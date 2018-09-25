@@ -1,0 +1,7 @@
+{
+    "access": {
+        "VISITOR": "visitor",
+        "MEMBER": "member",
+        "LEADER": "leader"
+    }
+}
