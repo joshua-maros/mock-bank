@@ -27,11 +27,10 @@ app.use(requestLogger);
 
 // Callback is passed the contents of the token in the authorization header of req if successful, null if not, and
 // undefined if header is not present.
-function validateSession(req, callback) {
+function validateSession(req) {
 	const authorization = req.get('authorization') || req.query.sessionToken;
 	if (!authorization) {
-		callback(undefined);
-		return;
+		return undefined;
 	}
 	const split = authorization.split(' ');
 	let method, token;
@@ -42,37 +41,38 @@ function validateSession(req, callback) {
 		token = split[1];
 	}
 	if (sessionStorage.sessionExists(token)) {
-		callback(sessionStorage.getSessionByToken(token));
+		return sessionStorage.getSessionByToken(token);
 	} else {
-		callback(null);
+		return null;
 	}
 }
 
 // Returns a promise that will pass a member to then() if the access level required is greater than ACCESS_LEVEL_VISITOR
 // Errors are automatically handled.
-function checkLogin(req, res, accessLevel) {
-    return new Promise((resolve, reject) => {
-        if (accessLevel == c.access.VISITOR) {
-            resolve()
-            return;
-        }
-        validateSession(req, (session) => {
-            if (!session || !session.memberId) {
-                res.status(401).send({error: 'A valid session token representing a session with an associated logged in user must be sent in the Authorization header. Either the token was not present, or the session associated with the token does not represent a logged in user.'});
-                return;			
-            }
-            dbs.members.findItemWithValue('id', session.memberId, (item) => {
-                if (item.accessLevel == c.access.LEADER) { // Leaders can access anything, no matter what.
-                    resolve(item);
-                } else if ((item.accessLevel == c.access.MEMBER) && (accessLevel == c.access.MEMBER)) {
-                    // Members can access member-level and below stuff. (Below stuff handled earlier.)
-                    resolve(item);
-                } else {
-                    res.status(403).send({error: 'This action requires the current user to be a leader.'});
-                }
-            });
-        });
-    });
+async function checkLogin(req, res, accessLevel) {
+	if (accessLevel == c.access.VISITOR) {
+		return;
+	}
+	const session = validateSession(req);
+	if (!session || !session.memberId) {
+		let e = 'A valid session token representing a session with an associated logged in user must be sent in '
+				+ 'the Authorization header. Either the token was not present, or the session associated with the '
+				+ 'token does not represent a logged in user.';
+		res.status(401).send({error: e});
+		throw e;
+	}
+
+	const member = await dbs.members.findItemWithValue('id', session.memberId);
+	if (item.accessLevel == c.access.LEADER) { // Leaders can access anything, no matter what.
+		return member;
+	} else if ((item.accessLevel == c.access.MEMBER) && (accessLevel == c.access.MEMBER)) {
+		// Members can access member-level and below stuff. (Below stuff handled earlier.)
+		return member;
+	} else {
+		let e = 'This action requires the current user to be a leader.';
+		res.status(403).send({error: e});
+		throw e;
+	}
 }
 
 function getAuthHost(req) {
