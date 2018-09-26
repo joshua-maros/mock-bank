@@ -3,5 +3,12 @@
         "VISITOR": "visitor",
         "MEMBER": "member",
         "LEADER": "leader"
+    },
+    "reason": {
+        "PAYMENT": "payment",
+        "SALARY": "salary",
+        "RENT": "rent",
+        "FINE": "fine",
+        "FEE": "fee"
     }
 }
