@@ -12,10 +12,10 @@ function generateRandomToken() {
 	return token;
 }
 
-module.exports.createNewSession = function() {
+module.exports.createNewSession = function(memberId) {
 	let session = {
 		token: generateRandomToken(),
-		memberId: null,
+		memberId: memberId,
 		started: Date.now(),
 		lastRefresh: Date.now(),
 		getAccessLevel: async function() {
