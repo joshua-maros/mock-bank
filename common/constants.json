@@ -12,5 +12,6 @@
         "RENT": "rent",
         "FINE": "fine",
         "FEE": "fee"
-    }
+    },
+    "BANK_ID": "BANK_OF_STROUP"
 }

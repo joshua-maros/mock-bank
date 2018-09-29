@@ -9,8 +9,8 @@ const ledger = {
     _processTransaction: function(transaction) {
         if (transaction.amount <= 0) return false;
         if (this.balances[transaction.from] < transaction.amount) return false;
-        this.balances[transaction.from] -= transaction.amount;
-        this.balances[transaction.to] += transaction.amount;
+        if (transaction.from !== c.BANK_ID) this.balances[transaction.from] -= transaction.amount;
+        if (transaction.to !== c.BANK_ID) this.balances[transaction.to] += transaction.amount;
         return true;
     },
     performTransaction: async function(from, to, amount, reason) {
