@@ -1,5 +1,5 @@
 const changeGuard = require('./changeGuard');
-const fs = require('fs/promises');
+const fs = require('mz/fs');
 
 const STALE_INTERVAL = 30 * 1000; // After 30 seconds, reload data from the file
 const PUSH_DELAY = 2000; // After 2 seconds of inactivity, save contents to file.
