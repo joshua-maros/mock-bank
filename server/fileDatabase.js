@@ -1,5 +1,5 @@
 const changeGuard = require('./changeGuard');
-const fs = require('fs');
+const fs = require('fs/promises');
 
 const STALE_INTERVAL = 30 * 1000; // After 30 seconds, reload data from the file
 const PUSH_DELAY = 2000; // After 2 seconds of inactivity, save contents to file.
@@ -54,13 +54,13 @@ class FileDatabase {
 		let data;
 		try {
 			data = await fs.readFile(this.fileName);
+			this.data = JSON.parse(data);
+			this.lastCacheGet = Date.now();
+			this._endCacheOp();
 		} catch (e) {
 			this._endCacheOp();
 			throw e;
 		}
-		this.data = JSON.parse(data);
-		this.lastCacheGet = Date.now();
-		this._endCacheOp();
 	}
 	
 	async _flushToSource() {
