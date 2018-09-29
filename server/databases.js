@@ -26,6 +26,7 @@ module.exports.members.createMember = function(options) {
 		ownsDesks: [],
 		rentsDesks: [],
 		jobs: [],
+		startWealth: 0,
 		accessLevel: c.access.MEMBER
 	};
 	for (let key in options) {

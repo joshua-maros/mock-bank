@@ -3,7 +3,6 @@ const FileDatabase = require('./fileDatabase').FileDatabase;
 const dbs = require('./databases');
 const c = require('../common/constants.json');
 
-const ledger = new FileDatabase('../private/ledger.json');
 const ledger = {
     balances: {},
     db: new FileDatabase('../private/ledger.json'),
@@ -15,6 +14,10 @@ const ledger = {
         return true;
     },
     performTransaction: async function(from, to, amount, reason) {
+        if (amount < 0) {
+            throw new Error(`Transactions cannot transfer negative amounts of money.\nFrom: ${from}\nTo: ${to}`
+                + `\nAmount: ${amount}`);
+        }
         if (typeof(from) !== typeof('')) {
             from = from.id;
         }
@@ -43,7 +46,7 @@ const ledger = {
         let members = dbs.members.getAllItems();
         let transactions = this.db.getAllItems();
         for (let member of await members) {
-            ledger.balances[member.id] = 0;
+            ledger.balances[member.id] = member.startWealth;
         }
         for (let transaction of await transactions) {
             this._processTransaction(transaction);
@@ -51,26 +54,4 @@ const ledger = {
     }
 }
 
-ledger.balances = {};
-
-ledger._processTransaction = function(transaction) {
-
-}
-
-async function init() {
-    let transactions = await ledger.getAllItems();
-    for (let transaction of transactions) {
-        ledger.balances[transaction.source] -= transaction.amount;
-        ledger.balances[transaction.dest] += 
-    }
-}
-dbs.members.getAllItems().then((members) => {
-    for (let member of members) {
-        ledger.balances[member.id] = 0;
-    }
-}
-ledger.getAccountBalance = function(member) {
-    if (typeof(member) !== typeof('')) {
-        member = member.id;
-    }
-}
+module.exports = ledger;

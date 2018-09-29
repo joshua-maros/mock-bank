@@ -10,6 +10,7 @@ const compression = require('compression');
 const express = require('express');
 
 const dbs = require('./databases');
+const ledger = require('./ledger');
 
 const rootDir = path.resolve(__dirname + '/../dist'); // ../ causes problems, because it is susceptible to exploitation.
 
