@@ -22,6 +22,20 @@ module.exports.createNewSession = function(memberId) {
 			const member = await memberDatabase.findItemWithValue('id', this.memberId);
 			return (member) ? member.level : c.access.VISITOR;
 		},
+		getMaxTime: async function() {
+			const accessLevel = this.getAccessLevel();
+			const a = {};
+			a[c.access.LEADER] = c.access.MAX_TIME_LEADER;
+			a[c.access.MEMBER] = c.access.MAX_TIME_MEMBER;
+			a[c.access.VISITOR] = 9e99;
+			return a[await accessLevel];
+		},
+		getExpirationDate: async function() {
+			return this.started + await this.getMaxTime() * 1000;
+		},
+		isExpired: async function() {
+			return this.getExpirationDate() < Date.now();
+		}
 	};
 	sessions.push(session);
 	return session;

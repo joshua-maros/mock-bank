@@ -2,7 +2,9 @@
     "access": {
         "VISITOR": "visitor",
         "MEMBER": "member",
-        "LEADER": "leader"
+        "LEADER": "leader",
+        "MAX_TIME_LEADER": 7200,
+        "MAX_TIME_MEMBER": 900
     },
     "reason": {
         "PAYMENT": "payment",

@@ -9,6 +9,8 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const express = require('express');
 
+const dbs = require('./databases');
+
 const rootDir = path.resolve(__dirname + '/../dist'); // ../ causes problems, because it is susceptible to exploitation.
 
 var app = express();
@@ -47,7 +49,7 @@ function validateSession(req) {
 	}
 }
 
-// Returns a promise that will pass a member to then() if the access level required is greater than ACCESS_LEVEL_VISITOR
+// Returns a promise that will pass a member to then() if the access level required is greater than c.ACCESS.VISITOR
 // Errors are automatically handled.
 async function checkLogin(req, res, accessLevel) {
 	if (accessLevel == c.access.VISITOR) {
@@ -61,8 +63,12 @@ async function checkLogin(req, res, accessLevel) {
 		res.status(401).send({error: e});
 		throw e;
 	}
-
 	const member = await dbs.members.findItemWithValue('id', session.memberId);
+	if (await session.isExpired()) {
+		let e = 'The session token provided has expired. Another session must be begun to continue.';
+		res.status(401).send({error: e});
+		throw e;
+	}
 	if (item.accessLevel == c.access.LEADER) { // Leaders can access anything, no matter what.
 		return member;
 	} else if ((item.accessLevel == c.access.MEMBER) && (accessLevel == c.access.MEMBER)) {
@@ -78,6 +84,42 @@ async function checkLogin(req, res, accessLevel) {
 function getAuthHost(req) {
 	return `http${productionMode ? 's' : ''}://${req.headers.host}`;
 }
+
+app.get('/api/v1/session/isValid', async (req, res) => {
+	const session = validateSession(req);
+	const member = await checkLogin(req, res, c.access.MEMBER);
+	if (member) {
+		const asession = await session;
+		res.status(200).send({
+			sessionToken: asession.token,
+			expires: await asession.getExpirationDate()
+		});
+	} else {
+		res.status(500).send({error: 'Unknown internal error.'});
+		throw new Error('Unknown internal error.');
+	}
+})
+
+app.get('/api/v1/session/login', async (req, res) => {
+	const name = req.query.name.toLowerCase().trim().split(' ');
+	const firstName = name[0], lastName = name[name.length - 1];
+	const pin = req.query.pin;
+	const members = await dbs.members.getAllItems();
+	for (let member of members) {
+		if (firstName !== member.firstName.toLowerCase()) continue;
+		if (lastName !== member.lastName.toLowerCase()) continue;
+		if (pin === member.pin) {
+			const session = sessionStorage.createNewSession(member.id);
+			res.status(200).send({
+				sessionToken: session.token,
+				expires: await session.getExpirationDate()
+			});
+		} else {
+			res.status(401).send({error: 'Incorrect name or PIN.'});
+		}
+	}
+	res.status(401).send({error: 'Incorrect name or PIN.'});
+}) 
 
 app.get('/public/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/private/*', (req, res) => res.sendFile(rootDir + '/index.html'));
