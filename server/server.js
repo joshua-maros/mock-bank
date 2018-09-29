@@ -126,6 +126,57 @@ app.get('/api/v1/session/login', async (req, res) => {
 	res.status(401).send({error: 'Incorrect name or PIN.'});
 });
 
+function censorMember(member) {
+	return {
+		id: member.id,
+		firstName: member.firstName,
+		lastName: member.lastName,
+		ownsDesks: member.ownsDesks,
+		rentsDesks: member.rentsDesks,
+		jobs: member.jobs,
+		startWealth: member.startWealth,
+		currentWealth: ledger.getBalance(member)
+	};
+}
+
+app.get('/api/v1/members', async (req, res) => {
+	const loggedInMember = checkLogin(req, res, c.access.MEMBER);
+	const result = [];
+	for (let member of await dbs.members.getAllItems()) {
+		result.push(censorMember(member));
+	}
+	await loggedInMember;
+	res.status(200).send(result);
+});
+
+app.post('/api/v1/members', async (req, res) => {
+	const loggedInMember = await checkLogin(req, res, c.access.LEADER);
+	const newMember = dbs.members.createMember({
+		firstName: req.body.firstName || undefined,
+		lastName: req.body.lastName || undefined,
+		pin: req.body.pin || undefined,
+		startWealth: req.body.startWealth || undefined
+	});
+	res.status(201).send(newMember);
+});
+
+app.get('/api/v1/ledger', async (req, res) => {
+	const loggedInMember = await checkLogin(req, res, c.access.MEMBER);
+	const ledgerData = await ledger.getTransactionHistory();
+	res.status(200).send(ledgerData);
+});
+
+app.post('/api/v1/ledger', async (req, res) => {
+	if (!(req.body.from && req.body.to && req.body.amount)) {
+		res.status(400).send({error: 'The parameters [from, to, amount] are required to be sent in the request body.'});
+		return;
+	}
+	const loggedInMember = await checkLogin(req, res, c.access.LEADER);
+	const transaction = await ledger.performTransaction(req.body.from, req.body.to, req.body.amount, 
+		req.body.reason || undefined);
+	res.status(201).send(transaction);
+});
+
 app.get('/public/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/private/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/', (req, res) => res.sendFile(rootDir + '/index.html'));
