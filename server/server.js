@@ -98,7 +98,7 @@ app.get('/api/v1/session/isValid', async (req, res) => {
 		res.status(500).send({error: 'Unknown internal error.'});
 		throw new Error('Unknown internal error.');
 	}
-})
+});
 
 app.get('/api/v1/session/login', async (req, res) => {
 	const name = req.query.name.toLowerCase().trim().split(' ');
@@ -119,7 +119,11 @@ app.get('/api/v1/session/login', async (req, res) => {
 		}
 	}
 	res.status(401).send({error: 'Incorrect name or PIN.'});
-}) 
+});
+
+// Begin Testing Area
+
+// End Testing Area
 
 app.get('/public/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/private/*', (req, res) => res.sendFile(rootDir + '/index.html'));
