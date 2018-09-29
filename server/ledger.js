@@ -33,7 +33,7 @@ const ledger = {
         if (!this._processTransaction(transaction)) {
             throw new Error(`The transaction cannot be processed.\nFrom: ${from}\nTo: ${to}\nAmount: ${amount}`);
         }
-        this.db.push(transaction);
+        await this.db.push(transaction);
         return transaction;
     },
     getBalance: function(member) {
@@ -41,6 +41,9 @@ const ledger = {
             member = member.id;
         }
         return this.balances[member];
+    },
+    getTransactionHistory: async function() {
+        return this.db.getAllItems();
     },
     init: async function() {
         let members = dbs.members.getAllItems();
