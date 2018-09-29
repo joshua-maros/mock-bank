@@ -1,4 +1,8 @@
-global.productionMode = (process.argv.length >= 3) && (process.argv[2].toLowerCase() == 'prod');
+// Arg 0 is node. Arg 1 is script name. This code will switch how the server runs depending on whether or not arg2 is 
+// 'prod' (production mode)
+global.productionMode = process.argv.length >= 3 && process.argv[2].toLowerCase() == 'prod';
+// Arg 2 can also be 'noauth' (dev mode and disable all authentication)
+global.authDisabled= process.argv.length >= 3 && process.argv[2].toLowerCase() == 'noauth';
 
 const fs = require('fs');
 const https = require('https');
@@ -53,7 +57,7 @@ function validateSession(req) {
 // Returns a promise that will pass a member to then() if the access level required is greater than c.ACCESS.VISITOR
 // Errors are automatically handled.
 async function checkLogin(req, res, accessLevel) {
-	if (accessLevel == c.access.VISITOR) {
+	if (accessLevel === c.access.VISITOR || authDisabled) {
 		return;
 	}
 	const session = validateSession(req);
@@ -122,32 +126,38 @@ app.get('/api/v1/session/login', async (req, res) => {
 	res.status(401).send({error: 'Incorrect name or PIN.'});
 });
 
-// Begin Testing Area
-
-// End Testing Area
-
 app.get('/public/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/private/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/*', (req, res) => res.sendFile(rootDir + req.path));
 
-// Arg 0 is node. Arg 1 is script name. This code will switch how the server runs depending on whether or not arg2 is 'prod' (production mode)
-if (productionMode) {
-	// Just bumps the user to HTTPS. Serves no content.
-	console.log('Starting in production mode.');
-	var redirector = express();
-	redirector.get('*', (req, res) => {
-		res.redirect('https://' + req.headers.host + req.url);
-	});
-	redirector.listen(80);
+// Begin Testing Area
 
-	https.createServer({
-		key: fs.readFileSync('../private/key.pem'),
-		cert: fs.readFileSync('../private/cert.pem')
-	}, app).listen(443);	
-} else {
-	console.log('Starting in development mode');
-	app.listen(4200);
-}
+// End Testing Area
 
-console.log('Initialization complete!');
+// Initialization function.
+(async function() {
+	await ledger.init();
+	if (authDisabled) {
+		console.log('WARNING: ALL AUTHORIZATION CHECKS ARE DISABLED.');
+	}
+	if (productionMode) {
+		// Just bumps the user to HTTPS. Serves no content.
+		console.log('Starting in production mode.');
+		var redirector = express();
+		redirector.get('*', (req, res) => {
+			res.redirect('https://' + req.headers.host + req.url);
+		});
+		redirector.listen(80);
+
+		https.createServer({
+			key: fs.readFileSync('../private/key.pem'),
+			cert: fs.readFileSync('../private/cert.pem')
+		}, app).listen(443);	
+	} else {
+		console.log('Starting in development mode');
+		app.listen(4200);
+	}
+
+	console.log('Initialization complete!');
+})();
