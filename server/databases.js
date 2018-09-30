@@ -30,7 +30,7 @@ module.exports.members.createMember = function(options) {
 		accessLevel: c.access.MEMBER
 	};
 	for (let key in options) {
-		member[key] = options[key];
+		member[key] = options[key] || member[key];
 	}
 	this.push(member);
 	return changeGuard(member, () => this._markDirty());
@@ -45,7 +45,7 @@ module.exports.jobs.createJob = function(options) {
 		blueSalary: 0
 	};
 	for (let key in options) {
-		job[key] = options[key];
+		job[key] = options[key] || job[key];
 	}
 	this.push(job);
 	return changeGuard(job, () => this._markDirty());
