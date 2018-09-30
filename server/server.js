@@ -15,6 +15,7 @@ const express = require('express');
 
 const dbs = require('./databases');
 const ledger = require('./ledger');
+const sessionStorage = require('./sessionStorage');
 
 const rootDir = path.resolve(__dirname + '/../dist'); // ../ causes problems, because it is susceptible to exploitation.
 
@@ -97,7 +98,8 @@ app.get('/api/v1/session/isValid', async (req, res) => {
 		const asession = await session;
 		res.status(200).send({
 			sessionToken: asession.token,
-			expires: await asession.getExpirationDate()
+			expires: await asession.getExpirationDate(),
+			loggedInMember: member
 		});
 	} else {
 		res.status(500).send({error: 'Unknown internal error.'});
@@ -117,8 +119,10 @@ app.get('/api/v1/session/login', async (req, res) => {
 			const session = sessionStorage.createNewSession(member.id);
 			res.status(200).send({
 				sessionToken: session.token,
-				expires: await session.getExpirationDate()
+				expires: await session.getExpirationDate(),
+				loggedInMember: member
 			});
+			return;
 		} else {
 			res.status(401).send({error: 'Incorrect name or PIN.'});
 		}
