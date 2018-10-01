@@ -155,7 +155,7 @@ export class WebappBackendService {
   }
 
   getMemberList(): Promise<HttpResponse<Member[]>> {
-    return this.get<Member[]>('/api/v1/members/list');
+    return this.get<Member[]>('/api/v1/members');
   }
 
   getTransactionHistory(): Promise<HttpResponse<Transaction[]>> {
