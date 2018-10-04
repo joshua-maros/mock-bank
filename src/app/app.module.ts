@@ -9,6 +9,7 @@ import { WebappBackendService } from './webapp-backend.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { PlatformIdService } from './platform-id.service';
 import { TitleBarComponent } from './title-bar/title-bar.component';
+import { TransactionPageComponent } from './transaction-page/transaction-page.component';
 
 const appRoutes = [
 ];
@@ -16,7 +17,8 @@ const appRoutes = [
 @NgModule({
   declarations: [
     AppComponent,
-    TitleBarComponent
+    TitleBarComponent,
+    TransactionPageComponent
   ],
   imports: [
     BrowserModule,
