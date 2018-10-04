@@ -123,5 +123,10 @@
       }
     }
   },
-  "defaultProject": "extensive-versatile-investment-log"
+  "defaultProject": "extensive-versatile-investment-log",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
