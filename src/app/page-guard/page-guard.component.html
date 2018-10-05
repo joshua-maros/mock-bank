@@ -1,0 +1,8 @@
+<div class="message mat-h1" *ngIf="loginInProgress && accessLevel != AccessLevel.VISITOR">Waiting for login to finish...</div>
+<ng-container *ngIf="!backend.shouldHaveAccess(accessLevel) && !loginInProgress">
+	<div class="message mat-h1" *ngIf="accessLevel == AccessLevel.LEADER">You need to be an administrator to access this page.</div>
+	<div class="message mat-h1" *ngIf="(accessLevel == AccessLevel.MEMBER) && (backend.pollAccessLevel() == AccessLevel.VISITOR)">
+		You need to be logged in to view this page.
+	</div>
+</ng-container>
+<div class="message mat-h1" *ngIf="!loaded && backend.shouldHaveAccess(accessLevel)">{{loadingMessage}}</div>
