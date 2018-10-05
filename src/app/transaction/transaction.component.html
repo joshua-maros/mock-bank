@@ -1,0 +1,18 @@
+<mat-card>
+  <span>
+    <span class="mat-caption">FROM: </span>
+    <span class="cat-text name">{{fromName || "UNKNOWN"}}</span>
+  </span>
+  <span>
+    <span class="mat-caption">TO: </span>
+    <span class="cat-text name">{{toName || "UNKNOWN"}}</span>
+  </span>
+  <span>
+    <span class="mat-caption">AMOUNT: </span>
+    <span class="cat-text value">{{transaction && transaction.amount || "UNKNOWN"}}</span>
+  </span>
+  <span>
+    <span class="mat-caption">REASON: </span>
+    <span class="cat-text text">{{transaction && transaction.reason || "UNKNOWN"}}</span>
+  </span>
+</mat-card>

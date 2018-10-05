@@ -1,0 +1,41 @@
+mat-card {
+    padding: 0.5em;
+    display: grid;
+    grid-template-columns: 2fr 2fr 2fr 3fr;
+}
+
+mat-card > * {
+    margin-right: 0.5em;
+    min-width: 0;
+}
+
+span.cat-text {
+    display: inline-block;
+    vertical-align: bottom;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+span.cat-text.name {
+    text-overflow: ".";
+}
+
+span.cat-text.text {
+    text-overflow: ellipsis;
+}
+
+mat-card > *:not(:last-child) {
+    padding-right: 0.5em;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.mat-caption {
+    opacity: 0.5;
+    display: inline-block;
+    vertical-align: bottom;
+    overflow: hidden;
+    max-width: 100%;
+    text-overflow: ":";
+    margin-right: 0.25em;
+}
