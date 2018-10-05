@@ -1,3 +1,5 @@
-<p>
-  transaction-page works!
+<app-page-guard [loaded]="members && ledger" #guard>
+</app-page-guard>
+<p *ngIf="guard.show">
+  <app-transaction *ngFor="let transaction of ledger" [transaction]="transaction"></app-transaction>
 </p>
