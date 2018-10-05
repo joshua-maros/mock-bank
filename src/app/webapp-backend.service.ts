@@ -58,9 +58,56 @@ interface BackendHTTPOptions {
   params?: HttpParams;
 }
 
+const CACHE_EXPIRE_TIME = 1000 * 60; // Expire after one minute.
+
+export class CachedResource<T> {
+  private data: T;
+  private lastRefresh = 0;
+  private currentUpdate: Promise<T>;
+  private currentUpdateComplete = true;
+  private hold: Promise<void> = null;
+  private endHoldFunc: () => any;
+
+  public constructor(private refresher: () => Promise<HttpResponse<T>>) { }
+  public async get() {
+    if (Date.now() < this.lastRefresh + CACHE_EXPIRE_TIME) {
+      return this.data;
+    } else {
+      if (this.hold) {
+        await this.hold;
+        this.hold = null;
+      }
+      if (this.currentUpdateComplete) {
+        this.currentUpdateComplete = false;
+        this.currentUpdate = new Promise<T>(async (res, rej) => {
+          this.data = (await this.refresher()).body;
+          this.currentUpdateComplete = true;
+          this.lastRefresh = Date.now();
+          res(this.data);
+        });
+      }
+      return this.currentUpdate;
+    }
+  }
+  public markDirty() {
+    this.lastRefresh = 0;
+  }
+  public markDirtyAndHold() {
+    this.markDirty();
+    this.hold = new Promise((res, rej) => this.endHoldFunc = res);
+  }
+  public endHold() {
+    if (this.hold) {
+      this.endHoldFunc();
+    }
+  }
+}
+
 @Injectable()
 export class WebappBackendService {
   private session: Session = null;
+  private cachedMembers: CachedResource<Member[]>;
+  private cachedLedger: CachedResource<Transaction[]>;
 
   public get currentMember(): Member {
     if (this.session) {
@@ -71,6 +118,8 @@ export class WebappBackendService {
   }
 
   constructor(private client: HttpClient/*, private cookieService: CookieService*/) {
+    this.cachedMembers = new CachedResource<Member[]>(() => this.get<Member[]>('/api/v1/members'));
+    this.cachedLedger = new CachedResource<Transaction[]>(() => this.get<Transaction[]>('/api/v1/ledger'));
   }
 
   private createOptions(contentType?: string): BackendHTTPOptions {
@@ -133,7 +182,7 @@ export class WebappBackendService {
   }
 
   getAccessLevel(): AccessLevel {
-    return this.session && this.session.loggedInMember && this.session.loggedInMember.accessLevel;
+    return this.session && this.session.loggedInMember && this.session.loggedInMember.accessLevel || AccessLevel.VISITOR;
   }
 
   shouldHaveAccess(minimumRequired: AccessLevel) {
@@ -150,19 +199,25 @@ export class WebappBackendService {
     });
   }
 
+  getCachedMemberList(): Promise<Member[]> {
+    return this.cachedMembers.get();
+  }
+
   createMember(memberData: Partial<Member>): Promise<HttpResponse<Member>> {
-    return this.post<Member>('/api/v1/members', memberData);
+    this.cachedMembers.markDirtyAndHold();
+    return this.post<Member>('/api/v1/members', memberData).then((e) => {
+      this.cachedMembers.endHold();
+      return e;
+    });
   }
 
-  getMemberList(): Promise<HttpResponse<Member[]>> {
-    return this.get<Member[]>('/api/v1/members');
-  }
-
-  getTransactionHistory(): Promise<HttpResponse<Transaction[]>> {
-    return this.get<Transaction[]>('/api/v1/ledger');
+  getCachedLedger(): Promise<Transaction[]> {
+    return this.cachedLedger.get();
   }
 
   createTransaction(from: Member | string, to: Member | string, amount: number, reason: string) {
+    this.cachedLedger.markDirtyAndHold();
+    this.cachedMembers.markDirtyAndHold(); // Because the server will recalculate individual balances afterwards.
     if ((from as Member).id !== undefined) {
       from = (from as Member).id;
     }
@@ -174,6 +229,10 @@ export class WebappBackendService {
       to: to,
       amount: amount,
       reason: reason
+    }).then((e) => {
+      this.cachedLedger.endHold();
+      this.cachedMembers.endHold();
+      return e;
     });
   }
 }
