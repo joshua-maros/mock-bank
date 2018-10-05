@@ -4,7 +4,7 @@ global.productionMode = process.argv.length >= 3 && process.argv[2].toLowerCase(
 // Arg 2 can also be 'noauth' (dev mode and disable all authentication)
 global.authDisabled= process.argv.length >= 3 && process.argv[2].toLowerCase() == 'noauth';
 
-const fs = require('fs');
+const fs = require('mz/fs');
 const https = require('https');
 const path = require('path');
 const c = require('../common/constants.json');
@@ -184,7 +184,14 @@ app.post('/api/v1/ledger', async (req, res) => {
 app.get('/public/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/private/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/', (req, res) => res.sendFile(rootDir + '/index.html'));
-app.get('/*', (req, res) => res.sendFile(rootDir + req.path));
+app.get('/*', async (req, res) => {
+	try {
+		await fs.stat(rootDir + req.path);
+		res.sendFile(rootDir + req.path);
+	} catch (e) {
+		res.sendFile(rootDir + '/index.html');
+	}
+});
 
 // Begin Testing Area
 
