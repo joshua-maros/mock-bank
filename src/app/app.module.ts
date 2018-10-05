@@ -10,15 +10,20 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { PlatformIdService } from './platform-id.service';
 import { TitleBarComponent } from './title-bar/title-bar.component';
 import { TransactionPageComponent } from './transaction-page/transaction-page.component';
+import { PageGuardComponent } from './page-guard/page-guard.component';
+import { TransactionComponent } from './transaction/transaction.component';
 
 const appRoutes = [
+  { path: 'transactions', component: TransactionPageComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     TitleBarComponent,
-    TransactionPageComponent
+    TransactionPageComponent,
+    PageGuardComponent,
+    TransactionComponent
   ],
   imports: [
     BrowserModule,
