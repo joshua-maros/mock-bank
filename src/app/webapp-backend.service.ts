@@ -21,7 +21,6 @@ export interface Member {
   ownsDesks: number[];
   rentsDesks: number[];
   jobs: string[];
-  startWealth: number;
   accessLevel: AccessLevel;
 }
 

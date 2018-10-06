@@ -49,7 +49,7 @@ const ledger = {
         let members = dbs.members.getAllItems();
         let transactions = this.db.getAllItems();
         for (let member of await members) {
-            ledger.balances[member.id] = member.startWealth;
+            ledger.balances[member.id] = 0;
         }
         for (let transaction of await transactions) {
             this._processTransaction(transaction);

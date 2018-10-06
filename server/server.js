@@ -138,7 +138,6 @@ function censorMember(member) {
 		ownsDesks: member.ownsDesks,
 		rentsDesks: member.rentsDesks,
 		jobs: member.jobs,
-		startWealth: member.startWealth,
 		currentWealth: ledger.getBalance(member)
 	};
 }
@@ -156,7 +155,6 @@ app.get('/api/v1/members', async (req, res) => {
 		ownsDesks: [],
 		rentsDesks: [],
 		jobs: [],
-		startWealth: 999,
 		currentWealth: 1000000
 	});
 	await loggedInMember;
@@ -168,8 +166,7 @@ app.post('/api/v1/members', async (req, res) => {
 	const newMember = dbs.members.createMember({
 		firstName: req.body.firstName || undefined,
 		lastName: req.body.lastName || undefined,
-		pin: req.body.pin || undefined,
-		startWealth: req.body.startWealth || undefined
+		pin: req.body.pin || undefined
 	});
 	res.status(201).send(newMember);
 });
