@@ -10,7 +10,12 @@ const ledger = {
         if (transaction.amount <= 0) return false;
         if (this.balances[transaction.from] < transaction.amount) return false;
         if (transaction.from !== c.BANK_ID) this.balances[transaction.from] -= transaction.amount;
-        if (transaction.to !== c.BANK_ID) this.balances[transaction.to] += transaction.amount;
+        if (transaction.to !== c.BANK_ID) {
+            if (!this.balances[transaction.to]) {
+                this.balances[transaction.to] = 0; // In case the user was recently created.
+            }
+            this.balances[transaction.to] += transaction.amount;
+        }
         return true;
     },
     createTransaction: async function(from, to, amount, reason) {
