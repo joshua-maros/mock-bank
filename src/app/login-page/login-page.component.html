@@ -1,0 +1,14 @@
+<app-centered-layout>
+  <form #form="ngForm" (ngSubmit)="login()"> <mat-card>
+    <mat-form-field>
+      <input matInput placeholder="First Name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Last Name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="password" placeholder="PIN">
+    </mat-form-field>
+    <button mat-raised-button type="submit" color="primary">Submit</button>
+  </mat-card> </form>
+</app-centered-layout>
