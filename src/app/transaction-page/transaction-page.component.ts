@@ -7,8 +7,8 @@ import { AccessLevel, Member, Transaction, WebappBackendService } from '../webap
   styleUrls: ['./transaction-page.component.scss']
 })
 export class TransactionPageComponent implements OnInit {
-  private members: Member[];
-  private ledger: Transaction[];
+  members: Member[];
+  ledger: Transaction[];
 
   get AccessLevel() { // For *ngIfs
     return AccessLevel;
