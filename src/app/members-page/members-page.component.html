@@ -1,4 +1,6 @@
-<app-centered-layout>
+<app-page-guard [loaded]="members" accessLevel="leader" #guard>
+</app-page-guard>
+<app-centered-layout *ngIf="guard.show">
   <h1>Members</h1>
   <mat-card>
     <div *ngFor="let member of members" 

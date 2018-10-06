@@ -1,4 +1,6 @@
-<app-centered-layout>
+<app-page-guard accessLevel="leader" #guard>
+</app-page-guard>
+<app-centered-layout *ngIf="guard.show">
   <h1>Create Member</h1>
   <form #form="ngForm" [formGroup]="fg" (ngSubmit)="submit()"> <mat-card>
     <mat-form-field id="class">
