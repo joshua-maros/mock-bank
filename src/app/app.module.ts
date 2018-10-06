@@ -1,8 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule,
-  MatToolbarModule, MatIconModule, MatIconRegistry, MatMenuModule, MatRippleModule } from '@angular/material';
+import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
+  MatSelectModule, MatToolbarModule, MatIconModule, MatIconRegistry, MatMenuModule,
+  MatRippleModule } from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -15,6 +16,7 @@ import { PageGuardComponent } from './page-guard/page-guard.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { CenteredLayoutComponent } from './centered-layout/centered-layout.component';
 import { MakeTransactionPageComponent } from './make-transaction-page/make-transaction-page.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const appRoutes = [
   { path: 'transactions', component: TransactionPageComponent },
@@ -35,6 +37,7 @@ const appRoutes = [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
@@ -44,6 +47,7 @@ const appRoutes = [
     MatMenuModule,
     MatSelectModule,
     MatToolbarModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(appRoutes, { enableTracing: false })
   ],
   providers: [
@@ -53,4 +57,8 @@ const appRoutes = [
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(reg: MatIconRegistry, domSanitizer: DomSanitizer) {
+    reg.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
+  }
+}
