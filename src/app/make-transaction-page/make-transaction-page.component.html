@@ -1,0 +1,13 @@
+<app-page-guard [loaded]="members" #guard>
+</app-page-guard>
+<app-centered-layout *ngIf="guard.show">
+  <h1>Create Transaction</h1>
+  <mat-card>
+    <mat-form-field>
+      <input matInput type="text" placeholder="From">
+    </mat-form-field>
+    <div *ngFor="let member of members">
+      {{member.firstName + ' ' + member.lastName}}
+    </div>
+  </mat-card>
+</app-centered-layout>

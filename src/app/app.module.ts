@@ -13,9 +13,11 @@ import { TransactionPageComponent } from './transaction-page/transaction-page.co
 import { PageGuardComponent } from './page-guard/page-guard.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { CenteredLayoutComponent } from './centered-layout/centered-layout.component';
+import { MakeTransactionPageComponent } from './make-transaction-page/make-transaction-page.component';
 
 const appRoutes = [
-  { path: 'transactions', component: TransactionPageComponent }
+  { path: 'transactions', component: TransactionPageComponent },
+  { path: 'transactions/new', component: MakeTransactionPageComponent }
 ];
 
 @NgModule({
@@ -25,7 +27,8 @@ const appRoutes = [
     TransactionPageComponent,
     PageGuardComponent,
     TransactionComponent,
-    CenteredLayoutComponent
+    CenteredLayoutComponent,
+    MakeTransactionPageComponent
   ],
   imports: [
     BrowserModule,
