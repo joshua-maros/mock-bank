@@ -1,8 +1,26 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
-.balance {
-    margin-left: 2em;
+mat-card {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.member {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    display: grid;
+    grid-template-columns: 1fr 1em 1fr;
+}
+
+.member:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.member-name {
+    width: 100%;
+    display: inline-block;
+    text-align: right;
 }
 
 .blue .member-name {

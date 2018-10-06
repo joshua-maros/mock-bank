@@ -1,8 +1,11 @@
 <app-centered-layout>
   <h1>Members</h1>
-  <mat-card *ngFor="let member of members" 
-    [ngClass]="member.firstName === '!' ? '' : (member.blue ? 'blue' : 'orange')">
-    <strong class="member-name">{{member.firstName}} {{member.lastName}}</strong>
-    <span class="balance">Balance: ${{member.currentWealth}}</span>
+  <mat-card>
+    <div *ngFor="let member of members" 
+      [ngClass]="[member.firstName === '!' ? '' : (member.blue ? 'blue' : 'orange'), 'member']">
+      <strong class="member-name">{{member.firstName}} {{member.lastName}}</strong>
+      <span></span>
+      <span class="balance">${{member.currentWealth}}</span>
+    </div>
   </mat-card>
 </app-centered-layout>
