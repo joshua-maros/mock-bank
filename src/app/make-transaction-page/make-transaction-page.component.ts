@@ -18,7 +18,7 @@ export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./make-transaction-page.component.scss']
 })
 export class MakeTransactionPageComponent implements OnInit {
-  private members: Member[];
+  members: Member[];
   reasons = [
     'Salary',
     'Payment',
