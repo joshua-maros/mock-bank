@@ -16,7 +16,7 @@ import { PageGuardComponent } from './page-guard/page-guard.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { CenteredLayoutComponent } from './centered-layout/centered-layout.component';
 import { MakeTransactionPageComponent } from './make-transaction-page/make-transaction-page.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 const appRoutes = [
   { path: 'transactions', component: TransactionPageComponent },
@@ -36,6 +36,7 @@ const appRoutes = [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
     HttpClientModule,
     MatAutocompleteModule,
     MatButtonModule,

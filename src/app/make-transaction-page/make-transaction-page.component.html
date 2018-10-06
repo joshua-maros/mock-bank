@@ -2,12 +2,43 @@
 </app-page-guard>
 <app-centered-layout *ngIf="guard.show">
   <h1>Create Transaction</h1>
-  <mat-card>
-    <mat-form-field>
-      <input matInput type="text" placeholder="From">
-    </mat-form-field>
-    <div *ngFor="let member of members">
-      {{member.firstName + ' ' + member.lastName}}
+  <mat-card id="root"> <form>
+    <div class="account" id="from">
+      <mat-form-field>
+        <mat-select placeholder="From" [formControl]="fromfc" [errorStateMatcher]="alwaysMatcher">
+          <mat-option *ngFor="let member of members" [value]="member">
+            {{member.firstName + ' ' + member.lastName}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="fromfc.hasError('required')">This value is required!</mat-error>
+      </mat-form-field>
+      <div class="net-desc loss" *ngIf="fromfc.value">
+        <span class="before">${{fromfc.value.currentWealth}}</span>
+        <span class="after" *ngIf="amountfc.value > 0"> &#8594; ${{fromfc.value.currentWealth - amountfc.value}}</span>
+      </div>
     </div>
-  </mat-card>
+
+    <div class="account" id="to">
+      <mat-form-field>
+        <mat-select placeholder="To" [formControl]="tofc" [errorStateMatcher]="alwaysMatcher">
+          <mat-option *ngFor="let member of members" [value]="member">
+            {{member.firstName + ' ' + member.lastName}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="tofc.hasError('required')">This value is required!</mat-error>
+      </mat-form-field>
+      <div class="net-desc gain" *ngIf="tofc.value">
+        <span class="before">${{tofc.value.currentWealth}}</span>
+        <span class="after" *ngIf="amountfc.value > 0"> &#8594; ${{tofc.value.currentWealth + amountfc.value}}</span>
+      </div>
+    </div>
+
+    <div id="amount">
+      <mat-form-field class="example-full-width">
+        <input matInput type="number" placeholder="Amount" [formControl]="amountfc" [errorStateMatcher]="alwaysMatcher">
+        <mat-error *ngIf="amountfc.hasError('min')">Amount must be positive!</mat-error>
+        <mat-error *ngIf="amountfc.hasError('max')">Sender cannot pay that much!</mat-error>
+      </mat-form-field>
+    </div>
+  </form> </mat-card>
 </app-centered-layout>

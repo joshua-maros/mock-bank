@@ -1,0 +1,60 @@
+mat-form-field {
+    width: 100%;
+}
+
+#root {
+    display: grid;
+}
+
+@media (max-width: 35em) {
+    #root {
+        grid-template-areas:
+            "from"
+            "to"
+            "amount"
+            "reason"
+            "send"
+    }
+}
+
+@media (min-width: 35em) {
+    #root {
+        grid-template-columns: 1fr 0.5em 1fr;
+        grid-template-areas: 
+            "from   . to"
+            "amount . reason"
+            ".      . send"
+    }
+}
+
+#from {
+    grid-area: from;
+}
+
+#to {
+    grid-area: to;
+}
+
+#amount {
+    grid-area: amount;
+}
+
+div.net-desc > * {
+    vertical-align: bottom;
+}
+
+.net-desc > mat-icon {
+    font-size: 1.25em;
+}
+
+.net-desc > .after {
+    font-weight: bold;
+}
+
+.net-desc.loss > .after {
+    color: red;
+}
+
+.net-desc.gain > .after {
+    color: green;
+}
