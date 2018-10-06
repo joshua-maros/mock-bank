@@ -23,15 +23,6 @@ mat-form-field {
     }
 }
 
-@media (min-width: 50em) {
-    #root {
-        grid-template-columns: 2fr 1fr 2fr 1fr 2fr 1fr;
-        grid-template-areas: 
-            "from   from   to     to     amount amount"
-            "reason reason reason reason reason send"
-    }
-}
-
 #from {
     grid-area: from;
 }
