@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { WebappBackendService, Member, AccessLevel } from '../webapp-backend.service';
-import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl } from '@angular/forms';
+import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
+  isErrorState(control: FormControl | null, fg: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = fg && fg.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
@@ -18,16 +18,27 @@ export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
 })
 export class MakeTransactionPageComponent implements OnInit {
   private members: Member[];
+  reasons = [
+    'Salary',
+    'Payment',
+    'Fine',
+    'Rent',
+    'Other Fee'
+  ];
 
   alwaysMatcher = new AlwaysErrorStateMatcher();
-  fromfc = new FormControl(null, Validators.required);
-  tofc = new FormControl(null, Validators.required);
-  amountfc = new FormControl(0, [
-    Validators.min(0),
-    (control: AbstractControl): {[key: string]: any} | null => {
-      return this.fromfc.value && control.value > this.fromfc.value.currentWealth ? {'max': {}} : null;
-    }
-  ]);
+  fg = new FormGroup({
+    from: new FormControl(null, Validators.required),
+    to: new FormControl(null, Validators.required),
+    amount: new FormControl(null, [
+      Validators.required,
+      Validators.min(0),
+      (control: AbstractControl): {[key: string]: any} | null => {
+        return this.fg && this.fg.value.from && control.value > this.fg.value.from.currentWealth ? {'max': {}} : null;
+      }
+    ]),
+    reason: new FormControl('', Validators.required)
+  });
 
   get AccessLevel() { // For *ngIfs
     return AccessLevel;
@@ -38,4 +49,8 @@ export class MakeTransactionPageComponent implements OnInit {
   }
 
   ngOnInit() { }
+
+  checkError(controlName: string, errorName: string): boolean {
+    return this.fg.controls[controlName] && this.fg.controls[controlName].hasError(errorName);
+  }
 }

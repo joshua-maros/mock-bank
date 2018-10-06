@@ -39,6 +39,14 @@ mat-form-field {
     grid-area: amount;
 }
 
+#reason {
+    grid-area: reason;
+}
+
+#send {
+    grid-area: send;
+}
+
 div.net-desc > * {
     vertical-align: bottom;
 }
