@@ -23,6 +23,7 @@ export interface Member {
   rentsDesks: number[];
   jobs: string[];
   accessLevel: AccessLevel;
+  currentWealth: number;
 }
 
 export interface Session {
