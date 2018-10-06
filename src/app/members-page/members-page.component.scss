@@ -24,9 +24,9 @@ mat-card {
 }
 
 .blue .member-name {
-    color: mat-color($mat-blue, A400);
+    color: $class-blue;
 }
 
 .orange .member-name {
-    color: mat-color($mat-deep-orange, A400);
+    color: $class-orange;
 }
