@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { WebappBackendService, Member, AccessLevel } from '../webapp-backend.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
@@ -27,6 +27,7 @@ export class MakeTransactionPageComponent implements OnInit {
   ];
 
   alwaysMatcher = new AlwaysErrorStateMatcher();
+  @ViewChild('form') form;
   fg = new FormGroup({
     from: new FormControl(null, Validators.required),
     to: new FormControl(null, Validators.required),
@@ -52,5 +53,26 @@ export class MakeTransactionPageComponent implements OnInit {
 
   checkError(controlName: string, errorName: string): boolean {
     return this.fg.controls[controlName] && this.fg.controls[controlName].hasError(errorName);
+  }
+
+  submit() {
+    const v = this.fg.value;
+    this.fg.disable();
+    this.backend.createTransaction(v.from, v.to, v.amount, v.reason).then(async (res) => {
+      const oldFrom = v.from.id, oldTo = v.to.id;
+      this.members = await this.backend.getCachedMemberList();
+      let newFrom: Member, newTo: Member;
+      for (const member of this.members) {
+        if (member.id === oldFrom) {
+          newFrom = member;
+        }
+        if (member.id === oldTo) {
+          newTo = member;
+        }
+      }
+      this.form.resetForm();
+      this.fg.patchValue({ amount: null, from: newFrom, to: newTo });
+      this.fg.enable();
+    });
   }
 }
