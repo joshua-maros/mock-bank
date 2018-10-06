@@ -4,7 +4,5 @@
 $frc-app-primary: mat-palette($mat-green, 700, 400, 900);
 $frc-app-accent: mat-palette($mat-amber, A700, A400, A900);
 $frc-app-theme: mat-light-theme($frc-app-primary, $frc-app-accent);
-$class-blue: mat-color($mat-blue, A400);
-$class-orange: mat-color($mat-deep-orange, A400);
 
 @include angular-material-theme($frc-app-theme);
