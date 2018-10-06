@@ -2,7 +2,7 @@
 </app-page-guard>
 <app-centered-layout *ngIf="guard.show">
   <h1>Create Transaction</h1>
-  <mat-card id="root"> <form #form="ngForm" [formGroup]="fg" (ngSubmit)="submit()">
+  <form #form="ngForm" [formGroup]="fg" (ngSubmit)="submit()"> <mat-card id="root">
     <div class="account" id="from">
       <mat-form-field>
         <mat-select placeholder="From" formControlName="from" [errorStateMatcher]="alwaysMatcher">
@@ -60,5 +60,5 @@
     <div id="send">
       <button mat-raised-button color="primary" type="submit" [disabled]="!fg.valid">Submit</button>
     </div>
-  </form> </mat-card>
+  </mat-card> </form>
 </app-centered-layout>

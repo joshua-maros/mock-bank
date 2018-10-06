@@ -4,26 +4,31 @@ mat-form-field {
 
 #root {
     display: grid;
-}
-
-@media (max-width: 35em) {
-    #root {
-        grid-template-areas:
-            "from"
-            "to"
-            "amount"
-            "reason"
-            "send"
-    }
+    grid-column-gap: 0.5em;
+    grid-row-gap: 1em;
+    grid-template-areas:
+        "from"
+        "to"
+        "amount"
+        "reason"
+        "send"
 }
 
 @media (min-width: 35em) {
     #root {
-        grid-template-columns: 1fr 0.5em 1fr;
+        grid-template-columns: 2fr 1fr 2fr 1fr;
         grid-template-areas: 
-            "from   . to"
-            "amount . reason"
-            ".      . send"
+            "from   from   to     to"
+            "reason reason amount send"
+    }
+}
+
+@media (min-width: 50em) {
+    #root {
+        grid-template-columns: 2fr 1fr 2fr 1fr 2fr 1fr;
+        grid-template-areas: 
+            "from   from   to     to     amount amount"
+            "reason reason reason reason reason send"
     }
 }
 
@@ -45,6 +50,10 @@ mat-form-field {
 
 #send {
     grid-area: send;
+}
+
+button {
+    width: 100%;
 }
 
 div.net-desc > * {
