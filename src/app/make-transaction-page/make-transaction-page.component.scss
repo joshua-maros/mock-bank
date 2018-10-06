@@ -6,6 +6,7 @@ mat-form-field {
     display: grid;
     grid-column-gap: 0.5em;
     grid-row-gap: 1em;
+    grid-template-columns: 1fr;
     grid-template-areas:
         "from"
         "to"
