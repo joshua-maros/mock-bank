@@ -12,6 +12,7 @@ import { TitleBarComponent } from './title-bar/title-bar.component';
 import { TransactionPageComponent } from './transaction-page/transaction-page.component';
 import { PageGuardComponent } from './page-guard/page-guard.component';
 import { TransactionComponent } from './transaction/transaction.component';
+import { CenteredLayoutComponent } from './centered-layout/centered-layout.component';
 
 const appRoutes = [
   { path: 'transactions', component: TransactionPageComponent }
@@ -23,7 +24,8 @@ const appRoutes = [
     TitleBarComponent,
     TransactionPageComponent,
     PageGuardComponent,
-    TransactionComponent
+    TransactionComponent,
+    CenteredLayoutComponent
   ],
   imports: [
     BrowserModule,
