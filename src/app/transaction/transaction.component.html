@@ -1,17 +1,17 @@
 <mat-card>
-  <span>
+  <span id="from">
     <span class="mat-caption">FROM: </span>
-    <span class="cat-text name">{{fromName || "UNKNOWN"}}</span>
+    <span [ngClass]="'cat-text name ' + fromColor">{{fromName || "UNKNOWN"}}</span>
   </span>
-  <span>
+  <span id="to">
     <span class="mat-caption">TO: </span>
-    <span class="cat-text name">{{toName || "UNKNOWN"}}</span>
+    <span [ngClass]="'cat-text name ' + toColor">{{toName || "UNKNOWN"}}</span>
   </span>
-  <span>
+  <span id="amount">
     <span class="mat-caption">AMOUNT: </span>
-    <span class="cat-text value">{{transaction && transaction.amount || "UNKNOWN"}}</span>
+    <span class="cat-text value">${{transaction && transaction.amount || "UNKNOWN"}}</span>
   </span>
-  <span>
+  <span id="reason">
     <span class="mat-caption">REASON: </span>
     <span class="cat-text text">{{transaction && transaction.reason || "UNKNOWN"}}</span>
   </span>

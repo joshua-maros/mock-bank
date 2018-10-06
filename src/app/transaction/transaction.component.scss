@@ -1,12 +1,46 @@
+@import 'vars';
+
 mat-card {
     padding: 0.5em;
     display: grid;
     grid-template-columns: 2fr 2fr 2fr 3fr;
+    grid-template-areas: "from to amount reason";
+}
+
+@media(max-width: 35em) {
+    mat-card {
+        grid-template-columns: 2fr 3fr;
+        grid-template-areas:
+            "from amount"
+            "to   reason"
+    }
+
+    #amount {
+        border: none;
+    }
 }
 
 mat-card > * {
     margin-right: 0.5em;
     min-width: 0;
+    display: grid;
+    grid-template-columns: min-content 1fr;
+}
+
+#from {
+    grid-area: from;
+}
+
+#to {
+    grid-area: to;
+}
+
+#amount {
+    grid-area: amount;
+}
+
+#reason {
+    grid-area: reason;
 }
 
 span.cat-text {
@@ -19,6 +53,14 @@ span.cat-text {
 
 span.cat-text.name {
     text-overflow: ".";
+}
+
+span.cat-text.name.blue {
+    color: $class-blue;
+}
+
+span.cat-text.name.orange {
+    color: $class-orange;
 }
 
 span.cat-text.text {

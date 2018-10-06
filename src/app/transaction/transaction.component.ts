@@ -8,8 +8,10 @@ import { Transaction, WebappBackendService } from '../webapp-backend.service';
 })
 export class TransactionComponent implements OnInit {
   @Input() transaction: Transaction = null;
-  private fromName = '';
-  private toName = '';
+  fromName = '';
+  toName = '';
+  fromColor = '';
+  toColor = '';
 
   constructor(private backend: WebappBackendService) {
     backend.getCachedMemberList().then((members) => {
@@ -19,13 +21,22 @@ export class TransactionComponent implements OnInit {
       for (const member of members) {
         if (member.id === this.transaction.from) {
           this.fromName = member.firstName + ' ' + member.lastName;
+          if (member.firstName === '!') {
+            this.fromName = 'Bank';
+          } else {
+            this.fromColor = member.blue ? 'blue' : 'orange';
+          }
         } else if (member.id === this.transaction.to) {
           this.toName = member.firstName + ' ' + member.lastName;
+          if (member.firstName === '!') {
+            this.toName = 'Bank';
+          } else {
+            this.toColor = member.blue ? 'blue' : 'orange';
+          }
         }
       }
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 }
