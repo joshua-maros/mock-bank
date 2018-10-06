@@ -1,5 +1,6 @@
 <app-page-guard [loaded]="members && ledger" #guard>
 </app-page-guard>
-<p *ngIf="guard.show">
+<app-centered-layout *ngIf="guard.show">
+  <h1>All Transactions</h1>
   <app-transaction *ngFor="let transaction of ledger" [transaction]="transaction"></app-transaction>
-</p>
+</app-centered-layout>
