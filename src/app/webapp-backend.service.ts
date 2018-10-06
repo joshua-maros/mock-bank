@@ -18,6 +18,7 @@ export interface Member {
   pin: string;
   firstName: string;
   lastName: string;
+  blue: boolean;
   ownsDesks: number[];
   rentsDesks: number[];
   jobs: string[];

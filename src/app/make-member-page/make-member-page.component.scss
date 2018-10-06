@@ -1,8 +1,37 @@
+mat-card {
+    display: grid;
+    grid-column-gap: 0.5em;
+    grid-row-gap: 1em;
+    grid-template-columns: min-content 1fr;
+    grid-template-areas: 
+        "class name"
+        "mess  mess"
+}
+
+@media(max-width: 35em) {
+    mat-card {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "class"
+            "name"
+            "mess"
+    }
+}
+
 mat-form-field {
     width: 100%;
 }
 
+#class {
+    grid-area: class;
+}
+
+#name {
+    grid-area: name;
+}
+
 #message {
+    grid-area: mess;
     opacity: 0;
     transition-duration: 0.5s;
 }

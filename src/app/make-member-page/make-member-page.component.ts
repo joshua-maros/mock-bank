@@ -12,6 +12,7 @@ export class MakeMemberPageComponent implements OnInit {
   @ViewChild('message') message;
   messageTimeout;
   fg = this.fb.group({
+    blue: [null, Validators.required],
     name: ['', (control: AbstractControl): {[key: string]: any} | null => {
       return control.value.split(' ').length === 2 ? null : {'names': 'not two'};
     }]
@@ -39,13 +40,16 @@ export class MakeMemberPageComponent implements OnInit {
     }
     this.fg.disable();
     const names = this.fg.value.name.split(' ');
+    const oldBlue = this.fg.value.blue;
     await this.backend.createMember({
       firstName: names[0],
-      lastName: names[1]
+      lastName: names[1],
+      blue: this.fg.value.blue
     });
     this.form.resetForm();
     this.fg.patchValue({
-      name: ''
+      name: '',
+      blue: oldBlue
     });
     this.fg.enable();
     this.showMessage();
