@@ -149,6 +149,16 @@ app.get('/api/v1/members', async (req, res) => {
 	for (let member of await dbs.members.getAllItems()) {
 		result.push(censorMember(member));
 	}
+	result.push({
+		id: c.BANK_ID,
+		firstName: '!',
+		lastName: 'Bank',
+		ownsDesks: [],
+		rentsDesks: [],
+		jobs: [],
+		startWealth: 999,
+		currentWealth: 1000000
+	});
 	await loggedInMember;
 	res.status(200).send(result);
 });
