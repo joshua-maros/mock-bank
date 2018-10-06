@@ -23,6 +23,7 @@ module.exports.members.createMember = function(options) {
 		pin: generateRandomPIN(),
 		firstName: null,
 		lastName: null,
+		blue: false,
 		ownsDesks: [],
 		rentsDesks: [],
 		jobs: [],

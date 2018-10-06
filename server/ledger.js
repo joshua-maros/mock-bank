@@ -13,7 +13,7 @@ const ledger = {
         if (transaction.to !== c.BANK_ID) this.balances[transaction.to] += transaction.amount;
         return true;
     },
-    performTransaction: async function(from, to, amount, reason) {
+    createTransaction: async function(from, to, amount, reason) {
         if (amount < 0) {
             throw new Error(`Transactions cannot transfer negative amounts of money.\nFrom: ${from}\nTo: ${to}`
                 + `\nAmount: ${amount}`);

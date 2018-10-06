@@ -135,6 +135,7 @@ function censorMember(member) {
 		id: member.id,
 		firstName: member.firstName,
 		lastName: member.lastName,
+		blue: member.blue,
 		ownsDesks: member.ownsDesks,
 		rentsDesks: member.rentsDesks,
 		jobs: member.jobs,
@@ -152,6 +153,7 @@ app.get('/api/v1/members', async (req, res) => {
 		id: c.BANK_ID,
 		firstName: '!',
 		lastName: 'Bank',
+		blue: false,
 		ownsDesks: [],
 		rentsDesks: [],
 		jobs: [],
@@ -166,9 +168,11 @@ app.post('/api/v1/members', async (req, res) => {
 	const newMember = dbs.members.createMember({
 		firstName: req.body.firstName || undefined,
 		lastName: req.body.lastName || undefined,
+		blue: req.body.blue || undefined,
 		pin: req.body.pin || undefined
 	});
-	res.status(201).send(newMember);
+	ledger.createTransaction(c.BANK_ID, newMember, req.body.blue ? c.BLUE_START : c.ORANGE_START, 'Starting balance');
+	res.status(201).send(censorMember(newMember));
 });
 
 app.get('/api/v1/ledger', async (req, res) => {
@@ -183,7 +187,7 @@ app.post('/api/v1/ledger', async (req, res) => {
 		return;
 	}
 	const loggedInMember = await checkLogin(req, res, c.access.LEADER);
-	const transaction = await ledger.performTransaction(req.body.from, req.body.to, req.body.amount, 
+	const transaction = await ledger.createTransaction(req.body.from, req.body.to, req.body.amount, 
 		req.body.reason || undefined);
 	res.status(201).send(transaction);
 });

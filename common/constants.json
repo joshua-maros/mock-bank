@@ -13,5 +13,7 @@
         "FINE": "fine",
         "FEE": "fee"
     },
-    "BANK_ID": "BANK_OF_STROUP"
+    "BANK_ID": "BANK_OF_STROUP",
+    "ORANGE_START": 100,
+    "BLUE_START": 2000
 }
