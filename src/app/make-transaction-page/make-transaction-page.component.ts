@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { WebappBackendService, Member, AccessLevel } from '../webapp-backend.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
+import { sortMembers } from '../util';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
@@ -46,7 +47,7 @@ export class MakeTransactionPageComponent implements OnInit {
   }
 
   constructor(private backend: WebappBackendService) {
-    backend.getCachedMemberList().then(e => this.members = e);
+    backend.getCachedMemberList().then(e => this.members = sortMembers(e, false));
   }
 
   ngOnInit() { }
@@ -60,7 +61,7 @@ export class MakeTransactionPageComponent implements OnInit {
     this.fg.disable();
     this.backend.createTransaction(v.from, v.to, v.amount, v.reason).then(async (res) => {
       const oldFrom = v.from.id, oldTo = v.to.id;
-      this.members = await this.backend.getCachedMemberList();
+      this.members = sortMembers(await this.backend.getCachedMemberList(), false);
       let newFrom: Member, newTo: Member;
       for (const member of this.members) {
         if (member.id === oldFrom) {
