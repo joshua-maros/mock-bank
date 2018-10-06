@@ -17,10 +17,12 @@ import { TransactionComponent } from './transaction/transaction.component';
 import { CenteredLayoutComponent } from './centered-layout/centered-layout.component';
 import { MakeTransactionPageComponent } from './make-transaction-page/make-transaction-page.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MakeMemberPageComponent } from './make-member-page/make-member-page.component';
 
 const appRoutes = [
   { path: 'transactions', component: TransactionPageComponent },
-  { path: 'transactions/new', component: MakeTransactionPageComponent }
+  { path: 'transactions/new', component: MakeTransactionPageComponent },
+  { path: 'members/new', component: MakeMemberPageComponent }
 ];
 
 @NgModule({
@@ -31,7 +33,8 @@ const appRoutes = [
     PageGuardComponent,
     TransactionComponent,
     CenteredLayoutComponent,
-    MakeTransactionPageComponent
+    MakeTransactionPageComponent,
+    MakeMemberPageComponent
   ],
   imports: [
     BrowserModule,
