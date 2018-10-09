@@ -1,0 +1,47 @@
+mat-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr min-content;
+    grid-column-gap: 0.5em;
+    grid-row-gap: 1em;
+    grid-template-areas: "first last pin login"
+}
+
+@media(max-width: 50em) {
+    mat-card {
+        grid-template-columns: 2fr 1fr 2fr 1fr;
+        grid-template-areas:
+            "first first last last"
+            "pin   pin   .    login"
+    }
+}
+
+@media(max-width: 30em) {
+    mat-card {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "first"
+            "last"
+            "pin"
+            "login"
+    }    
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+#first {
+    grid-area: first;
+}
+
+#last {
+    grid-area: last;
+}
+
+#pin {
+    grid-area: pin;
+}
+
+#login {
+    grid-area: login;
+}
