@@ -1,5 +1,6 @@
 import { AccessLevel, WebappBackendService } from '../webapp-backend.service';
 import { Component, OnInit, Input } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-page-guard',
@@ -10,7 +11,6 @@ export class PageGuardComponent implements OnInit {
   @Input() loaded = true;
   @Input() loadingMessage = 'Loading...';
   @Input() accessLevel = AccessLevel.VISITOR;
-  public loginInProgress = true;
 
   get AccessLevel() { // For *ngIfs
     return AccessLevel;
@@ -20,7 +20,15 @@ export class PageGuardComponent implements OnInit {
     return this.loaded && this.backend.shouldHaveAccess(this.accessLevel);
   }
 
-  constructor(public backend: WebappBackendService) { }
+  constructor(public backend: WebappBackendService, private router: Router, private route: ActivatedRoute) { }
+
+  routeToLogin() {
+    this.router.navigate(['/login'], {
+      queryParams: {
+        url: '/' + this.route.snapshot.routeConfig.path
+      }
+    });
+  }
 
   ngOnInit() {
     // const l = () => this.loginInProgress = false;
