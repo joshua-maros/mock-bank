@@ -1,14 +1,19 @@
 <app-centered-layout>
-  <form #form="ngForm" (ngSubmit)="login()"> <mat-card>
+  <form #form="ngForm" [formGroup]="fg" (ngSubmit)="login()"> <mat-card>
     <mat-form-field>
-      <input matInput placeholder="First Name">
+      <input matInput formControlName="first" placeholder="First Name">
+      <mat-hint>Case insensetive</mat-hint>
+      <mat-error>This field is required!</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Last Name">
+      <input matInput formControlName="last" placeholder="Last Name">
+      <mat-hint>Case insensetive</mat-hint>
+      <mat-error>This field is required!</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="password" placeholder="PIN">
+      <input matInput formControlName="pin" type="password" placeholder="PIN">
+      <mat-error>This field is required!</mat-error>
     </mat-form-field>
-    <button mat-raised-button type="submit" color="primary">Submit</button>
+    <button mat-raised-button type="submit" color="primary" [disabled]="!fg.valid">Submit</button>
   </mat-card> </form>
 </app-centered-layout>

@@ -190,14 +190,16 @@ export class WebappBackendService {
     return quantifyAccessLevel(this.getAccessLevel()) >= quantifyAccessLevel(minimumRequired);
   }
 
-  login(name: string, pin: string) {
-    const p = this.getByQuery<Session>('/api/v1/session/login', { name: name, pin: pin });
-    return p.then((result) => {
+  async login(name: string, pin: string) {
+    try {
+      const result = await this.getByQuery<Session>('/api/v1/session/login', { name: name, pin: pin });
       if (result.status === 200) {
         this.session = result.body;
       }
       return result;
-    });
+    } catch {
+      return false;
+    }
   }
 
   getCachedMemberList(): Promise<Member[]> {

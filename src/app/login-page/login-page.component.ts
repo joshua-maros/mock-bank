@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { WebappBackendService } from '../webapp-backend.service';
 
 @Component({
   selector: 'app-login-page',
@@ -6,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent implements OnInit {
-  constructor() { }
+  fg = this.fb.group({
+    first: ['', Validators.required],
+    last: ['', Validators.required],
+    pin: ['', Validators.required]
+  });
+
+  constructor(private fb: FormBuilder, private backend: WebappBackendService) { }
 
   ngOnInit() { }
 
-  login() { }
+  async login() {
+    if (this.fg.disabled) {
+      return;
+    }
+    const v = this.fg.value;
+    this.fg.disable();
+    const result = await this.backend.login(v.first + ' ' + v.last, v.pin);
+    this.fg.enable();
+   }
 }

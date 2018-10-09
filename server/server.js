@@ -108,6 +108,7 @@ app.get('/api/v1/session/isValid', async (req, res) => {
 });
 
 app.get('/api/v1/session/login', async (req, res) => {
+	await new Promise((resolve) => setTimeout(resolve, 2000));
 	const name = req.query.name.toLowerCase().trim().split(' ');
 	const firstName = name[0], lastName = name[name.length - 1];
 	const pin = req.query.pin;
