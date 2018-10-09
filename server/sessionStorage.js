@@ -20,7 +20,7 @@ module.exports.createNewSession = function(memberId) {
 		lastRefresh: Date.now(),
 		getAccessLevel: async function() {
 			const member = await memberDatabase.findItemWithValue('id', this.memberId);
-			return (member) ? member.level : c.access.VISITOR;
+			return (member) ? member.accessLevel : c.access.VISITOR;
 		},
 		getMaxTime: async function() {
 			const accessLevel = this.getAccessLevel();
