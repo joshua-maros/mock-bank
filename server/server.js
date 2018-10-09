@@ -126,6 +126,7 @@ app.get('/api/v1/session/login', async (req, res) => {
 			return;
 		} else {
 			res.status(401).send({error: 'Incorrect name or PIN.'});
+			return;
 		}
 	}
 	res.status(401).send({error: 'Incorrect name or PIN.'});
