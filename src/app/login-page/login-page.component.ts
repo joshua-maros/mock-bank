@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { WebappBackendService } from '../webapp-backend.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -14,7 +15,8 @@ export class LoginPageComponent implements OnInit {
     pin: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder, private backend: WebappBackendService) { }
+  constructor(private fb: FormBuilder, private backend: WebappBackendService, private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() { }
 
@@ -25,6 +27,10 @@ export class LoginPageComponent implements OnInit {
     const v = this.fg.value;
     this.fg.disable();
     const result = await this.backend.login(v.first + ' ' + v.last, v.pin);
+    if (result) {
+      const returnUrl = this.route.snapshot.queryParamMap.get('url');
+      this.router.navigateByUrl(returnUrl);
+    }
     this.fg.enable();
    }
 }

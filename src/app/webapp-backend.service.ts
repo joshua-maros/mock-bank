@@ -69,7 +69,9 @@ export class CachedResource<T> {
   private hold: Promise<void> = null;
   private endHoldFunc: () => any;
 
-  public constructor(private refresher: () => Promise<HttpResponse<T>>) { }
+  public constructor(private refresher: () => Promise<HttpResponse<T>>, placeholder: T) {
+    this.data = placeholder;
+  }
   public async get() {
     if (Date.now() < this.lastRefresh + CACHE_EXPIRE_TIME) {
       return this.data;
@@ -81,9 +83,11 @@ export class CachedResource<T> {
       if (this.currentUpdateComplete) {
         this.currentUpdateComplete = false;
         this.currentUpdate = new Promise<T>(async (res, rej) => {
-          this.data = (await this.refresher()).body;
+          try { // Only update the last refresh date if data is sucessfully retreived.
+            this.data = (await this.refresher()).body;
+            this.lastRefresh = Date.now();
+          } catch { }
           this.currentUpdateComplete = true;
-          this.lastRefresh = Date.now();
           res(this.data);
         });
       }
@@ -119,8 +123,8 @@ export class WebappBackendService {
   }
 
   constructor(private client: HttpClient/*, private cookieService: CookieService*/) {
-    this.cachedMembers = new CachedResource<Member[]>(() => this.get<Member[]>('/api/v1/members'));
-    this.cachedLedger = new CachedResource<Transaction[]>(() => this.get<Transaction[]>('/api/v1/ledger'));
+    this.cachedMembers = new CachedResource<Member[]>(() => this.get<Member[]>('/api/v1/members'), []);
+    this.cachedLedger = new CachedResource<Transaction[]>(() => this.get<Transaction[]>('/api/v1/ledger'), []);
   }
 
   private createOptions(contentType?: string): BackendHTTPOptions {
@@ -128,7 +132,7 @@ export class WebappBackendService {
     if (contentType) {
       headers['content-type'] = contentType;
     }
-    if (this.session) {
+    if (this.isSessionValid()) {
       headers.authorization = 'Bearer ' + this.session.sessionToken;
     }
     return {
@@ -168,7 +172,6 @@ export class WebappBackendService {
         params = params.append(key, query[key]);
       }
       options.params = params;
-      console.log(options.params);
       const it = this.client.get<T>(url, options);
       it.subscribe(resolve, reject);
     });
@@ -176,6 +179,14 @@ export class WebappBackendService {
 
   getSessionToken(): string {
     return this.session && this.session.sessionToken;
+  }
+
+  doesSessionExist(): boolean {
+    return !!this.session;
+  }
+
+  isSessionValid(): boolean {
+    return this.session && this.session.expires > Date.now();
   }
 
   getCurrentMember(): Member {

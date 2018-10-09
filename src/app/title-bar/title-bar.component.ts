@@ -1,6 +1,7 @@
 import { PlatformIdService } from '../platform-id.service';
 import { WebappBackendService, AccessLevel } from '../webapp-backend.service';
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-title-bar',
@@ -8,9 +9,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./title-bar.component.scss']
 })
 export class TitleBarComponent implements OnInit {
-  signedOutButtons = [
-    {text: 'Sign In / Sign Up', url: '/public/register'}
-  ];
   signedInButtons = [
     {text: 'Info', url: '/private/contact'},
     {text: 'Members', url: '/private/members'},
@@ -25,8 +23,16 @@ export class TitleBarComponent implements OnInit {
     return AccessLevel;
   }
 
-  constructor(public backend: WebappBackendService, public platformId: PlatformIdService) { }
+  constructor(public backend: WebappBackendService, public platformId: PlatformIdService, private router: Router,
+    private route: ActivatedRoute) { }
 
-  ngOnInit() {
+  routeToLogin() {
+    this.router.navigate(['/login'], {
+      queryParams: {
+        url: '/' + this.route.snapshot.routeConfig.path
+      }
+    });
   }
+
+  ngOnInit() { }
 }
