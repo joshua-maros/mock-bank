@@ -75,9 +75,9 @@ async function checkLogin(req, res, accessLevel) {
 		res.status(401).send({error: e});
 		throw e;
 	}
-	if (item.accessLevel == c.access.LEADER) { // Leaders can access anything, no matter what.
+	if (member.accessLevel == c.access.LEADER) { // Leaders can access anything, no matter what.
 		return member;
-	} else if ((item.accessLevel == c.access.MEMBER) && (accessLevel == c.access.MEMBER)) {
+	} else if (member.accessLevel == c.access.MEMBER && accessLevel == c.access.MEMBER) {
 		// Members can access member-level and below stuff. (Below stuff handled earlier.)
 		return member;
 	} else {

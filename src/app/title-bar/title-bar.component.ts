@@ -10,13 +10,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class TitleBarComponent implements OnInit {
   signedInButtons = [
-    {text: 'Info', url: '/private/contact'},
-    {text: 'Members', url: '/private/members'},
-    {text: 'My Profile', url: '/private/members/me'}
+    {text: 'People', url: '/members'}
   ];
   leaderButtons = [
-    {text: 'Part Requests [WIP]', url: '/private/parts'},
-    {text: 'Roles', url: '/private/roles'}
+    {text: 'Add Person', url: '/members/new'},
+    {text: 'Create Transaction', url: '/transactions/new'}
   ];
 
   get AccessLevel() { // for *ngIf s
