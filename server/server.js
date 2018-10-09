@@ -99,7 +99,7 @@ app.get('/api/v1/session/isValid', async (req, res) => {
 		res.status(200).send({
 			sessionToken: asession.token,
 			expires: await asession.getExpirationDate(),
-			loggedInMember: member
+			loggedInMember: censorMember(member)
 		});
 	} else {
 		res.status(500).send({error: 'Unknown internal error.'});
@@ -121,7 +121,7 @@ app.get('/api/v1/session/login', async (req, res) => {
 			res.status(200).send({
 				sessionToken: session.token,
 				expires: await session.getExpirationDate(),
-				loggedInMember: member
+				loggedInMember: censorMember(member)
 			});
 			return;
 		} else {
