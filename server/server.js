@@ -99,7 +99,7 @@ app.get('/api/v1/session/isValid', async (req, res) => {
 		res.status(200).send({
 			sessionToken: asession.token,
 			expires: await asession.getExpirationDate(),
-			loggedInMember: censorMember(member)
+			loggedInMember: censorMember(member, true)
 		});
 	} else {
 		res.status(500).send({error: 'Unknown internal error.'});
@@ -121,7 +121,7 @@ app.get('/api/v1/session/login', async (req, res) => {
 			res.status(200).send({
 				sessionToken: session.token,
 				expires: await session.getExpirationDate(),
-				loggedInMember: censorMember(member)
+				loggedInMember: censorMember(member, true)
 			});
 			return;
 		} else {
@@ -132,8 +132,8 @@ app.get('/api/v1/session/login', async (req, res) => {
 	res.status(401).send({error: 'Incorrect name or PIN.'});
 });
 
-function censorMember(member) {
-	return {
+function censorMember(member, showMore) {
+	const tr = {
 		id: member.id,
 		firstName: member.firstName,
 		lastName: member.lastName,
@@ -143,6 +143,10 @@ function censorMember(member) {
 		jobs: member.jobs,
 		currentWealth: ledger.getBalance(member)
 	};
+	if (showMore) {
+		tr.accessLevel = member.accessLevel
+	}
+	return tr;
 }
 
 app.get('/api/v1/members', async (req, res) => {
@@ -174,7 +178,7 @@ app.post('/api/v1/members', async (req, res) => {
 		pin: req.body.pin || undefined
 	});
 	ledger.createTransaction(c.BANK_ID, newMember, req.body.blue ? c.BLUE_START : c.ORANGE_START, 'Starting balance');
-	res.status(201).send(censorMember(newMember));
+	res.status(201).send(censorMember(newMember, true));
 });
 
 app.get('/api/v1/ledger', async (req, res) => {
