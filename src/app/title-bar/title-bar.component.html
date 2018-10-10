@@ -1,5 +1,5 @@
 <mat-toolbar id="root" class="mat-typography mat-elevation-z6" color="primary">
-	<ul *ngIf="!platformId.isPhone">
+	<ul class="desktop">
 		<li><a mat-button routerLink="/"><img src="/assets/logo.png"></a></li>
 		<li *ngIf="!backend.isSessionValid()"><a mat-button (click)="routeToLogin()">Sign In</a></li>
 		<li *ngFor="let button of backend.isSessionValid() ? signedInButtons : []">
@@ -9,10 +9,7 @@
 			<a mat-button [routerLink]="button.url">{{button.text}}</a>
 		</li>
 	</ul>
-	<div class="mat-typography clock">
-		{{time}}
-	</div>
-	<mat-menu id="mobile-menu" #mobileMenu>
+	<mat-menu id="mobile-menu" class="mobile" #mobileMenu>
 		<button mat-menu-item routerLink="/">Home</button>
 		<button *ngFor="let button of backend.isSessionValid() ? signedInButtons : []"
 			mat-menu-item [routerLink]="button.url">
@@ -23,10 +20,13 @@
 			{{button.text}}
 		</button>
 	</mat-menu>
-	<div *ngIf="platformId.isPhone" id="mobile-bar" [matMenuTriggerFor]="mobileMenu">
+	<div id="mobile-bar" class="mobile" [matMenuTriggerFor]="mobileMenu">
 		<button mat-icon-button>
 			<mat-icon>menu</mat-icon>
 		</button>
 		<img src="/assets/logo.png">
+	</div>
+	<div class="mat-typography clock">
+		{{time}}
 	</div>
 </mat-toolbar>

@@ -9,6 +9,20 @@ div.clock {
 	background: rgba(50, 50, 50, 0.3);
 }
 
+.mobile {
+	display: none;
+}
+
+@media(max-width: 50em) {
+	.desktop {
+		display: none;
+	}
+
+	.mobile {
+		display: initial;
+	}
+}
+
 ul {
 	list-style: none;
 	padding: 0;
