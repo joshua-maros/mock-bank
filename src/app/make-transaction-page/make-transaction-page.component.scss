@@ -1,3 +1,5 @@
+@import 'vars';
+
 mat-form-field {
     width: 100%;
 }
@@ -42,6 +44,24 @@ mat-form-field {
 
 #send {
     grid-area: send;
+}
+
+mat-form-field.person {
+    border-radius: 0.5em;
+    padding: 0.5em;
+    box-sizing: border-box;
+}
+
+mat-form-field.neutral {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+mat-form-field.orange {
+    background: rgba($class-orange, 0.2);
+}
+
+mat-form-field.blue {
+    background: rgba($class-blue, 0.2);
 }
 
 button {
