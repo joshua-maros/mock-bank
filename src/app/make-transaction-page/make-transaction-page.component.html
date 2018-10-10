@@ -10,14 +10,14 @@
             {{member.firstName + ' ' + member.lastName}}
           </mat-option>
         </mat-select>
+        <mat-hint class="net-desc loss">
+          $<span class="before" *ngIf="fg.value.from">{{fg.value.from.currentWealth}}</span>
+          <span class="after" *ngIf="fg.value.from && fg.value.amount > 0">
+            &#8594; ${{fg.value.from.currentWealth - fg.value.amount}}
+          </span>
+        </mat-hint>
         <mat-error *ngIf="checkError('from', 'required')">This value is required!</mat-error>
       </mat-form-field>
-      <div class="net-desc loss">
-        $<span class="before" *ngIf="fg.value.from">{{fg.value.from.currentWealth}}</span>
-        <span class="after" *ngIf="fg.value.from && fg.value.amount > 0">
-          &#8594; ${{fg.value.from.currentWealth - fg.value.amount}}
-        </span>
-      </div>
     </div>
 
     <div class="account" id="to">
@@ -27,14 +27,14 @@
             {{member.firstName + ' ' + member.lastName}}
           </mat-option>
         </mat-select>
+        <mat-hint class="net-desc gain">
+          $<span class="before" *ngIf="fg.value.to">{{fg.value.to.currentWealth}}</span>
+          <span class="after" *ngIf="fg.value.to && fg.value.amount > 0">
+            &#8594; ${{fg.value.to.currentWealth + fg.value.amount}}
+          </span>
+        </mat-hint>
         <mat-error *ngIf="checkError('to', 'required')">This value is required!</mat-error>
       </mat-form-field>
-      <div class="net-desc gain">
-        $<span class="before" *ngIf="fg.value.to">{{fg.value.to.currentWealth}}</span>
-        <span class="after" *ngIf="fg.value.to && fg.value.amount > 0">
-          &#8594; ${{fg.value.to.currentWealth + fg.value.amount}}
-        </span>
-      </div>
     </div>
 
     <div id="amount">
