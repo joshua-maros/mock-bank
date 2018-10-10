@@ -92,18 +92,16 @@ function getAuthHost(req) {
 }
 
 app.get('/api/v1/session/isValid', async (req, res) => {
-	const session = validateSession(req);
-	const member = await checkLogin(req, res, c.access.MEMBER);
-	if (member) {
-		const asession = await session;
+	const session = await validateSession(req);
+	if (session) {
+		const member = await dbs.members.findItemWithValue('id', session.memberId);
 		res.status(200).send({
-			sessionToken: asession.token,
-			expires: await asession.getExpirationDate(),
+			sessionToken: session.token,
+			expires: await session.getExpirationDate(),
 			loggedInMember: censorMember(member, true)
 		});
 	} else {
-		res.status(500).send({error: 'Unknown internal error.'});
-		throw new Error('Unknown internal error.');
+		res.status(404).send({error: 'Invalid session.'});
 	}
 });
 

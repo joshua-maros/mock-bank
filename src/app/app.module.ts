@@ -20,6 +20,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MakeMemberPageComponent } from './make-member-page/make-member-page.component';
 import { MembersPageComponent } from './members-page/members-page.component';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { CookieService, CookieOptionsProvider, CookieModule } from 'ngx-cookie';
 
 const appRoutes = [
   { path: 'login', component: LoginPageComponent },
@@ -45,6 +46,7 @@ const appRoutes = [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CookieModule.forRoot(),
     FormsModule,
     HttpClientModule,
     MatAutocompleteModule,

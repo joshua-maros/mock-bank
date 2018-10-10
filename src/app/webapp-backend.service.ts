@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-// import { CookieService } from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie';
 
 export type Partial<T> = {
   [P in keyof T]?: T[P];
@@ -122,9 +122,25 @@ export class WebappBackendService {
     }
   }
 
-  constructor(private client: HttpClient/*, private cookieService: CookieService*/) {
+  constructor(private client: HttpClient, private cookieService: CookieService) {
     this.cachedMembers = new CachedResource<Member[]>(() => this.get<Member[]>('/api/v1/members'), []);
     this.cachedLedger = new CachedResource<Transaction[]>(() => this.get<Transaction[]>('/api/v1/ledger'), []);
+    if (this.cookieService.get('sessionToken')) {
+      this.session = {
+        sessionToken: this.cookieService.get('sessionToken'),
+        expires: Date.now() + 1000 * 60,
+        loggedInMember: null
+      };
+      this.get<Session>('/api/v1/session/isValid').then((res) => {
+        if (res.ok) {
+          this.session = res.body;
+        } else {
+          this.session = null;
+        }
+      }, (err) => {
+        this.session = null;
+      });
+    }
   }
 
   private createOptions(contentType?: string): BackendHTTPOptions {
@@ -206,6 +222,7 @@ export class WebappBackendService {
       const result = await this.getByQuery<Session>('/api/v1/session/login', { name: name, pin: pin });
       if (result.status === 200) {
         this.session = result.body;
+        this.cookieService.put('sessionToken', this.session.sessionToken);
       }
       return result;
     } catch {
