@@ -17,7 +17,7 @@ export class PageGuardComponent implements OnInit {
   }
 
   get show() {
-    return this.loaded && this.backend.shouldHaveAccess(this.accessLevel);
+    return this.loaded && this.backend.shouldHaveAccess(this.accessLevel) && this.backend.isSessionValid();
   }
 
   constructor(public backend: WebappBackendService, private router: Router, private route: ActivatedRoute) { }

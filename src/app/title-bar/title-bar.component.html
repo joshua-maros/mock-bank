@@ -28,7 +28,7 @@
 			Bank of Stroup
 		</span>
 	</div>
-	<div class="mat-typography clock">
+	<div class="mat-typography clock" [ngClass]="[flash ? 'flash' : 'stable']">
 		{{time}}
 	</div>
 </mat-toolbar>

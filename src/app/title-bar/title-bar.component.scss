@@ -2,11 +2,23 @@
 	display: block;
 }
 
+@keyframes redflash {
+	0% { color: #fff; }
+	50% { color: red; }
+	100% { color: #fff; }
+}
+
 div.clock {
 	margin-left: auto;
 	padding: 0.7em;
 	border-radius: 0.5em;
 	background: rgba(50, 50, 50, 0.3);
+}
+
+div.clock.flash {
+	animation-name: redflash;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
 }
 
 .title {

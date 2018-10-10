@@ -17,6 +17,7 @@ export class TitleBarComponent implements OnInit {
     {text: 'Create Transaction', url: '/transactions/new'}
   ];
   time = '00:00';
+  flash = false;
 
   get AccessLevel() { // for *ngIf s
     return AccessLevel;
@@ -29,7 +30,13 @@ export class TitleBarComponent implements OnInit {
 
   updateTime() {
     const ss = this.backend.getSessionTime() / 1000;
-    this.time = Math.floor(ss / 60).toString().padStart(2, '0') + ':' + Math.floor(ss % 60).toString().padStart(2, '0');
+    if (ss < 0) {
+      this.time = '00:00';
+      this.flash = true;
+    } else {
+      this.time = Math.floor(ss / 60).toString().padStart(2, '0') + ':' + Math.floor(ss % 60).toString().padStart(2, '0');
+      this.flash = false;
+    }
   }
 
   routeToLogin() {
