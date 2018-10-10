@@ -1,6 +1,6 @@
 <mat-toolbar id="root" class="mat-typography mat-elevation-z6" color="primary">
 	<ul class="desktop">
-		<li><a mat-button routerLink="/"><img src="/assets/logo.png"></a></li>
+		<li><a mat-button routerLink="/" class="title">Home</a></li>
 		<li *ngIf="!backend.isSessionValid()"><a mat-button (click)="routeToLogin()">Sign In</a></li>
 		<li *ngFor="let button of backend.isSessionValid() ? signedInButtons : []">
 			<a mat-button [routerLink]="button.url">{{button.text}}</a>
@@ -24,7 +24,9 @@
 		<button mat-icon-button>
 			<mat-icon>menu</mat-icon>
 		</button>
-		<img src="/assets/logo.png">
+		<span class="title">
+			Bank of Stroup
+		</span>
 	</div>
 	<div class="mat-typography clock">
 		{{time}}

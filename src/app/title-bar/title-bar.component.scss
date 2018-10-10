@@ -9,11 +9,23 @@ div.clock {
 	background: rgba(50, 50, 50, 0.3);
 }
 
+.title {
+	font-weight: bold;
+}
+
 .mobile {
 	display: none;
 }
 
-@media(max-width: 50em) {
+.mobile .title {
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	height: 100%;
+	vertical-align: middle;
+}
+
+@media(max-width: 45em) {
 	.desktop {
 		display: none;
 	}
