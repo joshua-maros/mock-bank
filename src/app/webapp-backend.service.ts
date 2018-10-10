@@ -201,6 +201,10 @@ export class WebappBackendService {
     return !!this.session;
   }
 
+  getSessionTime(): number {
+    return this.session ? this.session.expires - Date.now() : 0;
+  }
+
   isSessionValid(): boolean {
     return this.session && this.session.expires > Date.now();
   }

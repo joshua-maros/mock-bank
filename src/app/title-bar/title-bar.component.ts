@@ -16,13 +16,21 @@ export class TitleBarComponent implements OnInit {
     {text: 'Add Person', url: '/members/new'},
     {text: 'Create Transaction', url: '/transactions/new'}
   ];
+  time = '00:00';
 
   get AccessLevel() { // for *ngIf s
     return AccessLevel;
   }
 
   constructor(public backend: WebappBackendService, public platformId: PlatformIdService, private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute) {
+    setInterval(() => this.updateTime(), 1000);
+  }
+
+  updateTime() {
+    const ss = this.backend.getSessionTime() / 1000;
+    this.time = Math.floor(ss / 60).toString().padStart(2, '0') + ':' + Math.floor(ss % 60).toString().padStart(2, '0');
+  }
 
   routeToLogin() {
     this.router.navigate(['/login'], {

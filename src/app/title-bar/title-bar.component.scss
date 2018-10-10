@@ -2,8 +2,11 @@
 	display: block;
 }
 
-mat-toolbar#root {
-	
+div.clock {
+	margin-left: auto;
+	padding: 0.7em;
+	border-radius: 0.5em;
+	background: rgba(50, 50, 50, 0.3);
 }
 
 ul {
