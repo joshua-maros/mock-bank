@@ -1,7 +1,7 @@
 <app-page-guard [loaded]="members" accessLevel="leader" #guard>
 </app-page-guard>
 <app-centered-layout *ngIf="guard.show">
-  <h1>Members</h1>
+  <h1>Members<a routerLink="/members/new"><mat-icon>add</mat-icon></a></h1>
   <mat-card>
     <div *ngFor="let member of members" 
       [ngClass]="[member.firstName === '!' ? '' : (member.blue ? 'blue' : 'orange'), 'member']">

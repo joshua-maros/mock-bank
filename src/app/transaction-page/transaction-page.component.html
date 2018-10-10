@@ -1,6 +1,6 @@
 <app-page-guard [loaded]="members && ledger" accessLevel="leader" #guard>
 </app-page-guard>
 <app-centered-layout *ngIf="guard.show">
-  <h1>All Transactions</h1>
+  <h1>All Transactions<a routerLink="/transactions/new"><mat-icon>add</mat-icon></a></h1>
   <app-transaction *ngFor="let transaction of ledger" [transaction]="transaction"></app-transaction>
 </app-centered-layout>
