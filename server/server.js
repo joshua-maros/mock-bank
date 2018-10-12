@@ -208,9 +208,9 @@ app.post('/api/v1/jobs', async (req, res) => {
 	}
 	await checkLogin(req, res, c.access.LEADER);
 	const job = dbs.jobs.createJob({
-		title: dbs.body.title,
-		blueSalary: dbs.body.blueSalary,
-		orangeSalary: dbs.body.orangeSalary
+		title: req.body.title,
+		blueSalary: req.body.blueSalary,
+		orangeSalary: req.body.orangeSalary
 	});
 	res.status(201).send(job);
 });

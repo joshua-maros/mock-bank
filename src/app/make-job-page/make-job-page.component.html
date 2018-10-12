@@ -5,20 +5,25 @@
   <form #form="ngForm" [formGroup]="fg" (ngSubmit)="submit()"> <mat-card id="root">
     <div id="name">
       <mat-form-field>
-        <input matInput placeholder="Job Name" fromControlName="name">
+        <input matInput placeholder="Job Name" formControlName="name">
       </mat-form-field>
     </div>
 
     <div id="blueSalary">
       <mat-form-field>
-        <input matInput type="number" placeholder="Blue Salary" fromControlName="blueSalary">
+        <input matInput type="number" placeholder="Blue Salary" formControlName="blueSalary">
       </mat-form-field>
     </div>
 
     <div id="orangeSalary">
       <mat-form-field>
-        <input matInput type="number" placeholder="Orange Salary" fromControlName="orangeSalary">
+        <input matInput type="number" placeholder="Orange Salary" formControlName="orangeSalary">
       </mat-form-field>
     </div>
+
+    <div id="send">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!fg.valid">Create</button>
+    </div>
   </mat-card> </form>
+  {{fg.value.blueSalary}}
 </app-centered-layout>

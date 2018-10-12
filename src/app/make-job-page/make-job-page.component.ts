@@ -18,4 +18,15 @@ export class MakeJobPageComponent implements OnInit {
   constructor(private backend: WebappBackendService, private fb: FormBuilder) { }
 
   ngOnInit() { }
+
+  submit() {
+    const v = this.fg.value;
+    this.fg.disable();
+    this.backend.createJob(v.name, v.blueSalary, v.orangeSalary).then((res) => {
+      if (res.ok) {
+        this.form.resetForm();
+      }
+      this.fg.enable();
+    })
+  }
 }
