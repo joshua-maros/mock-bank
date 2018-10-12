@@ -24,6 +24,9 @@ export class MakeTransactionPageComponent implements OnInit {
     'Payment',
     'Fine',
     'Rent',
+    'Property Tax',
+    'Law Fee',
+    'Priviledge Pass',
     'Other Fee'
   ];
 
