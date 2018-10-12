@@ -22,6 +22,7 @@ import { MembersPageComponent } from './members-page/members-page.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { CookieService, CookieOptionsProvider, CookieModule } from 'ngx-cookie';
 import { JobsPageComponent } from './jobs-page/jobs-page.component';
+import { MakeJobPageComponent } from './make-job-page/make-job-page.component';
 
 const appRoutes = [
   { path: 'login', component: LoginPageComponent },
@@ -29,7 +30,8 @@ const appRoutes = [
   { path: 'transactions/new', component: MakeTransactionPageComponent },
   { path: 'members', component: MembersPageComponent },
   { path: 'members/new', component: MakeMemberPageComponent },
-  { path: 'jobs', component: JobsPageComponent }
+  { path: 'jobs', component: JobsPageComponent },
+  { path: 'jobs/new', component: MakeJobPageComponent }
 ];
 
 @NgModule({
@@ -44,7 +46,8 @@ const appRoutes = [
     MakeMemberPageComponent,
     MembersPageComponent,
     LoginPageComponent,
-    JobsPageComponent
+    JobsPageComponent,
+    MakeJobPageComponent
   ],
   imports: [
     BrowserModule,
