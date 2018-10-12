@@ -22,16 +22,16 @@ export class TransactionComponent implements OnInit {
         if (member.id === this.transaction.from) {
           this.fromName = member.firstName + ' ' + member.lastName;
           if (member.firstName === '!') {
-            this.fromName = 'Bank';
+            this.fromName = member.lastName;
           } else {
-            this.fromColor = member.blue ? 'blue' : 'orange';
+            this.fromColor = member.class;
           }
         } else if (member.id === this.transaction.to) {
           this.toName = member.firstName + ' ' + member.lastName;
           if (member.firstName === '!') {
-            this.toName = 'Bank';
+            this.toName = member.lastName;
           } else {
-            this.toColor = member.blue ? 'blue' : 'orange';
+            this.toColor = member.class;
           }
         }
       }

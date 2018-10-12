@@ -64,6 +64,10 @@ mat-form-field.blue {
     background: rgba($class-blue, 0.2);
 }
 
+mat-form-field.none {
+    background: rgba(128, 128, 128, 0.2);
+}
+
 button {
     width: 100%;
 }

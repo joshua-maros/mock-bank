@@ -4,7 +4,7 @@
   <h1>Create Transaction</h1>
   <form #form="ngForm" [formGroup]="fg" (ngSubmit)="submit()"> <mat-card id="root">
     <div class="account" id="from">
-      <mat-form-field [ngClass]="[fg.value.from ? (fg.value.from.blue ? 'blue' : 'orange') : 'neutral', 'person']">
+      <mat-form-field [ngClass]="[fg.value.from ? (fg.value.from.class) : 'blank', 'person']">
         <mat-select placeholder="From" formControlName="from" [errorStateMatcher]="alwaysMatcher">
           <mat-option *ngFor="let member of members" [value]="member">
             {{member.firstName + ' ' + member.lastName}}
@@ -21,7 +21,7 @@
     </div>
 
     <div class="account" id="to">
-      <mat-form-field [ngClass]="[fg.value.to ? (fg.value.to.blue ? 'blue' : 'orange') : 'neutral', 'person']">
+      <mat-form-field [ngClass]="[fg.value.to ? (fg.value.to.class) : 'blank', 'person']">
         <mat-select placeholder="To" formControlName="to" [errorStateMatcher]="alwaysMatcher">
           <mat-option *ngFor="let member of members" [value]="member">
             {{member.firstName + ' ' + member.lastName}}

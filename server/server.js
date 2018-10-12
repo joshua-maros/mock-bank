@@ -135,7 +135,7 @@ function censorMember(member, showMore) {
 		id: member.id,
 		firstName: member.firstName,
 		lastName: member.lastName,
-		blue: member.blue,
+		class: member.class,
 		ownsDesks: member.ownsDesks,
 		rentsDesks: member.rentsDesks,
 		jobs: member.jobs,
@@ -157,7 +157,7 @@ app.get('/api/v1/members', async (req, res) => {
 		id: c.BANK_ID,
 		firstName: '!',
 		lastName: 'Bank',
-		blue: false,
+		class: 'none',
 		ownsDesks: [],
 		rentsDesks: [],
 		jobs: [],
@@ -172,10 +172,18 @@ app.post('/api/v1/members', async (req, res) => {
 	const newMember = dbs.members.createMember({
 		firstName: req.body.firstName || undefined,
 		lastName: req.body.lastName || undefined,
-		blue: req.body.blue || undefined,
+		class: req.body.class || undefined,
 		pin: req.body.pin || undefined
 	});
-	ledger.createTransaction(c.BANK_ID, newMember, req.body.blue ? c.BLUE_START : c.ORANGE_START, 'Starting balance');
+	let amount = 0;
+	if (req.body.class === 'blue') {
+		amount = c.BLUE_START
+	} else if (req.body.class = 'orange') {
+		amount = c.ORANGE_START;
+	}
+	if (amount) {
+		ledger.createTransaction(c.BANK_ID, newMember, amount, 'Starting balance');
+	}
 	res.status(201).send(censorMember(newMember, true));
 });
 

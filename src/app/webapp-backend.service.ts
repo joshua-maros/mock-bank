@@ -13,12 +13,18 @@ export enum AccessLevel {
   LEADER = 'leader'
 }
 
+export enum Class {
+  BLUE = 'blue',
+  ORANGE = 'orange',
+  NEUTRAL = 'none'
+}
+
 export interface Member {
   id: string;
   pin: string;
   firstName: string;
   lastName: string;
-  blue: boolean;
+  class: Class
   ownsDesks: number[];
   rentsDesks: number[];
   jobs: string[];
