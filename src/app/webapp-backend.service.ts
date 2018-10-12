@@ -39,6 +39,13 @@ export interface Transaction {
   reason: string;
 }
 
+export interface Job {
+  id: string;
+  title: string;
+  blueSalary: number;
+  orangeSalary: number;
+}
+
 const quantifiedAccessLevels = {
   visitor: 0,
   member: 2,
@@ -113,6 +120,7 @@ export class WebappBackendService {
   private session: Session = null;
   private cachedMembers: CachedResource<Member[]>;
   private cachedLedger: CachedResource<Transaction[]>;
+  private cachedJobs: CachedResource<Job[]>;
 
   public get currentMember(): Member {
     if (this.session) {
@@ -125,6 +133,7 @@ export class WebappBackendService {
   constructor(private client: HttpClient, private cookieService: CookieService) {
     this.cachedMembers = new CachedResource<Member[]>(() => this.get<Member[]>('/api/v1/members'), []);
     this.cachedLedger = new CachedResource<Transaction[]>(() => this.get<Transaction[]>('/api/v1/ledger'), []);
+    this.cachedJobs = new CachedResource<Job[]>(() => this.get<Job[]>('/api/v1/jobs'), []);
     if (this.cookieService.get('sessionToken')) {
       this.session = {
         sessionToken: this.cookieService.get('sessionToken'),
@@ -267,6 +276,22 @@ export class WebappBackendService {
     }).then((e) => {
       this.cachedLedger.endHold();
       this.cachedMembers.endHold();
+      return e;
+    });
+  }
+
+  getCachedJobList(): Promise<Job[]> {
+    return this.cachedJobs.get();
+  }
+
+  createJob(title: string, blueSalary: number, orangeSalary: number) {
+    this.cachedJobs.markDirtyAndHold();
+    return this.post<Transaction>('/api/v1/jobs', {
+      title: title,
+      blueSalary: blueSalary,
+      orangeSalary: orangeSalary
+    }).then((e) => {
+      this.cachedJobs.endHold();
       return e;
     });
   }

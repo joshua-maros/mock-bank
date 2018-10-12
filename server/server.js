@@ -196,6 +196,25 @@ app.post('/api/v1/ledger', async (req, res) => {
 	res.status(201).send(transaction);
 });
 
+app.get('/api/v1/jobs', async (req, res) => {
+	await checkLogin(req, res, c.access.MEMBER);
+	res.status(201).send(await dbs.jobs.getAllItems());
+});
+
+app.post('/api/v1/jobs', async (req, res) => {
+	if (!(req.body.title && req.body.orangeSalary && req.body.blueSalary)) {
+		res.status(400).send({error: 'The parameters [from, to, amount] are required in the request body.'});
+		return;
+	}
+	await checkLogin(req, res, c.access.LEADER);
+	const job = dbs.jobs.createJob({
+		title: dbs.body.title,
+		blueSalary: dbs.body.blueSalary,
+		orangeSalary: dbs.body.orangeSalary
+	});
+	res.status(201).send(job);
+});
+
 app.get('/public/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/private/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/', (req, res) => res.sendFile(rootDir + '/index.html'));
