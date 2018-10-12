@@ -21,7 +21,7 @@ export enum Class {
 
 export interface Member {
   id: string;
-  pin: string;
+  pin?: string;
   firstName: string;
   lastName: string;
   class: Class
@@ -259,6 +259,26 @@ export class WebappBackendService {
       this.cachedMembers.endHold();
       return e;
     });
+  }
+
+  async getClassSummary(clas: Class, hrClassName: string): Promise<Member> {
+    let minBalance = 99999999;
+    for (const member of await this.getCachedMemberList()) {
+      if (member.class === clas && member.currentWealth < minBalance) {
+        minBalance = member.currentWealth;
+      }
+    }
+    return {
+      accessLevel: AccessLevel.MEMBER,
+      class: clas,
+      firstName: 'All',
+      lastName: hrClassName,
+      id: 'ALL_' + hrClassName.toUpperCase(),
+      currentWealth: minBalance,
+      jobs: [],
+      ownsDesks: [],
+      rentsDesks: []
+    };
   }
 
   getCachedLedger(): Promise<Transaction[]> {

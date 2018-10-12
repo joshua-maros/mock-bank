@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { WebappBackendService } from '../webapp-backend.service';
+import { WebappBackendService, Member, AccessLevel, Class } from '../webapp-backend.service';
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({

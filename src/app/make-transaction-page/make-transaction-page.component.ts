@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { WebappBackendService, Member, AccessLevel } from '../webapp-backend.service';
+import { WebappBackendService, Member, AccessLevel, Class } from '../webapp-backend.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { sortMembers } from '../util';
@@ -49,8 +49,15 @@ export class MakeTransactionPageComponent implements OnInit {
     return AccessLevel;
   }
 
+  private async updateMembers() {
+    const members = this.backend.getCachedMemberList();
+    const allBlues = this.backend.getClassSummary(Class.BLUE, 'Blues');
+    const allOranges = this.backend.getClassSummary(Class.ORANGE, 'Oranges');
+    this.members = sortMembers((await members).concat([await allBlues, await allOranges]), false);
+  }
+
   constructor(private backend: WebappBackendService) {
-    backend.getCachedMemberList().then(e => this.members = sortMembers(e, false));
+    this.updateMembers();
   }
 
   ngOnInit() { }
@@ -59,12 +66,50 @@ export class MakeTransactionPageComponent implements OnInit {
     return this.fg.controls[controlName] && this.fg.controls[controlName].hasError(errorName);
   }
 
+  private async getClassList(clas: Class) {
+    let result = [];
+    for (const member of await this.backend.getCachedMemberList()) {
+      if (member.class === clas) {
+        result.push(member);
+      }
+    }
+    return result;
+  }
+
   submit() {
     const v = this.fg.value;
     this.fg.disable();
-    this.backend.createTransaction(v.from, v.to, v.amount, v.reason).then(async (res) => {
+    let from = [v.from], to = [v.to];
+    (async () => {
+      if (v.from.id === 'ALL_BLUES') {
+        from = await this.getClassList(Class.BLUE);
+      }
+      if (v.from.id === 'ALL_ORANGES') {
+        from = await this.getClassList(Class.ORANGE);
+      }
+      if (v.to.id === 'ALL_BLUES') {
+        to = await this.getClassList(Class.BLUE);
+      }
+      if (v.to.id === 'ALL_ORANGES') {
+        to = await this.getClassList(Class.ORANGE);
+      }
+      if (to.length > 1 && from.length > 1) {
+        this.fg.enable();
+        return;
+      }
+      if (to.length > 1) {
+        for (const m of to) {
+          await this.backend.createTransaction(v.from, m, v.amount, v.reason);
+        }
+      } else if (from.length > 1) {
+        for (const m of from) {
+          await this.backend.createTransaction(m, v.to, v.amount, v.reason);
+        }
+      } else {
+        await this.backend.createTransaction(v.from, v.to, v.amount, v.reason);
+      }
       const oldFrom = v.from.id, oldTo = v.to.id;
-      this.members = sortMembers(await this.backend.getCachedMemberList(), false);
+      await this.updateMembers();
       let newFrom: Member, newTo: Member;
       for (const member of this.members) {
         if (member.id === oldFrom) {
@@ -77,6 +122,6 @@ export class MakeTransactionPageComponent implements OnInit {
       this.form.resetForm();
       this.fg.patchValue({ amount: null, from: newFrom, to: newTo });
       this.fg.enable();
-    });
+    })();
   }
 }
