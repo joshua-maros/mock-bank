@@ -1,4 +1,4 @@
-<app-page-guard [loaded]="true" accessLevel="member" #guard>
+<app-page-guard [loaded]="members" accessLevel="member" #guard>
 </app-page-guard>
 <app-centered-layout *ngIf="true || guard.show">
   <h1>Create Job</h1>
@@ -21,9 +21,21 @@
       </mat-form-field>
     </div>
 
+    <div id="quickAdd">
+      <mat-form-field>
+        <mat-select placeholder="Add People" formControlName="toAdd" (change)="addMember()">
+          <mat-option *ngFor="let member of members" [value]="member">
+            {{member.firstName + ' ' + member.lastName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div *ngFor="let member of quickAddList">
+        {{member.firstName + ' ' + member.lastName}}
+      </div>
+    </div>
+
     <div id="send">
       <button mat-raised-button color="primary" type="submit" [disabled]="!fg.valid">Create</button>
     </div>
   </mat-card> </form>
-  {{fg.value.blueSalary}}
 </app-centered-layout>

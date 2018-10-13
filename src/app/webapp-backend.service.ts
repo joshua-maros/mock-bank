@@ -261,6 +261,17 @@ export class WebappBackendService {
     });
   }
 
+  patchMember(member: Member | string, memberData: Partial<Member>): Promise<HttpResponse<Member>> {
+    this.cachedMembers.markDirtyAndHold();
+    if ((member as Member).id !== undefined) {
+      member = (member as Member).id;
+    }
+    return this.patch<Member>('/api/v1/members/' + member, memberData).then((e) => {
+      this.cachedMembers.endHold();
+      return e;
+    })
+  }
+
   async getClassSummary(clas: Class, hrClassName: string): Promise<Member> {
     let minBalance = 99999999;
     for (const member of await this.getCachedMemberList()) {
@@ -310,9 +321,9 @@ export class WebappBackendService {
     return this.cachedJobs.get();
   }
 
-  createJob(title: string, blueSalary: number, orangeSalary: number) {
+  createJob(title: string, blueSalary: number, orangeSalary: number): Promise<HttpResponse<Job>> {
     this.cachedJobs.markDirtyAndHold();
-    return this.post<Transaction>('/api/v1/jobs', {
+    return this.post<Job>('/api/v1/jobs', {
       title: title,
       blueSalary: blueSalary,
       orangeSalary: orangeSalary

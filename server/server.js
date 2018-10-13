@@ -187,6 +187,23 @@ app.post('/api/v1/members', async (req, res) => {
 	res.status(201).send(censorMember(newMember, true));
 });
 
+app.patch('/api/v1/members/:id', async (req, res) => {
+	const loggedInMember = await checkLogin(req, res, c.access.MEMBER);
+	const memberOkay = Object.keys(req.body)[0] === 'pin' && Object.keys(req.body).size === 1 
+		|| loggedInMember.id === req.params.id;
+	if (loggedInMember.accessLevel === c.access.MEMBER && !memberOkay) {
+		res.status(403).send({error: 'This action requires the logged in user to be a leader.'});
+		return;
+	}
+	const existingMember = await dbs.members.findItemWithValue('id', req.params.id);
+	for (const key of ['firstName', 'lastName', 'class', 'ownsDesks', 'rentsDesks', 'jobs']) {
+		if (req.body[key]) {
+			existingMember[key] = req.body[key];
+		}
+	}
+	res.status(200).send(existingMember);
+});
+
 app.get('/api/v1/ledger', async (req, res) => {
 	const loggedInMember = await checkLogin(req, res, c.access.MEMBER);
 	const ledgerData = await ledger.getTransactionHistory();
@@ -211,7 +228,7 @@ app.get('/api/v1/jobs', async (req, res) => {
 
 app.post('/api/v1/jobs', async (req, res) => {
 	if (!(req.body.title && req.body.orangeSalary && req.body.blueSalary)) {
-		res.status(400).send({error: 'The parameters [from, to, amount] are required in the request body.'});
+		res.status(400).send({error: 'The parameters [title, orangeSalary, blueSalary] are required in the request body.'});
 		return;
 	}
 	await checkLogin(req, res, c.access.LEADER);
