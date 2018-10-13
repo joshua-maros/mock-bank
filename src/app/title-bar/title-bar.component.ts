@@ -13,7 +13,8 @@ export class TitleBarComponent implements OnInit {
     {text: 'People', url: '/members'}
   ];
   leaderButtons = [
-    {text: 'Transactions', url: '/transactions'}
+    {text: 'Transactions', url: '/transactions'},
+    {text: 'Jobs', url: '/jobs'}
   ];
   time = '00:00';
   flash = false;
