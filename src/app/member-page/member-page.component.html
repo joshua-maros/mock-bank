@@ -1,0 +1,31 @@
+<app-page-guard [loaded]="members && ledger && jobs && thisMember" accessLevel="leader" #guard>
+</app-page-guard>
+<app-centered-layout *ngIf="guard.show" [ngClass]="[thisMember.class]">
+  <h1>{{thisMember.firstName}} {{thisMember.lastName}}</h1>
+  <mat-card>
+    <div class="prop-box">
+      <span class="key">Class:</span>
+      <span class="spacer"></span>
+      <span class="value class">{{thisMember.class.charAt(0).toUpperCase() + thisMember.class.substr(1)}}</span>
+    </div>
+    <div class="prop-box">
+      <span class="key">Bank Balance:</span>
+      <span class="spacer"></span>
+      <span class="value">${{thisMember.currentWealth}}</span>
+    </div>
+    <div class="prop-box">
+      <span class="key">Number of Jobs:</span>
+      <span class="spacer"></span>
+      <span class="value">{{thisMember.jobs.length}}</span>
+    </div>
+    <div class="prop-box">
+      <span class="key">Weekly Salary:</span>
+      <span class="spacer"></span>
+      <span class="value">${{salary}}</span>
+    </div>
+  </mat-card>
+  <h1>{{thisMember.firstName}} {{thisMember.lastName}}'s Jobs</h1>
+  <app-job *ngFor="let job of memberJobs" [job]="job"></app-job>
+  <h1>{{thisMember.firstName}} {{thisMember.lastName}}'s Transactions</h1>
+  <app-transaction *ngFor="let transaction of memberTransactions" [transaction]="transaction"></app-transaction>
+</app-centered-layout>
