@@ -1,0 +1,79 @@
+@import 'vars';
+
+mat-card {
+    padding: 0.5em;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-areas: "title bs os";
+}
+
+@media(max-width: 35em) {
+    mat-card {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "title title"
+            "bs    os"
+    }
+
+    #title {
+        border: none;
+    }
+}
+
+mat-card > * {
+    margin-right: 0.5em;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: min-content 1fr;
+}
+
+#title {
+    grid-area: title;
+}
+
+#bs {
+    grid-area: bs;
+}
+
+#os {
+    grid-area: os;
+}
+
+span.cat-text {
+    display: inline-block;
+    vertical-align: bottom;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+span.cat-text.name {
+    text-overflow: ".";
+}
+
+span.cat-text.blue {
+    color: $class-blue;
+}
+
+span.cat-text.orange {
+    color: $class-orange;
+}
+
+span.cat-text.text {
+    text-overflow: ellipsis;
+}
+
+mat-card > *:not(:last-child) {
+    padding-right: 0.5em;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.mat-caption {
+    opacity: 0.5;
+    display: inline-block;
+    vertical-align: bottom;
+    overflow: hidden;
+    max-width: 100%;
+    text-overflow: ":";
+    margin-right: 0.25em;
+}

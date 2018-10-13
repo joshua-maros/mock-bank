@@ -23,6 +23,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { CookieService, CookieOptionsProvider, CookieModule } from 'ngx-cookie';
 import { JobsPageComponent } from './jobs-page/jobs-page.component';
 import { MakeJobPageComponent } from './make-job-page/make-job-page.component';
+import { JobComponent } from './job/job.component';
 
 const appRoutes = [
   { path: 'login', component: LoginPageComponent },
@@ -47,7 +48,8 @@ const appRoutes = [
     MembersPageComponent,
     LoginPageComponent,
     JobsPageComponent,
-    MakeJobPageComponent
+    MakeJobPageComponent,
+    JobComponent
   ],
   imports: [
     BrowserModule,
