@@ -29,7 +29,6 @@ export class TitleBarComponent implements OnInit {
   }
 
   updateTime() {
-    console.log(this.route.snapshot.pathFromRoot);
     const ss = this.backend.getSessionTime() / 1000;
     if (ss < 0) {
       this.time = '00:00';
