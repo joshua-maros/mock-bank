@@ -3,16 +3,16 @@
 mat-card {
     padding: 0.5em;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-areas: "title bs os";
+    grid-template-columns: 2fr 1fr 1fr min-content;
+    grid-template-areas: "title bs os clear";
 }
 
 @media(max-width: 35em) {
     mat-card {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr min-content;
         grid-template-areas: 
-            "title title"
-            "bs    os"
+            "title title clear"
+            "bs    os    os"
     }
 
     #title {
@@ -37,6 +37,20 @@ mat-card > * {
 
 #os {
     grid-area: os;
+}
+
+#clear {
+    grid-area: clear;
+    border: none;
+    margin: 0;
+    height: 24px;
+    opacity: 0.5;
+    transition: opacity 0.25s;
+    cursor: pointer;
+}
+
+#clear:hover {
+    opacity: 0.75;
 }
 
 span.cat-text {

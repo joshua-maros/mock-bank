@@ -3,6 +3,9 @@
     <span class="mat-caption">TITLE: </span>
     <span class="cat-text text">{{job.title}}</span>
   </span>
+  <span id="clear" (click)="deleteClick.emit()">
+    <span class="cat-text"><mat-icon>clear</mat-icon></span>
+  </span>
   <span id="bs">
     <span class="mat-caption">$/WK: </span>
     <span class="cat-text value blue">${{job.blueSalary}} </span>

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Member, Transaction, WebappBackendService, Job, Class } from '../webapp-backend.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatSelect } from '@angular/material';
 
 @Component({
   selector: 'app-member-page',
@@ -12,6 +13,7 @@ export class MemberPageComponent implements OnInit {
   ledger: Transaction[];
   jobs: Job[];
   thisMember: Member;
+  thisMemberId: string;
 
   get memberJobs() {
     return this.jobs.filter(value => {
@@ -37,22 +39,63 @@ export class MemberPageComponent implements OnInit {
     return total;
   }
 
+  private async reloadData() {
+    const members = this.backend.getCachedMemberList();
+    const ledger = this.backend.getCachedLedger();
+    const jobs = this.backend.getCachedJobList();
+    this.members = await members;
+    this.ledger = await ledger;
+    this.jobs = await jobs;
+  }
+
+  private updateThisMember() {
+    for (const member of this.members) {
+      if (member.id === this.thisMemberId) {
+        this.thisMember = member;
+        return;
+      }
+    }
+  }
+
   constructor(private backend: WebappBackendService, private route: ActivatedRoute) {
     (async () => {
-      const members = this.backend.getCachedMemberList();
-      const ledger = this.backend.getCachedLedger();
-      const jobs = this.backend.getCachedJobList();
-      this.members = await members;
-      this.ledger = await ledger;
-      this.jobs = await jobs;
+      await this.reloadData();
       this.route.params.subscribe(params => {
-        for (const member of this.members) {
-          if (member.id === params['id']) {
-            this.thisMember = member;
-          }
-        }
+        this.thisMemberId = params['id'];
+        this.updateThisMember();
       });
     })();
+  }
+
+  addJob(job: Job) {
+    if (!job || this.thisMember.jobs.indexOf(job.id) !== -1) {
+      return;
+    }
+    const newJobList = this.thisMember.jobs.concat(job.id);
+    this.thisMember.jobs = newJobList;
+    this.backend.patchMember(this.thisMember, {
+      jobs: newJobList
+    });
+    (async () => {
+      this.members = await(this.backend.getCachedMemberList());
+      this.updateThisMember();
+    })();
+  }
+
+  deleteJob(job: Job) {
+    this.thisMember.jobs = this.thisMember.jobs.filter(id => id !== job.id);
+    const newJobList = this.memberJobs.filter(item => item.id !== job.id).map(item => item.id);
+    this.backend.patchMember(this.thisMember, {
+      jobs: newJobList
+    });
+    (async () => {
+      this.members = await(this.backend.getCachedMemberList());
+      this.updateThisMember();
+    })();
+  }
+
+  test() {
+    console.log('asdf');
   }
 
   ngOnInit() { }

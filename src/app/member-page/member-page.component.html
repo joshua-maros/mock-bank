@@ -24,8 +24,15 @@
       <span class="value">${{salary}}</span>
     </div>
   </mat-card>
-  <h1>{{thisMember.firstName}} {{thisMember.lastName}}'s Jobs</h1>
-  <app-job *ngFor="let job of memberJobs" [job]="job"></app-job>
+  <h1>{{thisMember.firstName}} {{thisMember.lastName}}'s Jobs
+    <button mat-icon-button [matMenuTriggerFor]="jobMenu"><mat-icon>add</mat-icon></button>
+  </h1>
+  <mat-menu #jobMenu="matMenu">
+    <button mat-menu-item *ngFor="let job of jobs" (click)="addJob(job)">
+      {{job.title}}
+    </button>
+  </mat-menu>
+  <app-job *ngFor="let job of memberJobs" [job]="job" (deleteClick)="deleteJob(job)"></app-job>
   <h1>{{thisMember.firstName}} {{thisMember.lastName}}'s Transactions</h1>
   <app-transaction *ngFor="let transaction of memberTransactions" [transaction]="transaction"></app-transaction>
 </app-centered-layout>

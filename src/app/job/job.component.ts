@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Job } from '../webapp-backend.service';
+import { OuterSubscriber } from 'rxjs/internal/OuterSubscriber';
 
 @Component({
   selector: 'app-job',
@@ -8,10 +9,9 @@ import { Job } from '../webapp-backend.service';
 })
 export class JobComponent implements OnInit {
   @Input() job: Job;
+  @Output() deleteClick = new EventEmitter<void>();
 
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() { }
 }
