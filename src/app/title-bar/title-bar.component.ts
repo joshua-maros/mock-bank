@@ -29,6 +29,7 @@ export class TitleBarComponent implements OnInit {
   }
 
   updateTime() {
+    console.log(this.route.snapshot.pathFromRoot);
     const ss = this.backend.getSessionTime() / 1000;
     if (ss < 0) {
       this.time = '00:00';
@@ -40,10 +41,9 @@ export class TitleBarComponent implements OnInit {
   }
 
   routeToLogin() {
-    const r = this.route.snapshot.routeConfig;
     this.router.navigate(['/login'], {
       queryParams: {
-        url: '/' + (r === null ? '' : r.path)
+        url: window.location.pathname
       }
     });
   }

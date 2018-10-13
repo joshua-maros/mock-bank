@@ -25,7 +25,7 @@ export class PageGuardComponent implements OnInit {
   routeToLogin() {
     this.router.navigate(['/login'], {
       queryParams: {
-        url: '/' + this.route.snapshot.routeConfig.path
+        url: window.location.pathname
       }
     });
   }
