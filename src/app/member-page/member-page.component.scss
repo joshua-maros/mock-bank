@@ -40,3 +40,8 @@ div.prop-box span.spacing {
 div.prop-box span.value {
     grid-area: value;
 }
+
+app-job, app-transaction {
+    display: block;
+    margin-bottom: 0.5em;
+}

@@ -15,6 +15,11 @@ h1 > a {
     padding-bottom: 0.5em;
     display: grid;
     grid-template-columns: 1fr 1em 1fr;
+    cursor: pointer;
+}
+
+.member:hover {
+    background-color: rgba(128, 128, 128, 0.1);
 }
 
 .member:not(:last-child) {

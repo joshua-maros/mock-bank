@@ -3,7 +3,7 @@
 <app-centered-layout *ngIf="guard.show">
   <h1>Members<a routerLink="/members/new"><mat-icon>add</mat-icon></a></h1>
   <mat-card>
-    <div *ngFor="let member of members" 
+    <div *ngFor="let member of members" (click)="gotoMember(member)"
       [ngClass]="[member.firstName === '!' ? '' : member.class, 'member']">
       <strong class="member-name">{{member.firstName}} {{member.lastName}}</strong>
       <span></span>
