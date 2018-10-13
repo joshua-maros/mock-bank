@@ -24,7 +24,7 @@ export interface Member {
   pin?: string;
   firstName: string;
   lastName: string;
-  class: Class
+  class: Class;
   ownsDesks: number[];
   rentsDesks: number[];
   jobs: string[];
@@ -269,7 +269,7 @@ export class WebappBackendService {
     return this.patch<Member>('/api/v1/members/' + member, memberData).then((e) => {
       this.cachedMembers.endHold();
       return e;
-    })
+    });
   }
 
   async getClassSummary(clas: Class, hrClassName: string): Promise<Member> {
