@@ -1,0 +1,63 @@
+mat-card {
+    display: grid;
+    grid-column-gap: 0.5em;
+    grid-row-gap: 1em;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+        "name qadd"
+        "bs   qadd"
+        "os   qadd"
+        "os   send"
+}
+
+@media(max-width: 35em) {
+    mat-card {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "name"
+            "bs"
+            "os"
+            "qadd"
+            "send"
+    }
+
+    #send > button {
+        width: 100%;
+    }
+}
+
+@media(min-width: 35em) {
+    #send {
+        position: relative;
+    }
+
+    #send > button {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+#name {
+    grid-area: name;
+}
+
+#blueSalary {
+    grid-area: bs;
+}
+
+#orangeSalary {
+    grid-area: os;
+}
+
+#quickAdd {
+    grid-area: qadd;
+}
+
+#send {
+    grid-area: send;
+}
