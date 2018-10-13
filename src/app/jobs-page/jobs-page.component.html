@@ -1,3 +1,6 @@
-<p>
-  jobs-page works!
-</p>
+<app-page-guard [loaded]="jobs" accessLevel="member" #guard>
+</app-page-guard>
+<app-centered-layout *ngIf="guard.show">
+  <h1>Jobs<a routerLink="/jobs/new"><mat-icon>add</mat-icon></a></h1>
+  <app-job *ngFor="let job of jobs" [job]="job"></app-job>
+</app-centered-layout>

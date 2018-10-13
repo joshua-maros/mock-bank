@@ -1,4 +1,4 @@
-import { Member } from './webapp-backend.service';
+import { Member, Job } from './webapp-backend.service';
 
 export function sortMembers(input: Member[], excludeBank: boolean): Member[] {
   const sorted = input.sort((a, b) => {
@@ -13,4 +13,10 @@ export function sortMembers(input: Member[], excludeBank: boolean): Member[] {
   } else {
     return sorted;
   }
+}
+
+export function sortJobs(input: Job[]): Job[] {
+  return input.sort((a, b) => {
+    return a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1;
+  });
 }
