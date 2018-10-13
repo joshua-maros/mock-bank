@@ -39,9 +39,10 @@ export class TitleBarComponent implements OnInit {
   }
 
   routeToLogin() {
+    const r = this.route.snapshot.routeConfig;
     this.router.navigate(['/login'], {
       queryParams: {
-        url: '/' + this.route.snapshot.routeConfig.path
+        url: '/' + (r === null ? '' : r.path)
       }
     });
   }
