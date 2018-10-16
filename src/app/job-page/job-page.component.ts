@@ -9,9 +9,9 @@ import { sortMembers } from '../util';
   styleUrls: ['./job-page.component.scss']
 })
 export class JobPageComponent implements OnInit {
-  private job: Job = null;
-  private members: Member[] = null;
-  private employees: Member[] = null;
+  public job: Job = null;
+  public members: Member[] = null;
+  public employees: Member[] = null;
 
   private async updateEmployeeList() {
     const members = await this.backend.getCachedMemberList();
