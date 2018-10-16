@@ -1,0 +1,15 @@
+@import 'vars';
+
+:host {
+    display: block;
+    opacity: 0;
+    transition-duration: 0.5s;
+}
+
+:host(.active) {
+    opacity: 1;
+}
+
+:host(.error) {
+    color: $error-color;
+}
