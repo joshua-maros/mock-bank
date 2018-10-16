@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Job } from '../webapp-backend.service';
-import { OuterSubscriber } from 'rxjs/internal/OuterSubscriber';
 import { Router } from '@angular/router';
 
 @Component({
