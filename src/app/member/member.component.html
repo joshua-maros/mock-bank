@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card (click)="gotoMember()">
   <span id="name">
     <span class="mat-caption">NAME: </span>
     <span [ngClass]="'cat-text name ' + member.class">{{member.firstName}} {{member.lastName}}</span>

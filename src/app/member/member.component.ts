@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Member, WebappBackendService } from '../webapp-backend.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-member',
@@ -10,7 +11,7 @@ export class MemberComponent implements OnInit {
   @Input() member: Member = null;
   salary: Number = null;
 
-  constructor(private backend: WebappBackendService) {
+  constructor(private backend: WebappBackendService, private router: Router) {
     this.backend.getCachedJobList().then(jobs => {
       let total = 0;
       for (const job of jobs) {
@@ -20,6 +21,10 @@ export class MemberComponent implements OnInit {
       }
       this.salary = total;
     });
+  }
+
+  gotoMember() {
+    this.router.navigateByUrl('/members/' + this.member.id);
   }
 
   ngOnInit() { }
