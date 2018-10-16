@@ -1,7 +1,7 @@
 @import 'vars';
 
 mat-card {
-    padding: 0.5em;
+    padding: 0em;
     display: grid;
     grid-template-columns: 2fr 2fr 2fr 3fr;
     grid-template-areas: "from to amount reason";
@@ -21,7 +21,7 @@ mat-card {
 }
 
 mat-card > * {
-    margin-right: 0.5em;
+    padding: 0.5em;
     min-width: 0;
     display: grid;
     grid-template-columns: min-content 1fr;
@@ -29,10 +29,20 @@ mat-card > * {
 
 #from {
     grid-area: from;
+    cursor: pointer;
+}
+
+#from:hover {
+    background: $hover;
 }
 
 #to {
     grid-area: to;
+    cursor: pointer;
+}
+
+#to:hover {
+    background: $hover;
 }
 
 #amount {

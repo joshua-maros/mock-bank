@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Transaction, WebappBackendService } from '../webapp-backend.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-transaction',
@@ -13,7 +14,7 @@ export class TransactionComponent implements OnInit {
   fromColor = '';
   toColor = '';
 
-  constructor(private backend: WebappBackendService) {
+  constructor(private backend: WebappBackendService, private router: Router) {
     backend.getCachedMemberList().then((members) => {
       if (!this.transaction) {
         return;
@@ -36,6 +37,14 @@ export class TransactionComponent implements OnInit {
         }
       }
     });
+  }
+
+  gotoFrom() {
+    this.router.navigateByUrl('/members/' + this.transaction.from);
+  }
+
+  gotoTo() {
+    this.router.navigateByUrl('/members/' + this.transaction.to);
   }
 
   ngOnInit() { }

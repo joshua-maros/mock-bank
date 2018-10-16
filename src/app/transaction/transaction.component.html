@@ -1,9 +1,9 @@
 <mat-card>
-  <span id="from">
+  <span id="from" (click)="gotoFrom()">
     <span class="mat-caption">FROM: </span>
     <span [ngClass]="'cat-text name ' + fromColor">{{fromName || "UNKNOWN"}}</span>
   </span>
-  <span id="to">
+  <span id="to" (click)="gotoTo()">
     <span class="mat-caption">TO: </span>
     <span [ngClass]="'cat-text name ' + toColor">{{toName || "UNKNOWN"}}</span>
   </span>
