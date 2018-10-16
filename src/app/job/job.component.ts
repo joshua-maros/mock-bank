@@ -9,8 +9,6 @@ import { Router } from '@angular/router';
 })
 export class JobComponent implements OnInit {
   @Input() job: Job;
-  @Input() showDelete = false;
-  @Output() deleteClick = new EventEmitter<void>();
 
   constructor(private router: Router) { }
 

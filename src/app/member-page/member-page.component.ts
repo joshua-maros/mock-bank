@@ -27,6 +27,10 @@ export class MemberPageComponent implements OnInit {
     });
   }
 
+  get isLeader() {
+    return this.backend.getAccessLevel() === 'leader';
+  }
+
   get salary() {
     let total = 0;
     for (const job of this.memberJobs) {

@@ -1,6 +1,6 @@
 <app-page-guard [loaded]="members && ledger && jobs && thisMember" [accessLevel]="accessLevel" #guard>
 </app-page-guard>
-<app-centered-layout *ngIf="guard.show" [ngClass]="[thisMember.class]">
+<app-centered-layout *ngIf="guard.show" [ngClass]="[thisMember ? thisMember.class : '']">
   <h1>{{thisMember.firstName}} {{thisMember.lastName}}</h1>
   <mat-card>
     <div class="prop-box">
@@ -25,14 +25,18 @@
     </div>
   </mat-card>
   <h1>{{thisMember.firstName}} {{thisMember.lastName}}'s Jobs
-    <button mat-icon-button [matMenuTriggerFor]="jobMenu"><mat-icon>add</mat-icon></button>
+    <button mat-icon-button *ngIf="isLeader" [matMenuTriggerFor]="jobMenu">
+      <mat-icon>add</mat-icon>
+    </button>
   </h1>
   <mat-menu #jobMenu="matMenu">
     <button mat-menu-item *ngFor="let job of jobs" (click)="addJob(job)">
       {{job.title}}
     </button>
   </mat-menu>
-  <app-job *ngFor="let job of memberJobs" [showDelete]="true" [job]="job" (deleteClick)="deleteJob(job)"></app-job>
+  <app-clear-box *ngFor="let job of memberJobs" [showButton]="isLeader" (buttonClick)="deleteJob(job)">
+    <app-job [job]="job"></app-job>
+  </app-clear-box>
   <h1>{{thisMember.firstName}} {{thisMember.lastName}}'s Transactions</h1>
   <app-transaction *ngFor="let transaction of memberTransactions" [transaction]="transaction"></app-transaction>
 </app-centered-layout>
