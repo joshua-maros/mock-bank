@@ -9,8 +9,9 @@ h1 {
 }
 
 h1 button {
-    float: right;
     margin-top: -6px;
+    position: absolute;
+    right: 0;
 }
 
 .blue .class {
