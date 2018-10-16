@@ -9,6 +9,7 @@ import { OuterSubscriber } from 'rxjs/internal/OuterSubscriber';
 })
 export class JobComponent implements OnInit {
   @Input() job: Job;
+  @Input() showDelete = false;
   @Output() deleteClick = new EventEmitter<void>();
 
   constructor() { }
