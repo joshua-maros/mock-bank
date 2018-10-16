@@ -26,6 +26,7 @@ import { MakeJobPageComponent } from './make-job-page/make-job-page.component';
 import { JobComponent } from './job/job.component';
 import { MemberPageComponent } from './member-page/member-page.component';
 import { MemberComponent } from './member/member.component';
+import { JobPageComponent } from './job-page/job-page.component';
 
 const appRoutes = [
   { path: 'login', component: LoginPageComponent },
@@ -35,7 +36,8 @@ const appRoutes = [
   { path: 'members/new', component: MakeMemberPageComponent },
   { path: 'members/:id', component: MemberPageComponent },
   { path: 'jobs', component: JobsPageComponent },
-  { path: 'jobs/new', component: MakeJobPageComponent }
+  { path: 'jobs/new', component: MakeJobPageComponent },
+  { path: 'jobs/:id', component: JobPageComponent }
 ];
 
 @NgModule({
@@ -54,7 +56,8 @@ const appRoutes = [
     MakeJobPageComponent,
     JobComponent,
     MemberPageComponent,
-    MemberComponent
+    MemberComponent,
+    JobPageComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,44 @@
+@import 'vars';
+
+h1 {
+    margin-top: 0.5em;
+}
+
+h1 button {
+    position: absolute;
+    right: 0;
+    margin-top: -6px;
+}
+
+div.prop-box {
+    display: grid;
+    grid-template-columns: 1fr 1em 1fr;
+    grid-template-areas: "key spacing value"
+}
+
+div.prop-box.blue span.value {
+    color: $class-blue;
+}
+
+div.prop-box.orange span.value {
+    color: $class-orange;
+}
+
+div.prop-box span.key {
+    grid-area: key;
+    font-weight: bold;
+    text-align: right;
+}
+
+div.prop-box span.spacing {
+    grid-area: spacing;
+}
+
+div.prop-box span.value {
+    grid-area: value;
+}
+
+app-member {
+    display: block;
+    margin-bottom: 0.5em;
+}
