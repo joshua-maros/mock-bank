@@ -15,6 +15,7 @@ mat-form-field {
         "amount"
         "reason"
         "send"
+        "hint"
 }
 
 @media (min-width: 35em) {
@@ -23,6 +24,7 @@ mat-form-field {
         grid-template-areas: 
             "from   from   to     to"
             "reason reason amount send"
+            "hint   hint   hint   hint"
     }
 }
 
@@ -44,6 +46,10 @@ mat-form-field {
 
 #send {
     grid-area: send;
+}
+
+#hint {
+    grid-area: hint;
 }
 
 mat-form-field.person {

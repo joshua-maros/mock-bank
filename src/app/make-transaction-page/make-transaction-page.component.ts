@@ -3,6 +3,7 @@ import { WebappBackendService, Member, AccessLevel, Class } from '../webapp-back
 import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { sortMembers } from '../util';
+import { FadeHintComponent } from '../fade-hint/fade-hint.component';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
@@ -18,19 +19,23 @@ export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./make-transaction-page.component.scss']
 })
 export class MakeTransactionPageComponent implements OnInit {
+  @ViewChild('hint') hint: FadeHintComponent;
   members: Member[];
+  numOranges: number;
+  numBlues: number;
   reasons = [
-    'Salary',
     'Payment',
-    'Fine',
     'Rent',
+    'Salary',
+    'Fine',
     'Property Tax',
     'Law Fee',
+    'Income Tax',
     'Priviledge Pass',
+    'Other Fee',
     'Random Event',
-    'Class Reset',
+    'Bankruptcy',
     'Starting Balance',
-    'Other Fee'
   ];
 
   alwaysMatcher = new AlwaysErrorStateMatcher();
@@ -52,11 +57,46 @@ export class MakeTransactionPageComponent implements OnInit {
     return AccessLevel;
   }
 
+  get newBalanceForFrom() {
+    const v = this.fg.value;
+    let multiplier = 1;
+    if (v.to.firstName === 'All') {
+      if (v.to.lastName === 'Oranges') {
+        multiplier = this.numOranges;
+      } else if (v.to.lastName === 'Blues') {
+        multiplier = this.numBlues;
+      }
+    }
+    return v.from.currentWealth - v.amount * multiplier;
+  }
+
+  get newBalanceForTo() {
+    const v = this.fg.value;
+    let multiplier = 1;
+    if (v.from.firstName === 'All') {
+      if (v.from.lastName === 'Oranges') {
+        multiplier = this.numOranges;
+      } else if (v.from.lastName === 'Blues') {
+        multiplier = this.numBlues;
+      }
+    }
+    return v.to.currentWealth + v.amount * multiplier;
+  }
+
   private async updateMembers() {
     const members = this.backend.getCachedMemberList();
     const allBlues = this.backend.getClassSummary(Class.BLUE, 'Blues');
     const allOranges = this.backend.getClassSummary(Class.ORANGE, 'Oranges');
     this.members = sortMembers((await members).concat([await allBlues, await allOranges]), false);
+    this.numOranges = 0;
+    this.numBlues = 0;
+    for (const member of this.members) {
+      if (member.class === Class.ORANGE) {
+        this.numOranges += 1;
+      } else if (member.class === Class.BLUE) {
+        this.numBlues += 1;
+      }
+    }
   }
 
   constructor(private backend: WebappBackendService) {
@@ -84,47 +124,53 @@ export class MakeTransactionPageComponent implements OnInit {
     this.fg.disable();
     let from = [v.from], to = [v.to];
     (async () => {
-      if (v.from.id === 'ALL_BLUES') {
-        from = await this.getClassList(Class.BLUE);
-      }
-      if (v.from.id === 'ALL_ORANGES') {
-        from = await this.getClassList(Class.ORANGE);
-      }
-      if (v.to.id === 'ALL_BLUES') {
-        to = await this.getClassList(Class.BLUE);
-      }
-      if (v.to.id === 'ALL_ORANGES') {
-        to = await this.getClassList(Class.ORANGE);
-      }
-      if (to.length > 1 && from.length > 1) {
+      try {
+        if (v.from.id === 'ALL_BLUES') {
+          from = await this.getClassList(Class.BLUE);
+        }
+        if (v.from.id === 'ALL_ORANGES') {
+          from = await this.getClassList(Class.ORANGE);
+        }
+        if (v.to.id === 'ALL_BLUES') {
+          to = await this.getClassList(Class.BLUE);
+        }
+        if (v.to.id === 'ALL_ORANGES') {
+          to = await this.getClassList(Class.ORANGE);
+        }
+        if (to.length > 1 && from.length > 1) {
+          this.hint.showError('Cannot send from one group to another.');
+          this.fg.enable();
+          return;
+        }
+        if (to.length > 1) {
+          for (const m of to) {
+            await this.backend.createTransaction(v.from, m, v.amount, v.reason);
+          }
+        } else if (from.length > 1) {
+          for (const m of from) {
+            await this.backend.createTransaction(m, v.to, v.amount, v.reason);
+          }
+        } else {
+          await this.backend.createTransaction(v.from, v.to, v.amount, v.reason);
+        }
+        const oldFrom = v.from.id, oldTo = v.to.id, oldAmount = v.amount, oldReason = v.reason;
+        await this.updateMembers();
+        let newFrom: Member, newTo: Member;
+        for (const member of this.members) {
+          if (member.id === oldFrom) {
+            newFrom = member;
+          }
+          if (member.id === oldTo) {
+            newTo = member;
+          }
+        }
+        this.hint.showMessage('Transaction created!');
+        this.form.resetForm();
+        this.fg.patchValue({ amount: oldAmount, reason: oldReason, from: newFrom, to: newTo });
         this.fg.enable();
-        return;
+      } catch {
+        this.hint.showError('Error encountered while processing transaction!');
       }
-      if (to.length > 1) {
-        for (const m of to) {
-          await this.backend.createTransaction(v.from, m, v.amount, v.reason);
-        }
-      } else if (from.length > 1) {
-        for (const m of from) {
-          await this.backend.createTransaction(m, v.to, v.amount, v.reason);
-        }
-      } else {
-        await this.backend.createTransaction(v.from, v.to, v.amount, v.reason);
-      }
-      const oldFrom = v.from.id, oldTo = v.to.id;
-      await this.updateMembers();
-      let newFrom: Member, newTo: Member;
-      for (const member of this.members) {
-        if (member.id === oldFrom) {
-          newFrom = member;
-        }
-        if (member.id === oldTo) {
-          newTo = member;
-        }
-      }
-      this.form.resetForm();
-      this.fg.patchValue({ amount: null, from: newFrom, to: newTo });
-      this.fg.enable();
     })();
   }
 }
