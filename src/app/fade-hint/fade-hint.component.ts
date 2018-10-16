@@ -6,7 +6,8 @@ import { Component, OnInit, HostBinding, ViewChild, Input } from '@angular/core'
   styleUrls: ['./fade-hint.component.scss']
 })
 export class FadeHintComponent implements OnInit {
-  @Input('duration') duration: number = 1500;
+  @Input('ms-per-word') msPerWord: number = 500;
+  @Input('base-delay') baseDelay: number = 500;
   @HostBinding('class.active') cssClassActive: boolean = false;
   @HostBinding('class.error') cssClassError: boolean = false;
   text: string = 'Placeholder';
@@ -21,10 +22,11 @@ export class FadeHintComponent implements OnInit {
     if (this.messageTimeout) {
       clearTimeout(this.messageTimeout);
     }
+    const numWords = this.text.split(' ').length;
     this.messageTimeout = setTimeout(() => {
       this.cssClassActive = false;
       this.messageTimeout = null;
-    }, this.duration);
+    }, this.baseDelay + this.msPerWord * numWords);
   }
 
   public showMessage(message: string) {
