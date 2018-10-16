@@ -49,6 +49,7 @@ export class MakeJobPageComponent implements OnInit {
         this.quickAddList = [];
         this.form.resetForm()
       }
+      this.members = sortMembers(await this.backend.getCachedMemberList(), true);
       this.fg.enable();
     })();
   }
