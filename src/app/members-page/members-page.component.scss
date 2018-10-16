@@ -10,32 +10,8 @@ h1 > a {
     right: 0.5em;
 }
 
-.member {
-    padding-top: 0.5em;
+app-member {
+    display: block;
     padding-bottom: 0.5em;
-    display: grid;
-    grid-template-columns: 1fr 1em 1fr;
     cursor: pointer;
-}
-
-.member:hover {
-    background-color: rgba(128, 128, 128, 0.1);
-}
-
-.member:not(:last-child) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.member-name {
-    width: 100%;
-    display: inline-block;
-    text-align: right;
-}
-
-.blue .member-name {
-    color: $class-blue;
-}
-
-.orange .member-name {
-    color: $class-orange;
 }

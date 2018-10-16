@@ -25,6 +25,7 @@ import { JobsPageComponent } from './jobs-page/jobs-page.component';
 import { MakeJobPageComponent } from './make-job-page/make-job-page.component';
 import { JobComponent } from './job/job.component';
 import { MemberPageComponent } from './member-page/member-page.component';
+import { MemberComponent } from './member/member.component';
 
 const appRoutes = [
   { path: 'login', component: LoginPageComponent },
@@ -52,7 +53,8 @@ const appRoutes = [
     JobsPageComponent,
     MakeJobPageComponent,
     JobComponent,
-    MemberPageComponent
+    MemberPageComponent,
+    MemberComponent
   ],
   imports: [
     BrowserModule,

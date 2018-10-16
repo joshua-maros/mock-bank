@@ -1,0 +1,14 @@
+<mat-card>
+  <span id="name">
+    <span class="mat-caption">NAME: </span>
+    <span [ngClass]="'cat-text name ' + member.class">{{member.firstName}} {{member.lastName}}</span>
+  </span>
+  <span id="funds">
+    <span class="mat-caption">FUNDS: </span>
+    <span class="cat-text value">${{member.currentWealth}}</span>
+  </span>
+  <span id="salary">
+    <span class="mat-caption">SALARY: </span>
+    <span class="cat-text value">${{salary}}</span>
+  </span>
+</mat-card>
