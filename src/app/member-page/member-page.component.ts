@@ -73,7 +73,8 @@ export class MemberPageComponent implements OnInit {
     (async () => {
       await this.reloadData();
       this.route.params.subscribe(params => {
-        this.thisMemberId = params['id'];
+        this.thisMemberId = params['id'] === 'me' ? backend.getCurrentMember().id : params['id'];
+        console.log(this.thisMemberId, backend.getCurrentMember().id);
         this.updateThisMember();
       });
     })();
