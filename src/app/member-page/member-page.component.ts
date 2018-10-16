@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Member, Transaction, WebappBackendService, Job, Class } from '../webapp-backend.service';
+import { Member, Transaction, WebappBackendService, Job, Class, AccessLevel } from '../webapp-backend.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatSelect } from '@angular/material';
 
@@ -37,6 +37,18 @@ export class MemberPageComponent implements OnInit {
       }
     }
     return total;
+  }
+
+  get accessLevel() {
+    if (this.backend.isSessionValid()) {
+      if (this.backend.getCurrentMember().id === this.thisMemberId) {
+        return AccessLevel.MEMBER;
+      } else {
+        return AccessLevel.LEADER;
+      }
+    } else {
+      return AccessLevel.MEMBER;
+    }
   }
 
   private async reloadData() {

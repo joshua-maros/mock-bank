@@ -1,4 +1,4 @@
-<app-page-guard [loaded]="members && ledger && jobs && thisMember" accessLevel="leader" #guard>
+<app-page-guard [loaded]="members && ledger && jobs && thisMember" [accessLevel]="accessLevel" #guard>
 </app-page-guard>
 <app-centered-layout *ngIf="guard.show" [ngClass]="[thisMember.class]">
   <h1>{{thisMember.firstName}} {{thisMember.lastName}}</h1>
