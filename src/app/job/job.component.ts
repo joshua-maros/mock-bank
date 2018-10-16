@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Job } from '../webapp-backend.service';
 import { OuterSubscriber } from 'rxjs/internal/OuterSubscriber';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-job',
@@ -12,7 +13,11 @@ export class JobComponent implements OnInit {
   @Input() showDelete = false;
   @Output() deleteClick = new EventEmitter<void>();
 
-  constructor() { }
+  constructor(private router: Router) { }
+
+  gotoJob() {
+    this.router.navigateByUrl('/jobs/' + this.job.id);
+  }
 
   ngOnInit() { }
 }

@@ -1,10 +1,15 @@
 @import 'vars';
 
 mat-card {
-    padding: 0.5em;
+    padding: 0;
     display: grid;
     grid-template-columns: 2fr 1fr 1fr min-content;
     grid-template-areas: "title bs os clear";
+    cursor: pointer;
+}
+
+mat-card:hover {
+    background: $hover;
 }
 
 @media(max-width: 35em) {
@@ -21,7 +26,7 @@ mat-card {
 }
 
 mat-card > * {
-    margin-right: 0.5em;
+    padding: 0.5em;
     min-width: 0;
     display: grid;
     grid-template-columns: min-content 1fr;
