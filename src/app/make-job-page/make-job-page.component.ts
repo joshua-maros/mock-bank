@@ -37,6 +37,10 @@ export class MakeJobPageComponent implements OnInit {
     this.fg.get('toAdd').reset();
   }
 
+  removeMember(member: Member) {
+    this.quickAddList.splice(this.quickAddList.indexOf(member), 1);
+  }
+
   submit() {
     const v = this.fg.value;
     this.fg.disable();

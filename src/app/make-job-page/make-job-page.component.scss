@@ -44,6 +44,11 @@ mat-form-field {
     width: 100%;
 }
 
+.quickAddListing:hover {
+    text-decoration: line-through;
+    cursor: pointer;
+}
+
 #name {
     grid-area: name;
 }
