@@ -27,6 +27,9 @@ export class MakeTransactionPageComponent implements OnInit {
     'Property Tax',
     'Law Fee',
     'Priviledge Pass',
+    'Random Event',
+    'Class Reset',
+    'Starting Amount',
     'Other Fee'
   ];
 
