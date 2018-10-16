@@ -1,2 +1,2 @@
-./node_modules/@angular/cli/bin/ng build --output-path dist --watch
+./node_modules/@angular/cli/bin/ng build --output-path dist --watch --poll 1000
 
