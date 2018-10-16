@@ -74,15 +74,14 @@ export class MemberPageComponent implements OnInit {
   }
 
   constructor(private backend: WebappBackendService, private route: ActivatedRoute) {
-    (async () => {
+    this.route.params.subscribe(async params => {
       await this.reloadData();
-      this.route.params.subscribe(params => {
-        this.thisMemberId = params['id'] === 'me' ? backend.getCurrentMember().id : params['id'];
-        console.log(this.thisMemberId, backend.getCurrentMember().id);
-        this.updateThisMember();
-      });
-    })();
+      this.thisMemberId = params['id'] === 'me' ? backend.getCurrentMember().id : params['id'];
+      this.updateThisMember();
+    });
   }
+
+  ngOnInit() { }
 
   addJob(job: Job) {
     if (!job || this.thisMember.jobs.indexOf(job.id) !== -1) {
@@ -114,6 +113,4 @@ export class MemberPageComponent implements OnInit {
   test() {
     console.log('asdf');
   }
-
-  ngOnInit() { }
 }

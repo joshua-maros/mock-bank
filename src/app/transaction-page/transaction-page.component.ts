@@ -14,11 +14,12 @@ export class TransactionPageComponent implements OnInit {
     return AccessLevel;
   }
 
-  constructor(private backend: WebappBackendService) {
-    backend.getCachedMemberList().then(e => this.members = e);
-    backend.getCachedLedger().then(e => this.ledger = e);
-  }
+  constructor(private backend: WebappBackendService) { }
 
   ngOnInit() {
+    this.members = null;
+    this.ledger = null;
+    this.backend.getCachedMemberList().then(e => this.members = e);
+    this.backend.getCachedLedger().then(e => this.ledger = e);
   }
 }

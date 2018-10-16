@@ -14,8 +14,10 @@ export class TransactionComponent implements OnInit {
   fromColor = '';
   toColor = '';
 
-  constructor(private backend: WebappBackendService, private router: Router) {
-    backend.getCachedMemberList().then((members) => {
+  constructor(private backend: WebappBackendService, private router: Router) { }
+
+  ngOnInit() {
+    this.backend.getCachedMemberList().then((members) => {
       if (!this.transaction) {
         return;
       }
@@ -46,6 +48,4 @@ export class TransactionComponent implements OnInit {
   gotoTo() {
     this.router.navigateByUrl('/members/' + this.transaction.to);
   }
-
-  ngOnInit() { }
 }

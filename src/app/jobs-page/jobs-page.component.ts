@@ -14,7 +14,10 @@ export class JobsPageComponent implements OnInit {
     return this.backend.getAccessLevel() === AccessLevel.LEADER;
   }
 
-  constructor(private backend: WebappBackendService) {
+  constructor(private backend: WebappBackendService) { }
+
+  ngOnInit() {
+    this.jobs = null;
     this.backend.getCachedJobList().then(e => this.jobs = sortJobs(e));
   }
 
@@ -23,6 +26,4 @@ export class JobsPageComponent implements OnInit {
     this.jobs.splice(this.jobs.findIndex(i => i.id === job.id), 1);
     this.backend.getCachedJobList().then(e => this.jobs = e);
   }
-
-  ngOnInit() { }
 }

@@ -84,6 +84,7 @@ export class MakeTransactionPageComponent implements OnInit {
   }
 
   private async updateMembers() {
+    this.members = null;
     const members = this.backend.getCachedMemberList();
     const allBlues = this.backend.getClassSummary(Class.BLUE, 'Blues');
     const allOranges = this.backend.getClassSummary(Class.ORANGE, 'Oranges');
@@ -99,11 +100,11 @@ export class MakeTransactionPageComponent implements OnInit {
     }
   }
 
-  constructor(private backend: WebappBackendService) {
+  constructor(private backend: WebappBackendService) { }
+
+  ngOnInit() {
     this.updateMembers();
   }
-
-  ngOnInit() { }
 
   checkError(controlName: string, errorName: string): boolean {
     return this.fg.controls[controlName] && this.fg.controls[controlName].hasError(errorName);

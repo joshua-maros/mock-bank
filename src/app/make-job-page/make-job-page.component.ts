@@ -23,11 +23,14 @@ export class MakeJobPageComponent implements OnInit {
   });
 
   constructor(private backend: WebappBackendService, private fb: FormBuilder) { 
-    this.backend.getCachedMemberList().then(e => this.members = sortMembers(e, true));
     this.fg.get('toAdd').valueChanges.subscribe(val => this.addMember(val));
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.members = null;
+    this.quickAddList = [];
+    this.backend.getCachedMemberList().then(e => this.members = sortMembers(e, true));
+  }
 
   addMember(member: Member) {
     if (!member) return;

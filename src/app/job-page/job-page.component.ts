@@ -42,6 +42,8 @@ export class JobPageComponent implements OnInit {
     });
   }
 
+  ngOnInit() { }
+
   async addEmployee(employee: Member) {
     if (employee.jobs.indexOf(this.job.id) !== -1) {
       return;
@@ -63,6 +65,4 @@ export class JobPageComponent implements OnInit {
     });
     await this.updateEmployeeList();
   }
-
-  ngOnInit() { }
 }

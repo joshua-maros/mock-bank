@@ -10,9 +10,10 @@ import { sortMembers } from '../util';
 export class MembersPageComponent implements OnInit {
   members: Member[];
 
-  constructor(private backend: WebappBackendService) {
-    backend.getCachedMemberList().then(e => this.members = sortMembers(e, true));
-  }
+  constructor(private backend: WebappBackendService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.members = null;
+    this.backend.getCachedMemberList().then(e => this.members = sortMembers(e, true));
+  }
 }
