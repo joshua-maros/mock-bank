@@ -2,7 +2,7 @@
 </app-page-guard>
 <app-centered-layout *ngIf="guard.show">
   <h1>Jobs<a routerLink="/jobs/new"><mat-icon>add</mat-icon></a></h1>
-  <app-clear-box *ngFor="let job of jobs" (buttonClick)="deleteJob(job)">
+  <app-clear-box *ngFor="let job of jobs" [showButton]="isLeader" (buttonClick)="deleteJob(job)">
     <app-job [job]="job"></app-job>
   </app-clear-box>
 </app-centered-layout>

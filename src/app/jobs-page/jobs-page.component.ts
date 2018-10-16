@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Job, WebappBackendService } from '../webapp-backend.service';
+import { Job, WebappBackendService, AccessLevel } from '../webapp-backend.service';
 import { sortJobs } from '../util';
 
 @Component({
@@ -9,6 +9,10 @@ import { sortJobs } from '../util';
 })
 export class JobsPageComponent implements OnInit {
   jobs: Job[];
+
+  get isLeader() {
+    return this.backend.getAccessLevel() === AccessLevel.LEADER;
+  }
 
   constructor(private backend: WebappBackendService) {
     this.backend.getCachedJobList().then(e => this.jobs = sortJobs(e));
