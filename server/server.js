@@ -188,13 +188,7 @@ app.post('/api/v1/members', async (req, res) => {
 });
 
 app.patch('/api/v1/members/:id', async (req, res) => {
-	const loggedInMember = await checkLogin(req, res, c.access.MEMBER);
-	const memberOkay = Object.keys(req.body)[0] === 'pin' && Object.keys(req.body).size === 1 
-		|| loggedInMember.id === req.params.id;
-	if (loggedInMember.accessLevel === c.access.MEMBER && !memberOkay) {
-		res.status(403).send({error: 'This action requires the logged in user to be a leader.'});
-		return;
-	}
+	const loggedInMember = await checkLogin(req, res, c.access.LEADER);
 	const existingMember = await dbs.members.findItemWithValue('id', req.params.id);
 	for (const key of ['firstName', 'lastName', 'class', 'ownsDesks', 'rentsDesks', 'jobs']) {
 		if (req.body[key]) {
@@ -202,6 +196,25 @@ app.patch('/api/v1/members/:id', async (req, res) => {
 		}
 	}
 	res.status(200).send(existingMember);
+});
+
+app.patch('/api/v1/members/:id/pin', async (req, res) => {
+	const loggedInMember = await checkLogin(req, res, c.access.MEMBER);
+	if (!req.body.oldPin || !req.body.newPin) {
+		res.status(400).send({error: 'The parameters [oldPin, newPin] must be provided in the request body!'});
+	}
+	if (loggedInMember.id !== req.params.id) {
+		res.status(403).send({error: 'Members can only change their own PINs!'});
+		return;
+	}
+	// Artificial password check delay.
+	await new Promise((res, rej) => {
+		setTimeout(res, 2000);
+	});
+	const existingMember = await dbs.members.findItemWithValue('id', req.params.id);
+	if (existingMember.pin !== req.body.oldPin) {
+		res.status(403).send({error: 'Old PIN provided in request body does not match old PIN of user!'});
+	}
 });
 
 app.get('/api/v1/ledger', async (req, res) => {
@@ -215,7 +228,11 @@ app.post('/api/v1/ledger', async (req, res) => {
 		res.status(400).send({error: 'The parameters [from, to, amount] are required to be sent in the request body.'});
 		return;
 	}
-	const loggedInMember = await checkLogin(req, res, c.access.LEADER);
+	const loggedInMember = await checkLogin(req, res, c.access.MEMBER);
+	if (loggedInMember.id !== req.body.from && loggedInMember.accessLevel !== c.access.LEADER) {
+		res.status(403).send({error: 'Members can only send money from their own account.'});
+		return;
+	}
 	const transaction = await ledger.createTransaction(req.body.from, req.body.to, req.body.amount, 
 		req.body.reason || undefined);
 	res.status(201).send(transaction);
