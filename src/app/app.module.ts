@@ -27,8 +27,10 @@ import { JobComponent } from './job/job.component';
 import { MemberPageComponent } from './member-page/member-page.component';
 import { MemberComponent } from './member/member.component';
 import { JobPageComponent } from './job-page/job-page.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 const appRoutes = [
+  { path: 'home', component: HomePageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'transactions', component: TransactionPageComponent },
   { path: 'transactions/new', component: MakeTransactionPageComponent },
@@ -37,7 +39,8 @@ const appRoutes = [
   { path: 'members/:id', component: MemberPageComponent },
   { path: 'jobs', component: JobsPageComponent },
   { path: 'jobs/new', component: MakeJobPageComponent },
-  { path: 'jobs/:id', component: JobPageComponent }
+  { path: 'jobs/:id', component: JobPageComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
 @NgModule({
@@ -57,7 +60,8 @@ const appRoutes = [
     JobComponent,
     MemberPageComponent,
     MemberComponent,
-    JobPageComponent
+    JobPageComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
