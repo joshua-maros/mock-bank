@@ -182,7 +182,7 @@ app.post('/api/v1/members', async (req, res) => {
 		amount = c.ORANGE_START;
 	}
 	if (amount) {
-		ledger.createTransaction(c.BANK_ID, newMember, amount, 'Starting balance');
+		ledger.createTransaction(c.BANK_ID, newMember, amount, 'Starting Balance');
 	}
 	res.status(201).send(censorMember(newMember, true));
 });
@@ -267,7 +267,7 @@ app.post('/api/v1/jobs', async (req, res) => {
 		res.status(400).send({error: 'The parameters [title, orangeSalary, blueSalary] are required in the request body.'});
 		return;
 	}
-	await checkLogin(req, res, c.access.LEADER);
+	await checkLogin(req, res, c.acBalancecess.LEADER);
 	const job = dbs.jobs.createJob({
 		title: req.body.title,
 		blueSalary: req.body.blueSalary,

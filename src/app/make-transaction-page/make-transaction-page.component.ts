@@ -29,7 +29,7 @@ export class MakeTransactionPageComponent implements OnInit {
     'Priviledge Pass',
     'Random Event',
     'Class Reset',
-    'Starting Amount',
+    'Starting Balance',
     'Other Fee'
   ];
 
