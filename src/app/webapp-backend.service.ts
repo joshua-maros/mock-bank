@@ -249,6 +249,11 @@ export class WebappBackendService {
     }
   }
 
+  logout() {
+    this.session = null;
+    this.cookieService.remove('sessionToken');
+  }
+
   getCachedMemberList(): Promise<Member[]> {
     return this.cachedMembers.get();
   }

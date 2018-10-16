@@ -10,11 +10,20 @@ export class HomePageComponent implements OnInit {
   get showLeader() {
     return this.backend.isSessionValid() && this.backend.getAccessLevel() === AccessLevel.LEADER;
   }
+
+  get loggedIn() {
+    return this.backend.isSessionValid();
+  }
+
   constructor(private backend: WebappBackendService) { }
 
   ngOnInit() { }
 
   paySalaries() {
     this.backend.paySalaries();
+  }
+
+  logout() {
+    this.backend.logout();
   }
 }
