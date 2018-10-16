@@ -10,9 +10,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class TitleBarComponent implements OnInit {
   signedInButtons = [
-    {text: 'People', url: '/members'}
+    {text: 'My Profile', url: '/members/me'}
   ];
   leaderButtons = [
+    {text: 'People', url: '/members'},
     {text: 'Transactions', url: '/transactions'},
     {text: 'Jobs', url: '/jobs'}
   ];

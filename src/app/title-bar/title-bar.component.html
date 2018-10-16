@@ -11,7 +11,7 @@
 	</ul>
 	<mat-menu id="mobile-menu" class="mobile" #mobileMenu>
 		<button mat-menu-item routerLink="/">Home</button>
-		<button *ngFor="let button of backend.isSessionValid() ? signedInButtons : []"
+		<button *ngFor="let button of backend.getAccessLevel() === AccessLevel.MEMBER ? signedInButtons : []"
 			mat-menu-item [routerLink]="button.url">
 			{{button.text}}
 		</button>
