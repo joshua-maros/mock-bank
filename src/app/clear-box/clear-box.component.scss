@@ -1,0 +1,9 @@
+:host {
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    margin-bottom: 0.5em;
+}
+
+button {
+    margin: auto;
+}

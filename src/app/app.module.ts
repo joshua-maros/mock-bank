@@ -28,6 +28,7 @@ import { MemberPageComponent } from './member-page/member-page.component';
 import { MemberComponent } from './member/member.component';
 import { JobPageComponent } from './job-page/job-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { ClearBoxComponent } from './clear-box/clear-box.component';
 
 const appRoutes = [
   { path: 'home', component: HomePageComponent },
@@ -61,7 +62,8 @@ const appRoutes = [
     MemberPageComponent,
     MemberComponent,
     JobPageComponent,
-    HomePageComponent
+    HomePageComponent,
+    ClearBoxComponent
   ],
   imports: [
     BrowserModule,
