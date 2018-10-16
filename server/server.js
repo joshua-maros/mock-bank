@@ -1,8 +1,36 @@
 // Arg 0 is node. Arg 1 is script name. This code will switch how the server runs depending on whether or not arg2 is 
 // 'prod' (production mode)
-global.productionMode = process.argv.length >= 3 && process.argv[2].toLowerCase() == 'prod';
 // Arg 2 can also be 'noauth' (dev mode and disable all authentication)
-global.authDisabled= process.argv.length >= 3 && process.argv[2].toLowerCase() == 'noauth';
+global.productionMode = process.argv.indexOf('--prod') !== -1;
+global.authDisabled = process.argv.indexOf('--noauth') !== -1;
+if (global.productionMode && global.authDisabled) {
+	throw new Error('Cannot have authorization disabled in production mode.')
+}
+global.port = global.productionMode ? 443 : 4200;
+global.useHttp = process.argv.indexOf('--no-reroute-http') === -1;
+if (!global.productionMode && ! global.useHttp) {
+	throw new Error('HTTP Rerouting can only be disabled in production mode.');
+}
+if (process.argv.indexOf('--port') !== -1) {
+	const portIndex = process.argv.indexOf('--port') + 1;
+	if (portIndex >= process.argv.length) {
+		throw new Error('--port must be followed by a port number to serve on.');
+	}
+	const port = process.argv[portIndex];
+	const portNum = Number(port);
+	if (!(portNum >= 0 && portNum <= 65535)) {
+		throw new Error('--port must be followed by a valid port number, not ' + a + '.');
+	}
+	global.port = portNum;
+}
+global.privateSubdir = '';
+if (process.argv.indexOf('--file-subdir') !== -1) {
+	const subdirIndex = process.argv.indexOf('--file-subdir') + 1;
+	if (subdirIndex >= process.argv.length) {
+		throw new Error('--file-subdir must be followed by the name of a directory in /private.');
+	}
+	global.privateSubdir = process.argv[subdirIndex] + '/';
+}
 
 const fs = require('mz/fs');
 const https = require('https');
@@ -313,19 +341,21 @@ app.get('/*', async (req, res) => {
 	if (productionMode) {
 		// Just bumps the user to HTTPS. Serves no content.
 		console.log('Starting in production mode.');
-		var redirector = express();
-		redirector.get('*', (req, res) => {
-			res.redirect('https://' + req.headers.host + req.url);
-		});
-		redirector.listen(80);
+		if (useHttp) {
+			var redirector = express();
+			redirector.get('*', (req, res) => {
+				res.redirect('https://' + req.headers.host + req.url);
+			});
+			redirector.listen(80);
+		}
 
 		https.createServer({
 			key: fs.readFileSync('../private/key.pem'),
 			cert: fs.readFileSync('../private/cert.pem')
-		}, app).listen(443);	
+		}, app).listen(port);	
 	} else {
 		console.log('Starting in development mode');
-		app.listen(4200);
+		app.listen(port);
 	}
 
 	console.log('Initialization complete!');

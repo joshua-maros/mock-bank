@@ -5,7 +5,7 @@ const c = require('../common/constants.json');
 
 const ledger = {
     balances: {},
-    db: new FileDatabase('../private/ledger.json'),
+    db: new FileDatabase('../private/' + global.privateSubdir + 'ledger.json'),
     _processTransaction: function(transaction) {
         if (transaction.amount <= 0) return false;
         if (this.balances[transaction.from] < transaction.amount) return false;

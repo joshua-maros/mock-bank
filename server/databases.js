@@ -16,7 +16,7 @@ function generateRandomPIN() {
 	return Math.random().toString().substr(2, 5); // Random 5-digit PIN with leading zeroes.
 }
 
-module.exports.members = new FileDatabase('../private/members.json');
+module.exports.members = new FileDatabase('../private/' + global.privateSubdir + 'members.json');
 module.exports.members.createMember = function(options) {
 	let member = {
 		id: generateRandomToken(),
@@ -36,7 +36,7 @@ module.exports.members.createMember = function(options) {
 	return changeGuard(member, () => this._markDirty());
 }
 
-module.exports.jobs = new FileDatabase('../private/jobs.json');
+module.exports.jobs = new FileDatabase('../private/' + global.privateSubdir + 'jobs.json');
 module.exports.jobs.createJob = function(options) {
 	let job = {
 		id: generateRandomToken(),
@@ -51,7 +51,7 @@ module.exports.jobs.createJob = function(options) {
 	return changeGuard(job, () => this._markDirty());
 }
 
-module.exports.miscConfig = new FileDatabase('../private/miscConfig.json');
+module.exports.miscConfig = new FileDatabase('../private/' + global.privateSubdir + 'miscConfig.json');
 module.exports.miscConfig.get = function(key, callback) {
 	this.getItem(0, (item) => {
 		callback(item[key]);
