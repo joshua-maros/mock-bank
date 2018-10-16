@@ -32,10 +32,4 @@ mat-form-field {
 
 #message {
     grid-area: mess;
-    opacity: 0;
-    transition-duration: 0.5s;
-}
-
-#message.active {
-    opacity: 1;
 }

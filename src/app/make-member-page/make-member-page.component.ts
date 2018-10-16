@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { WebappBackendService } from '../webapp-backend.service';
+import { FadeHintComponent } from '../fade-hint/fade-hint.component';
 
 @Component({
   selector: 'app-make-member-page',
@@ -9,7 +10,7 @@ import { WebappBackendService } from '../webapp-backend.service';
 })
 export class MakeMemberPageComponent implements OnInit {
   @ViewChild('form') form;
-  @ViewChild('message') message;
+  @ViewChild('message') message: FadeHintComponent;
   messageTimeout;
   fg = this.fb.group({
     class: ['none', Validators.required],
@@ -21,17 +22,6 @@ export class MakeMemberPageComponent implements OnInit {
   constructor(private fb: FormBuilder, private backend: WebappBackendService) { }
 
   ngOnInit() { }
-
-  showMessage() {
-    this.message.nativeElement.classList.add('active');
-    if (this.messageTimeout) {
-      clearTimeout(this.messageTimeout);
-    }
-    this.messageTimeout = setTimeout(() => {
-      this.message.nativeElement.classList.remove('active');
-      this.messageTimeout = null;
-    }, 1500);
-  }
 
   async submit() {
     this.fg.updateValueAndValidity();
@@ -52,6 +42,6 @@ export class MakeMemberPageComponent implements OnInit {
       class: oldClass
     });
     this.fg.enable();
-    this.showMessage();
+    this.message.showMessage('User created!');
   }
 }
