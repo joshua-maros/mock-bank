@@ -317,6 +317,10 @@ export class WebappBackendService {
     });
   }
 
+  paySalaries(): Promise<HttpResponse<null>> {
+    return this.post('/api/v1/ledger/paySalaries', {});
+  }
+
   getCachedJobList(): Promise<Job[]> {
     return this.cachedJobs.get();
   }

@@ -7,11 +7,11 @@
         "MAX_TIME_MEMBER": 900
     },
     "reason": {
-        "PAYMENT": "payment",
-        "SALARY": "salary",
-        "RENT": "rent",
-        "FINE": "fine",
-        "FEE": "fee"
+        "PAYMENT": "Payment",
+        "SALARY": "Salary",
+        "RENT": "Rent",
+        "FINE": "Fine",
+        "FEE": "Fee"
     },
     "BANK_ID": "BANK_OF_STROUP",
     "ORANGE_START": 100,

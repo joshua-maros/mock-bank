@@ -221,6 +221,25 @@ app.post('/api/v1/ledger', async (req, res) => {
 	res.status(201).send(transaction);
 });
 
+app.post('/api/v1/ledger/paySalaries', async (req, res) => {
+	await checkLogin(req, res, c.access.LEADER);
+	for (const member of await dbs.members.getAllItems()) {
+		for (const jobId of member.jobs) {
+			const job = await dbs.jobs.findItemWithValue('id', jobId);
+			let amount = 0;
+			if (member.class === 'blue') {
+				amount = job.blueSalary;
+			} else if (member.class === 'orange') {
+				amount = job.orangeSalary;
+			} else {
+				continue;
+			}
+			await ledger.createTransaction(c.BANK_ID, member.id, amount, c.reason.SALARY);
+		}
+	}
+	res.status(201).send({});
+});
+
 app.get('/api/v1/jobs', async (req, res) => {
 	await checkLogin(req, res, c.access.MEMBER);
 	res.status(201).send(await dbs.jobs.getAllItems());
