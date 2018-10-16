@@ -13,6 +13,10 @@ export class JobPageComponent implements OnInit {
   public members: Member[] = null;
   public employees: Member[] = null;
 
+  get isLeader() {
+    return this.backend.getAccessLevel() === 'leader';
+  }
+
   private async updateEmployeeList() {
     const members = await this.backend.getCachedMemberList();
     this.members = sortMembers(members, true);
@@ -45,6 +49,17 @@ export class JobPageComponent implements OnInit {
     this.employees.push(employee);
     await this.backend.patchMember(employee, {
       jobs: employee.jobs.concat(this.job.id)
+    });
+    await this.updateEmployeeList();
+  }
+
+  async fireEmployee(employee: Member) {
+    if (employee.jobs.indexOf(this.job.id) === -1) {
+      return;
+    }
+    this.employees = this.employees.filter(member => member.id !== employee.id);
+    await this.backend.patchMember(employee, {
+      jobs: employee.jobs.filter(jobId => jobId !== this.job.id)
     });
     await this.updateEmployeeList();
   }

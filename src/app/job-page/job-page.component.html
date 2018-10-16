@@ -14,11 +14,15 @@
       <span class="value">${{job.orangeSalary}}</span>
     </div>
   </mat-card>
-  <h1>Employees<button mat-icon-button [matMenuTriggerFor]="employeeMenu"><mat-icon>add</mat-icon></button></h1>
+  <h1>Employees
+    <button mat-icon-button *ngIf="isLeader" [matMenuTriggerFor]="employeeMenu"><mat-icon>add</mat-icon></button>
+  </h1>
   <mat-menu #employeeMenu="matMenu">
     <button mat-menu-item *ngFor="let member of members" (click)="addEmployee(member)">
       {{member.firstName}} {{member.lastName}}
     </button>
   </mat-menu>
-  <app-member *ngFor="let member of employees" [member]="member"></app-member>
+  <app-clear-box *ngFor="let member of employees" [showButton]="isLeader" (buttonClick)="fireEmployee(member)">
+    <app-member [member]="member"></app-member>
+  </app-clear-box>
 </app-centered-layout>
