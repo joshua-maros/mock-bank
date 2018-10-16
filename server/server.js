@@ -267,7 +267,7 @@ app.post('/api/v1/jobs', async (req, res) => {
 		res.status(400).send({error: 'The parameters [title, orangeSalary, blueSalary] are required in the request body.'});
 		return;
 	}
-	await checkLogin(req, res, c.acBalancecess.LEADER);
+	await checkLogin(req, res, c.access.LEADER);
 	const job = dbs.jobs.createJob({
 		title: req.body.title,
 		blueSalary: req.body.blueSalary,
@@ -275,6 +275,18 @@ app.post('/api/v1/jobs', async (req, res) => {
 	});
 	res.status(201).send(job);
 });
+
+app.delete('/api/v1/jobs/:id', async (req, res) => {
+	await checkLogin(req, res, c.access.LEADER);
+	const job = await dbs.jobs.findItemWithValue('id', req.params.id);
+	if (!job) {
+		res.status(404).send({error: 'No such job with id ' + req.params.id + '.'});
+		return;
+	}
+	await dbs.jobs.removeItem(job);
+	// TODO: Remove job from members that used to have it.
+	res.status(200).send({});
+})
 
 app.get('/public/*', (req, res) => res.sendFile(rootDir + '/index.html'));
 app.get('/private/*', (req, res) => res.sendFile(rootDir + '/index.html'));

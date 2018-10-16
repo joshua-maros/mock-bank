@@ -195,6 +195,13 @@ export class WebappBackendService {
     });
   }
 
+  private delete<T>(url: string): Promise<HttpResponse<T>> {
+    return new Promise<HttpResponse<T>>((resolve, reject) => {
+      const options = this.createOptions();
+      this.client.delete<T>(url, options).subscribe(resolve, reject);
+    })
+  }
+
   private getByQuery<T>(url: string, query: any): Promise<HttpResponse<T>> {
     return new Promise<HttpResponse<T>>((resolve, reject) => {
       const options = this.createOptions();
@@ -340,5 +347,12 @@ export class WebappBackendService {
       this.cachedJobs.endHold();
       return e;
     });
+  }
+
+  deleteJob(job: Job | string) {
+    if ((job as Job).id !== undefined) {
+      job = (job as Job).id;
+    }
+    return this.delete<{}>('/api/v1/jobs/' + job);
   }
 }

@@ -158,6 +158,28 @@ class FileDatabase {
 		return undefined;
 	}
 
+	async indexOf(item) {
+		await this._checkStaleness();
+		const allowedTypes = [typeof(''), typeof(0), typeof(true)];
+		for (let i = 0; i < this.data.length; i++) {
+			const checkAgainst = this.data[i];
+			let matches = true;
+			for (let key of Object.keys(checkAgainst)) {
+				if (allowedTypes.indexOf(typeof(checkAgainst[key])) === -1) {
+					continue;
+				}
+				if (!item[key] || item[key] !== checkAgainst[key]) {
+					matches = false;
+					break;
+				} 
+			}
+			if (matches) {
+				return i;
+			}
+		}
+		return undefined;
+	}
+
 	async setItems(startIndex, items) {
 		await this._checkStaleness();
 		for (let i = 0; i < items.length; i++) {
@@ -181,6 +203,16 @@ class FileDatabase {
 	async push(item) {
 		await this._checkStaleness();
 		this.data.push(item);
+		this._markDirty();
+	}
+
+	async removeItem(item) {
+		this.removeByIndex(await this.indexOf(item));
+	}
+
+	async removeByIndex(index) {
+		await this._checkStaleness();
+		this.data.splice(index, 1);
 		this._markDirty();
 	}
 }
