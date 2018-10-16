@@ -14,5 +14,11 @@ export class JobsPageComponent implements OnInit {
     this.backend.getCachedJobList().then(e => this.jobs = sortJobs(e));
   }
 
+  deleteJob(job: Job) {
+    this.backend.deleteJob(job);
+    this.jobs.splice(this.jobs.findIndex(i => i.id === job.id), 1);
+    this.backend.getCachedJobList().then(e => this.jobs = e);
+  }
+
   ngOnInit() { }
 }
