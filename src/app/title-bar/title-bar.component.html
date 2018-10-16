@@ -2,7 +2,7 @@
 	<ul class="desktop">
 		<li><a mat-button routerLink="/" class="title">Home</a></li>
 		<li *ngIf="!backend.isSessionValid()"><a mat-button (click)="routeToLogin()">Sign In</a></li>
-		<li *ngFor="let button of backend.isSessionValid() ? signedInButtons : []">
+		<li *ngFor="let button of backend.getAccessLevel() === AccessLevel.MEMBER ? signedInButtons : []">
 			<a mat-button [routerLink]="button.url">{{button.text}}</a>
 		</li>
 		<li *ngFor="let button of (backend.getAccessLevel() == AccessLevel.LEADER) ? leaderButtons : []">
