@@ -207,7 +207,7 @@ app.post('/api/v1/members', async (req, res) => {
 	let amount = 0;
 	if (req.body.class === 'blue') {
 		amount = c.BLUE_START
-	} else if (req.body.class = 'orange') {
+	} else if (req.body.class === 'orange') {
 		amount = c.ORANGE_START;
 	}
 	if (amount) {
