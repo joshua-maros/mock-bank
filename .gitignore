@@ -40,3 +40,4 @@ Thumbs.db
 
 # Private files (certificates, user data, etc.)
 private/
+private-backups/
