@@ -227,7 +227,7 @@ app.patch('/api/v1/members/:id', async (req, res) => {
 	res.status(200).send(existingMember);
 });
 
-app.patch('/api/v1/members/:id/pin', async (req, res) => {
+app.post('/api/v1/members/:id/pin', async (req, res) => {
 	const loggedInMember = await checkLogin(req, res, c.access.MEMBER);
 	if (!req.body.oldPin || !req.body.newPin) {
 		res.status(400).send({error: 'The parameters [oldPin, newPin] must be provided in the request body!'});
@@ -244,6 +244,8 @@ app.patch('/api/v1/members/:id/pin', async (req, res) => {
 	if (existingMember.pin !== req.body.oldPin) {
 		res.status(403).send({error: 'Old PIN provided in request body does not match old PIN of user!'});
 	}
+	existingMember.pin = req.body.newPin;
+	res.status(200).send({});
 });
 
 app.get('/api/v1/ledger', async (req, res) => {

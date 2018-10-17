@@ -199,7 +199,7 @@ export class WebappBackendService {
     return new Promise<HttpResponse<T>>((resolve, reject) => {
       const options = this.createOptions();
       this.client.delete<T>(url, options).subscribe(resolve, reject);
-    })
+    });
   }
 
   private getByQuery<T>(url: string, query: any): Promise<HttpResponse<T>> {
@@ -281,6 +281,13 @@ export class WebappBackendService {
     return this.patch<Member>('/api/v1/members/' + member, memberData).then((e) => {
       this.cachedMembers.endHold();
       return e;
+    });
+  }
+
+  changePin(from: string, to: string): Promise<HttpResponse<{}>> {
+    return this.post<{}>('/api/v1/members/' + this.getCurrentMember().id + '/pin', {
+      oldPin: from,
+      newPin: to
     });
   }
 

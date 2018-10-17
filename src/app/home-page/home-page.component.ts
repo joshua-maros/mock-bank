@@ -23,6 +23,19 @@ export class HomePageComponent implements OnInit {
     this.backend.paySalaries();
   }
 
+  changePin() {
+    const oldPin = window.prompt('Enter current PIN:');
+    const newPin = window.prompt('Enter new PIN:');
+    const confirm = window.prompt('Re-enter new PIN:') === newPin;
+    if (!confirm) {
+      window.alert('PINs do not match!');
+      return;
+    }
+    this.backend.changePin(oldPin, newPin).then(e => {
+      window.alert('PIN changed!');
+    });
+  }
+
   logout() {
     this.backend.logout();
   }
