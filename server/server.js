@@ -9,7 +9,7 @@ if (global.productionMode && global.authDisabled) {
 global.forceHttp = process.argv.indexOf('--force-http') !== -1;
 global.redirectHttp = process.argv.indexOf('--no-reroute-http') === -1 && !global.forceHttp;
 global.port = global.productionMode ? (global.forceHttp ? 80 : 443) : 4200;
-if (!global.productionMode && ! global.useHttp) {
+if (!global.productionMode && !global.redirectHttp) {
 	throw new Error('HTTP Rerouting can only be disabled in production mode.');
 }
 if (process.argv.indexOf('--port') !== -1) {
