@@ -3,7 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
   MatSelectModule, MatToolbarModule, MatIconModule, MatIconRegistry, MatMenuModule,
-  MatRippleModule } from '@angular/material';
+  MatRippleModule, 
+  MatRadioModule} from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -81,6 +82,7 @@ const appRoutes = [
     MatIconModule,
     MatInputModule,
     MatMenuModule,
+    MatRadioModule,
     MatSelectModule,
     MatToolbarModule,
     ReactiveFormsModule,

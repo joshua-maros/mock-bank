@@ -61,6 +61,26 @@
       <button mat-raised-button color="primary" type="submit" [disabled]="!fg.valid">Submit</button>
     </div>
 
+    <div id="settings">
+      <mat-checkbox formControlName="allowDebt">Allow sender to go into debt.</mat-checkbox>
+      <mat-radio-group formControlName="splitGroup" 
+        *ngIf="!!(fg.value.from && fg.value.from.members) !== !!(fg.value.to && fg.value.to.members)">
+                          <!-- If one is a group, show settings. If both are, don't. -->
+        <mat-radio-button [value]="false" *ngIf="fg.value.from && fg.value.from.members">
+          Each sender pays the amount.
+        </mat-radio-button>
+        <mat-radio-button [value]="true" *ngIf="fg.value.from && fg.value.from.members">
+          The receiver gets the amount.
+        </mat-radio-button>
+        <mat-radio-button [value]="true" *ngIf="fg.value.to && fg.value.to.members">
+          The sender pays the amount.
+        </mat-radio-button>
+        <mat-radio-button [value]="false" *ngIf="fg.value.to && fg.value.to.members">
+          Each receiver gets the amount.
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
     <app-fade-hint id="hint" #hint></app-fade-hint>
   </mat-card> </form>
 </app-centered-layout>

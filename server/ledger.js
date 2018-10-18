@@ -8,7 +8,8 @@ const ledger = {
     db: new FileDatabase('../private/' + global.privateSubdir + 'ledger.json'),
     _processTransaction: function(transaction) {
         if (transaction.amount <= 0) return false;
-        if (this.balances[transaction.from] < transaction.amount) return false;
+        // TODO: This used to prevent payments resulting in debt.
+        // if (this.balances[transaction.from] < transaction.amount) return false;
         if (transaction.from !== c.BANK_ID) this.balances[transaction.from] -= transaction.amount;
         if (transaction.to !== c.BANK_ID) {
             if (!this.balances[transaction.to]) {

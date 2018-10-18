@@ -21,8 +21,6 @@ export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
 export class MakeTransactionPageComponent implements OnInit {
   @ViewChild('hint') hint: FadeHintComponent;
   members: (Member | MemberGroup)[];
-  allBlues: MemberGroup;
-  allOranges: MemberGroup;
   reasons = [
     'Payment',
     'Rent',
@@ -46,36 +44,67 @@ export class MakeTransactionPageComponent implements OnInit {
     amount: new FormControl(null, [
       Validators.required,
       Validators.min(0),
+      // TODO: Replace this with some kind of global validator.
       (control: AbstractControl): {[key: string]: any} | null => {
-        return this.fg && this.fg.value.from && control.value > this.fg.value.from.currentWealth ? {'max': {}} : null;
+        return this.fg && !this.fg.value.allowDebt && this.fg.value.from 
+          && this.computeBalanceForFrom(control.value) < 0 ? {'max': {}} : null;
       }
     ]),
-    reason: new FormControl('', Validators.required)
+    reason: new FormControl('', Validators.required),
+    splitGroup: new FormControl(false),
+    allowDebt: new FormControl(false)
   });
 
   get AccessLevel() { // For *ngIfs
     return AccessLevel;
   }
 
-  get newBalanceForFrom() {
+  private computeBalanceForFrom(amount: number) {
     const v = this.fg.value;
-    const multiplier = v.to.members ? v.to.members.length : 1;
-    return v.from.currentWealth - v.amount * multiplier;
+    if (!v.from) {
+      return 0;
+    }
+    if (!v.to) {
+      return v.from.currentWealth;
+    }
+    if (v.splitGroup) {
+      if (v.from.members) {
+        return v.from.currentWealth - Math.ceil(amount / v.from.members.length);
+      } else {
+        return v.from.currentWealth - amount;
+      }
+    } else {
+      return v.from.currentWealth - amount * (v.to.members ? v.to.members.length : 1);
+    }
+  }
+
+  get newBalanceForFrom() {
+    return this.computeBalanceForFrom(this.fg.value.amount);
   }
 
   get newBalanceForTo() {
     const v = this.fg.value;
-    const multiplier = v.from.members ? v.from.members.length : 1;
-    return v.to.currentWealth + v.amount * multiplier;
+    if (!v.to) {
+      return 0;
+    }
+    if (!v.from) {
+      return v.to.currentWealth;
+    }
+    if (v.splitGroup) {
+      if (v.to.members) {
+        return v.to.currentWealth + Math.ceil(v.amount / v.to.members.length);
+      } else {
+        return v.to.currentWealth + v.amount;
+      }
+    } else {
+      return v.to.currentWealth + v.amount * (v.from.members ? v.from.members.length : 1);
+    }
   }
 
   private async updateMembers() {
-    this.members = null;
     const members = this.backend.getCachedMemberList();
     const allBlues = this.backend.getClassSummary(Class.BLUE, 'Blues');
     const allOranges = this.backend.getClassSummary(Class.ORANGE, 'Oranges');
-    this.allBlues = await allBlues;
-    this.allOranges = await allOranges;
     const allMembers = (<(Member | MemberGroup)[]> await members).concat([await allBlues, await allOranges]);
     this.members = sortMembers(allMembers, false);
   }
@@ -84,6 +113,15 @@ export class MakeTransactionPageComponent implements OnInit {
 
   ngOnInit() {
     this.updateMembers();
+    // TODO: Replace this with some kind of global validator.
+    this.fg.valueChanges.subscribe(() => {
+      if (!this.fg.value.from || !this.fg.value.to) {
+        return;
+      }
+      if (this.fg.value.from.members && this.fg.value.to.members) {
+        this.hint.showError('Cannot send from one group to another.')
+      }
+    });
   }
 
   checkError(controlName: string, errorName: string): boolean {
@@ -103,31 +141,30 @@ export class MakeTransactionPageComponent implements OnInit {
   submit() {
     const v = this.fg.value;
     this.fg.disable();
-    let from = [v.from], to = [v.to];
+    const from = v.from.members || [v.from];
+    const to = v.to.members || [v.to];
+    console.log(this.hint);
+    this.hint.showMessage('hello world!');
     (async () => {
       try {
-        if (v.from.id === 'ALL_BLUES') {
-          from = await this.getClassList(Class.BLUE);
-        }
-        if (v.from.id === 'ALL_ORANGES') {
-          from = await this.getClassList(Class.ORANGE);
-        }
-        if (v.to.id === 'ALL_BLUES') {
-          to = await this.getClassList(Class.BLUE);
-        }
-        if (v.to.id === 'ALL_ORANGES') {
-          to = await this.getClassList(Class.ORANGE);
-        }
         if (to.length > 1 && from.length > 1) {
           this.hint.showError('Cannot send from one group to another.');
           this.fg.enable();
           return;
         }
         if (to.length > 1) {
+          let amount = v.amount;
+          if (v.splitGroup) {
+            amount = amount / to.length;
+          }
           for (const m of to) {
-            await this.backend.createTransaction(v.from, m, v.amount, v.reason);
+            await this.backend.createTransaction(v.from, m, amount, v.reason);
           }
         } else if (from.length > 1) {
+          let amount = v.amount;
+          if (v.splitGroup) {
+            amount = amount / from.length;
+          }
           for (const m of from) {
             await this.backend.createTransaction(m, v.to, v.amount, v.reason);
           }

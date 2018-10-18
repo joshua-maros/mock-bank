@@ -4,6 +4,10 @@ mat-form-field {
     width: 100%;
 }
 
+mat-radio-button {
+    margin-left: 1em;
+}
+
 #root {
     display: grid;
     grid-column-gap: 0.5em;
@@ -14,6 +18,7 @@ mat-form-field {
         "to"
         "amount"
         "reason"
+        "settings"
         "send"
         "hint"
 }
@@ -22,9 +27,10 @@ mat-form-field {
     #root {
         grid-template-columns: 2fr 1fr 2fr 1fr;
         grid-template-areas: 
-            "from   from   to     to"
-            "reason reason amount send"
-            "hint   hint   hint   hint"
+            "from     from     to       to"
+            "reason   reason   amount   send"
+            "settings settings settings settings"
+            "hint     hint     hint     hint"
     }
 }
 
@@ -46,6 +52,10 @@ mat-form-field {
 
 #send {
     grid-area: send;
+}
+
+#settings {
+    grid-area: settings;
 }
 
 #hint {
