@@ -4,7 +4,8 @@
   <h1>Create Transaction</h1>
   <form #form="ngForm" [formGroup]="fg" (ngSubmit)="submit()"> <mat-card id="root">
     <div class="account" id="from">
-      <mat-form-field [ngClass]="[fg.value.from ? (fg.value.from.class) : 'blank', 'person']">
+      <mat-form-field [ngClass]="[fg.value.from ? (fg.value.from.class) : 'blank', 'person', 
+        newBalanceForFrom < 0 && !fg.value.allowDebt ? 'error' : 'ok']">
         <mat-select placeholder="From" formControlName="from" [errorStateMatcher]="alwaysMatcher">
           <mat-option *ngFor="let member of members" [value]="member">
             {{member.firstName + ' ' + member.lastName}}
@@ -28,9 +29,9 @@
           </mat-option>
         </mat-select>
         <mat-hint class="net-desc gain">
-          $<span class="before" *ngIf="fg.value.to">{{fg.value.to.currentWealth}}</span>
+          $<span class="before" *ngIf="fg.value.to">{{f(fg.value.to.currentWealth)}}</span>
           <span class="after" *ngIf="fg.value.to && fg.value.amount > 0">
-            &#8594; ${{newBalanceForTo}}
+            &#8594; ${{f(newBalanceForTo)}}
           </span>
         </mat-hint>
         <mat-error *ngIf="checkError('to', 'required')">This value is required!</mat-error>
@@ -81,6 +82,6 @@
       </mat-radio-group>
     </div>
 
-    <app-fade-hint id="hint" #hint></app-fade-hint>
+    <app-overlay-hint id="hint" #hint></app-overlay-hint>
   </mat-card> </form>
 </app-centered-layout>

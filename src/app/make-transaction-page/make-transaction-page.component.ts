@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { WebappBackendService, Member, AccessLevel, Class, MemberGroup } from '../webapp-backend.service';
-import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { sortMembers } from '../util';
-import { FadeHintComponent } from '../fade-hint/fade-hint.component';
+import { OverlayHintComponent } from '../overlay-hint/overlay-hint.component';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
@@ -19,7 +19,7 @@ export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./make-transaction-page.component.scss']
 })
 export class MakeTransactionPageComponent implements OnInit {
-  @ViewChild('hint') hint: FadeHintComponent;
+  @ViewChild('hint') hint: OverlayHintComponent;
   members: (Member | MemberGroup)[];
   reasons = [
     'Payment',
@@ -38,21 +38,21 @@ export class MakeTransactionPageComponent implements OnInit {
 
   alwaysMatcher = new AlwaysErrorStateMatcher();
   @ViewChild('form') form;
-  fg = new FormGroup({
-    from: new FormControl(null, Validators.required),
-    to: new FormControl(null, Validators.required),
-    amount: new FormControl(null, [
+  fg = this.fb.group({
+    from: [null, Validators.required],
+    to: [null, Validators.required],
+    amount: [null, [
       Validators.required,
-      Validators.min(0),
-      // TODO: Replace this with some kind of global validator.
-      (control: AbstractControl): {[key: string]: any} | null => {
-        return this.fg && !this.fg.value.allowDebt && this.fg.value.from 
-          && this.computeBalanceForFrom(control.value) < 0 ? {'max': {}} : null;
-      }
-    ]),
-    reason: new FormControl('', Validators.required),
-    splitGroup: new FormControl(false),
-    allowDebt: new FormControl(false)
+      Validators.min(0)
+    ]],
+    reason: ['', Validators.required],
+    splitGroup: [false],
+    allowDebt: [false]
+  }, { 
+    validator: (control: AbstractControl): {[key: string]: any} | null => {
+      return control.value && !control.value.allowDebt && control.value.from 
+        && this.computeBalanceForFrom(control.value.amount) < 0 ? {'max': {}} : null;
+    }
   });
 
   get AccessLevel() { // For *ngIfs
@@ -113,19 +113,19 @@ export class MakeTransactionPageComponent implements OnInit {
     this.members = sortMembers(allMembers, false);
   }
 
-  constructor(private backend: WebappBackendService) { }
+  constructor(private backend: WebappBackendService, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.updateMembers();
     // TODO: Replace this with some kind of global validator.
-    this.fg.valueChanges.subscribe(() => {
+    /* this.fg.valueChanges.subscribe(() => {
       if (!this.fg.value.from || !this.fg.value.to) {
         return;
       }
       if (this.fg.value.from.members && this.fg.value.to.members) {
         this.hint.showError('Cannot send from one group to another.')
       }
-    });
+    }); */
   }
 
   checkError(controlName: string, errorName: string): boolean {
@@ -148,7 +148,6 @@ export class MakeTransactionPageComponent implements OnInit {
     const from = v.from.members || [v.from];
     const to = v.to.members || [v.to];
     console.log(this.hint);
-    this.hint.showMessage('hello world!');
     (async () => {
       try {
         if (to.length > 1 && from.length > 1) {
@@ -175,7 +174,7 @@ export class MakeTransactionPageComponent implements OnInit {
         } else {
           await this.backend.createTransaction(v.from, v.to, v.amount, v.reason);
         }
-        const oldFrom = v.from.id, oldTo = v.to.id, oldAmount = v.amount, oldReason = v.reason;
+        const oldFrom = v.from.id, oldTo = v.to.id, oldAmount = v.amount, oldReason = v.reason, oldSplit = v.splitGroup;
         await this.updateMembers();
         let newFrom: Member | MemberGroup, newTo: Member | MemberGroup;
         for (const member of this.members) {
@@ -188,7 +187,7 @@ export class MakeTransactionPageComponent implements OnInit {
         }
         this.hint.showMessage('Transaction created!');
         this.form.resetForm();
-        this.fg.patchValue({ amount: oldAmount, reason: oldReason, from: newFrom, to: newTo });
+        this.fg.patchValue({ amount: oldAmount, reason: oldReason, from: newFrom, to: newTo, splitGroup: oldSplit });
         this.fg.enable();
       } catch {
         this.hint.showError('Error encountered while processing transaction!');
