@@ -1,11 +1,11 @@
-import { Component, OnInit, HostBinding, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, Input, HostBinding } from '@angular/core';
 
 @Component({
-  selector: 'app-fade-hint',
-  templateUrl: './fade-hint.component.html',
-  styleUrls: ['./fade-hint.component.scss']
+  selector: 'app-overlay-hint',
+  templateUrl: './overlay-hint.component.html',
+  styleUrls: ['./overlay-hint.component.scss']
 })
-export class FadeHintComponent implements OnInit {
+export class OverlayHintComponent implements OnInit {
   @Input('ms-per-word') msPerWord: number = 300;
   @Input('base-delay') baseDelay: number = 500;
   @HostBinding('class.active') cssClassActive: boolean = false;
