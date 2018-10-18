@@ -32,6 +32,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { ClearBoxComponent } from './clear-box/clear-box.component';
 import { FadeHintComponent } from './fade-hint/fade-hint.component';
 import { OverlayHintComponent } from './overlay-hint/overlay-hint.component';
+import { ToolsPageComponent } from './tools-page/tools-page.component';
 
 const appRoutes = [
   { path: 'home', component: HomePageComponent },
@@ -44,6 +45,7 @@ const appRoutes = [
   { path: 'jobs', component: JobsPageComponent },
   { path: 'jobs/new', component: MakeJobPageComponent },
   { path: 'jobs/:id', component: JobPageComponent },
+  { path: 'tools', component: ToolsPageComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
@@ -68,7 +70,8 @@ const appRoutes = [
     HomePageComponent,
     ClearBoxComponent,
     FadeHintComponent,
-    OverlayHintComponent
+    OverlayHintComponent,
+    ToolsPageComponent
   ],
   imports: [
     BrowserModule,
