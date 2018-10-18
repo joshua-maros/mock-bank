@@ -50,7 +50,7 @@ export class MemberGroup {
     return this.minWealth;
   }
 
-  constructor(private name: string, private members: Member[]) {
+  constructor(public readonly name: string, public readonly members: Member[]) {
     this.minWealth = 1e10;
     this.maxWealth = -1e10;
     this.class = this.members.length > 0 ? this.members[0].class : null;

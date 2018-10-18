@@ -21,8 +21,8 @@ export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
 export class MakeTransactionPageComponent implements OnInit {
   @ViewChild('hint') hint: FadeHintComponent;
   members: (Member | MemberGroup)[];
-  numOranges: number;
-  numBlues: number;
+  allBlues: MemberGroup;
+  allOranges: MemberGroup;
   reasons = [
     'Payment',
     'Rent',
@@ -59,27 +59,13 @@ export class MakeTransactionPageComponent implements OnInit {
 
   get newBalanceForFrom() {
     const v = this.fg.value;
-    let multiplier = 1;
-    if (v.to.firstName === 'All') {
-      if (v.to.lastName === 'Oranges') {
-        multiplier = this.numOranges;
-      } else if (v.to.lastName === 'Blues') {
-        multiplier = this.numBlues;
-      }
-    }
+    const multiplier = v.to.members ? v.to.members.length : 1;
     return v.from.currentWealth - v.amount * multiplier;
   }
 
   get newBalanceForTo() {
     const v = this.fg.value;
-    let multiplier = 1;
-    if (v.from.firstName === 'All') {
-      if (v.from.lastName === 'Oranges') {
-        multiplier = this.numOranges;
-      } else if (v.from.lastName === 'Blues') {
-        multiplier = this.numBlues;
-      }
-    }
+    const multiplier = v.from.members ? v.from.members.length : 1;
     return v.to.currentWealth + v.amount * multiplier;
   }
 
@@ -88,17 +74,10 @@ export class MakeTransactionPageComponent implements OnInit {
     const members = this.backend.getCachedMemberList();
     const allBlues = this.backend.getClassSummary(Class.BLUE, 'Blues');
     const allOranges = this.backend.getClassSummary(Class.ORANGE, 'Oranges');
+    this.allBlues = await allBlues;
+    this.allOranges = await allOranges;
     const allMembers = (<(Member | MemberGroup)[]> await members).concat([await allBlues, await allOranges]);
     this.members = sortMembers(allMembers, false);
-    this.numOranges = 0;
-    this.numBlues = 0;
-    for (const member of this.members) {
-      if (member.class === Class.ORANGE) {
-        this.numOranges += 1;
-      } else if (member.class === Class.BLUE) {
-        this.numBlues += 1;
-      }
-    }
   }
 
   constructor(private backend: WebappBackendService) { }
