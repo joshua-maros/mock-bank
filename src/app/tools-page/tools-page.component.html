@@ -3,7 +3,7 @@
 <app-centered-layout *ngIf="guard.show">
   <div class="toolPane">
     <h1>Change PIN</h1>
-    <mat-card> <form [formGroup]="pinFg" #pinForm="ngForm">
+    <mat-card> <form [formGroup]="pinFg" (submit)="changePin()" #pinForm="ngForm">
       <div class="controls">
         <mat-form-field>
           <input matInput type="password" placeholder="Old PIN" formControlName="oldPin">
@@ -16,22 +16,23 @@
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput type="password" placeholder="Confirm new PIN" formControlName="newPin">
+          <input matInput type="password" placeholder="Confirm new PIN" formControlName="confirmPin">
           <mat-error>This field is required!</mat-error>
         </mat-form-field>
       </div>
 
-      <app-overlay-hint #pinHint></app-overlay-hint>
 
       <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!pinFg.valid">
         Change PIN
       </button>
+      
+      <app-overlay-hint #pinHint></app-overlay-hint> 
     </form> </mat-card>
   </div>
 
   <div class="toolPane">
     <h1>Reversal of Fortune</h1>
-    <mat-card> <form [formGroup]="rofFg" #rofForm="ngForm">
+    <mat-card> <form [formGroup]="rofFg" (submit)="doRof()" #rofForm="ngForm">
       <div class="controls">
         <mat-form-field>
           <mat-select placeholder="Switch this orange..." formControlName="orangePerson">
@@ -52,11 +53,11 @@
         </mat-form-field>
       </div>
 
-      <app-overlay-hint #rofHint></app-overlay-hint>
-
       <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!rofFg.valid">
         Reverse
       </button>
+
+      <app-overlay-hint #rofHint></app-overlay-hint>
     </form> </mat-card>
   </div>
 </app-centered-layout>
