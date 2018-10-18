@@ -1,6 +1,6 @@
-import { Member, Job } from './webapp-backend.service';
+import { Member, Job, MemberGroup } from './webapp-backend.service';
 
-export function sortMembers(input: Member[], excludeBank: boolean): Member[] {
+export function sortMembers(input: (Member | MemberGroup)[], excludeBank: boolean): (Member | MemberGroup)[] {
   const sorted = input.sort((a, b) => {
     if (a.firstName.toLowerCase() === b.firstName.toLowerCase()) {
       return (a.lastName.toLowerCase() > b.lastName.toLowerCase() ? 1 : -1);

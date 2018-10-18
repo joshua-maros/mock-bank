@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { WebappBackendService, Member, AccessLevel, Class } from '../webapp-backend.service';
+import { WebappBackendService, Member, AccessLevel, Class, MemberGroup } from '../webapp-backend.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { sortMembers } from '../util';
 import { FadeHintComponent } from '../fade-hint/fade-hint.component';
@@ -10,7 +10,7 @@ import { FadeHintComponent } from '../fade-hint/fade-hint.component';
   styleUrls: ['./make-job-page.component.scss']
 })
 export class MakeJobPageComponent implements OnInit {
-  public members: Member[];
+  public members: (Member | MemberGroup)[];
   private quickAddList: Member[] = [];
   @ViewChild('hint') hint: FadeHintComponent;
 
@@ -22,7 +22,7 @@ export class MakeJobPageComponent implements OnInit {
     toAdd: [null]
   });
 
-  constructor(private backend: WebappBackendService, private fb: FormBuilder) { 
+  constructor(private backend: WebappBackendService, private fb: FormBuilder) {
     this.fg.get('toAdd').valueChanges.subscribe(val => this.addMember(val));
   }
 
@@ -33,7 +33,9 @@ export class MakeJobPageComponent implements OnInit {
   }
 
   addMember(member: Member) {
-    if (!member) return;
+    if (!member) {
+      return;
+    }
     if (this.quickAddList.indexOf(member) === -1) {
       this.quickAddList.push(member);
     }
@@ -49,7 +51,7 @@ export class MakeJobPageComponent implements OnInit {
     this.fg.disable();
     (async () => {
       try {
-        let res = await this.backend.createJob(v.name, v.blueSalary, v.orangeSalary);
+        const res = await this.backend.createJob(v.name, v.blueSalary, v.orangeSalary);
         if (res.ok) {
           for (const member of this.quickAddList) {
             await this.backend.patchMember(member, {

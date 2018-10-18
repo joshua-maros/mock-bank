@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { WebappBackendService, Member, AccessLevel, Class } from '../webapp-backend.service';
+import { WebappBackendService, Member, AccessLevel, Class, MemberGroup } from '../webapp-backend.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, AbstractControl, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { sortMembers } from '../util';
@@ -20,7 +20,7 @@ export class AlwaysErrorStateMatcher implements ErrorStateMatcher {
 })
 export class MakeTransactionPageComponent implements OnInit {
   @ViewChild('hint') hint: FadeHintComponent;
-  members: Member[];
+  members: (Member | MemberGroup)[];
   numOranges: number;
   numBlues: number;
   reasons = [
@@ -88,7 +88,8 @@ export class MakeTransactionPageComponent implements OnInit {
     const members = this.backend.getCachedMemberList();
     const allBlues = this.backend.getClassSummary(Class.BLUE, 'Blues');
     const allOranges = this.backend.getClassSummary(Class.ORANGE, 'Oranges');
-    this.members = sortMembers((await members).concat([await allBlues, await allOranges]), false);
+    const allMembers = (<(Member | MemberGroup)[]> await members).concat([await allBlues, await allOranges]);
+    this.members = sortMembers(allMembers, false);
     this.numOranges = 0;
     this.numBlues = 0;
     for (const member of this.members) {
@@ -111,7 +112,7 @@ export class MakeTransactionPageComponent implements OnInit {
   }
 
   private async getClassList(clas: Class) {
-    let result = [];
+    const result = [];
     for (const member of await this.backend.getCachedMemberList()) {
       if (member.class === clas) {
         result.push(member);
@@ -156,7 +157,7 @@ export class MakeTransactionPageComponent implements OnInit {
         }
         const oldFrom = v.from.id, oldTo = v.to.id, oldAmount = v.amount, oldReason = v.reason;
         await this.updateMembers();
-        let newFrom: Member, newTo: Member;
+        let newFrom: Member | MemberGroup, newTo: Member | MemberGroup;
         for (const member of this.members) {
           if (member.id === oldFrom) {
             newFrom = member;

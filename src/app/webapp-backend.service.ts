@@ -32,6 +32,43 @@ export interface Member {
   currentWealth: number;
 }
 
+export class MemberGroup {
+  public readonly id: string;
+  public readonly class: Class | null;
+  public readonly minWealth: number;
+  public readonly maxWealth: number;
+
+  public get firstName() {
+    return '!';
+  }
+
+  public get lastName() {
+    return this.name;
+  }
+
+  public get currentWealth() {
+    return this.minWealth;
+  }
+
+  constructor(private name: string, private members: Member[]) {
+    this.minWealth = 1e10;
+    this.maxWealth = -1e10;
+    this.class = this.members.length > 0 ? this.members[0].class : null;
+    for (const member of this.members) {
+      if (member.currentWealth > this.maxWealth) {
+        this.maxWealth = member.currentWealth;
+      }
+      if (member.currentWealth < this.minWealth) {
+        this.minWealth = member.currentWealth;
+      }
+      if (member.class !== this.class && this.class !== null) {
+        this.class = null;
+      }
+    }
+    this.id = 'MemberGroup_' + name;
+  }
+}
+
 export interface Session {
   sessionToken: string;
   expires: number;
@@ -291,24 +328,14 @@ export class WebappBackendService {
     });
   }
 
-  async getClassSummary(clas: Class, hrClassName: string): Promise<Member> {
-    let minBalance = 99999999;
+  async getClassSummary(clas: Class, hrClassName: string): Promise<MemberGroup> {
+    const members: Member[] = [];
     for (const member of await this.getCachedMemberList()) {
-      if (member.class === clas && member.currentWealth < minBalance) {
-        minBalance = member.currentWealth;
+      if (member.class === clas) {
+        members.push(member);
       }
     }
-    return {
-      accessLevel: AccessLevel.MEMBER,
-      class: clas,
-      firstName: 'All',
-      lastName: hrClassName,
-      id: 'ALL_' + hrClassName.toUpperCase(),
-      currentWealth: minBalance,
-      jobs: [],
-      ownsDesks: [],
-      rentsDesks: []
-    };
+    return new MemberGroup('All ' + hrClassName, members);
   }
 
   getCachedLedger(): Promise<Transaction[]> {

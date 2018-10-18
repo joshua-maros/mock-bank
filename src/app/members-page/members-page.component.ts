@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Member, WebappBackendService } from '../webapp-backend.service';
+import { Member, WebappBackendService, MemberGroup } from '../webapp-backend.service';
 import { sortMembers } from '../util';
 
 @Component({
@@ -8,7 +8,7 @@ import { sortMembers } from '../util';
   styleUrls: ['./members-page.component.scss']
 })
 export class MembersPageComponent implements OnInit {
-  members: Member[];
+  members: (Member | MemberGroup)[];
 
   constructor(private backend: WebappBackendService) { }
 

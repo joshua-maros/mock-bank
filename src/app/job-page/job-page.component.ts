@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WebappBackendService, Job, Member } from '../webapp-backend.service';
+import { WebappBackendService, Job, Member, MemberGroup } from '../webapp-backend.service';
 import { ActivatedRoute } from '@angular/router';
 import { sortMembers } from '../util';
 
@@ -10,7 +10,7 @@ import { sortMembers } from '../util';
 })
 export class JobPageComponent implements OnInit {
   public job: Job = null;
-  public members: Member[] = null;
+  public members: (Member | MemberGroup)[] = null;
   public employees: Member[] = null;
 
   get isLeader() {
