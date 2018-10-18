@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { WebappBackendService } from '../webapp-backend.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { OverlayHintComponent } from '../overlay-hint/overlay-hint.component';
 
 @Component({
   selector: 'app-login-page',
@@ -9,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent implements OnInit {
+  @ViewChild('hint') hint: OverlayHintComponent;
   fg = this.fb.group({
     first: ['', Validators.required],
     last: ['', Validators.required],
@@ -30,6 +32,8 @@ export class LoginPageComponent implements OnInit {
     if (result) {
       const returnUrl = this.route.snapshot.queryParamMap.get('url');
       this.router.navigateByUrl(returnUrl);
+    } else {
+      this.hint.showError('Could not log in.');
     }
     this.fg.enable();
    }

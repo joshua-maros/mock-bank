@@ -5,15 +5,20 @@
       <mat-hint>Case insensetive</mat-hint>
       <mat-error>This field is required!</mat-error>
     </mat-form-field>
+
     <mat-form-field id="last">
       <input matInput formControlName="last" placeholder="Last Name">
       <mat-hint>Case insensetive</mat-hint>
       <mat-error>This field is required!</mat-error>
     </mat-form-field>
+
     <mat-form-field id="pin">
       <input matInput formControlName="pin" type="password" placeholder="PIN">
       <mat-error>This field is required!</mat-error>
     </mat-form-field>
+
     <button mat-raised-button type="submit" id="login" color="primary" [disabled]="!fg.valid">Log In</button>
+    
+    <app-overlay-hint #hint></app-overlay-hint>
   </mat-card> </form>
 </app-centered-layout>
