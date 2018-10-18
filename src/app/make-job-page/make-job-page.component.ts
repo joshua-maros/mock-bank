@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { WebappBackendService, Member, AccessLevel, Class, MemberGroup } from '../webapp-backend.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { sortMembers } from '../util';
-import { FadeHintComponent } from '../fade-hint/fade-hint.component';
+import { OverlayHintComponent } from '../overlay-hint/overlay-hint.component';
 
 @Component({
   selector: 'app-make-job-page',
@@ -12,7 +12,7 @@ import { FadeHintComponent } from '../fade-hint/fade-hint.component';
 export class MakeJobPageComponent implements OnInit {
   public members: (Member | MemberGroup)[];
   private quickAddList: Member[] = [];
-  @ViewChild('hint') hint: FadeHintComponent;
+  @ViewChild('hint') hint: OverlayHintComponent;
 
   @ViewChild('form') form;
   fg = this.fb.group({

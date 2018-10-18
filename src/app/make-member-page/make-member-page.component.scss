@@ -5,7 +5,6 @@ mat-card {
     grid-template-columns: min-content 1fr;
     grid-template-areas: 
         "class name"
-        "mess  mess"
 }
 
 @media(max-width: 35em) {
@@ -14,7 +13,6 @@ mat-card {
         grid-template-areas:
             "class"
             "name"
-            "mess"
     }
 }
 
@@ -28,8 +26,4 @@ mat-form-field {
 
 #name {
     grid-area: name;
-}
-
-#message {
-    grid-area: mess;
 }

@@ -8,7 +8,6 @@ mat-card {
         "bs   qadd"
         "os   qadd"
         "os   send"
-        "hint hint"
 }
 
 @media(max-width: 35em) {
@@ -20,7 +19,6 @@ mat-card {
             "os"
             "qadd"
             "send"
-            "hint"
     }
 
     #send > button {
@@ -67,8 +65,4 @@ mat-form-field {
 
 #send {
     grid-area: send;
-}
-
-#hint {
-    grid-area: hint;
 }

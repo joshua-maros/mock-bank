@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { WebappBackendService } from '../webapp-backend.service';
-import { FadeHintComponent } from '../fade-hint/fade-hint.component';
+import { OverlayHintComponent } from '../overlay-hint/overlay-hint.component';
 
 @Component({
   selector: 'app-make-member-page',
@@ -10,7 +10,7 @@ import { FadeHintComponent } from '../fade-hint/fade-hint.component';
 })
 export class MakeMemberPageComponent implements OnInit {
   @ViewChild('form') form;
-  @ViewChild('message') message: FadeHintComponent;
+  @ViewChild('message') message: OverlayHintComponent;
   messageTimeout;
   fg = this.fb.group({
     class: ['none', Validators.required],
