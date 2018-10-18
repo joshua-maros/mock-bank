@@ -1,0 +1,56 @@
+app-centered-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 1em;
+}
+
+div.toolPane {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+}
+
+div.toolPane  button {
+    width: 100%;
+    margin-top: auto;
+}
+
+form {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-areas: 
+        "controls"
+        "."
+        "submit"
+}
+
+form div.controls {
+    grid-area: controls;
+}
+
+form button.submit {
+    grid-area: submit;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+@media(max-width: 65em) {
+    app-centered-layout {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media(max-width: 50em) {
+    app-centered-layout {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media(max-width: 35em) {
+    app-centered-layout {
+        grid-template-columns: 1fr;
+    }
+}

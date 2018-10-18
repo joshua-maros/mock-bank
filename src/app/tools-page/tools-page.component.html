@@ -1,3 +1,62 @@
-<p>
-  tools-page works!
-</p>
+<app-page-guard [loaded]="members" accessLevel="member" #guard>
+</app-page-guard>
+<app-centered-layout *ngIf="guard.show">
+  <div class="toolPane">
+    <h1>Change PIN</h1>
+    <mat-card> <form [formGroup]="pinFg" #pinForm="ngForm">
+      <div class="controls">
+        <mat-form-field>
+          <input matInput type="password" placeholder="Old PIN" formControlName="oldPin">
+          <mat-error>This field is required!</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="password" placeholder="New PIN" formControlName="newPin">
+          <mat-error>This field is required!</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="password" placeholder="Confirm new PIN" formControlName="newPin">
+          <mat-error>This field is required!</mat-error>
+        </mat-form-field>
+      </div>
+
+      <app-overlay-hint #pinHint></app-overlay-hint>
+
+      <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!pinFg.valid">
+        Change PIN
+      </button>
+    </form> </mat-card>
+  </div>
+
+  <div class="toolPane">
+    <h1>Reversal of Fortune</h1>
+    <mat-card> <form [formGroup]="rofFg" #rofForm="ngForm">
+      <div class="controls">
+        <mat-form-field>
+          <mat-select placeholder="Switch this orange..." formControlName="orangePerson">
+            <mat-option *ngFor="let member of oranges" [value]="member">
+              {{member.firstName}} {{member.lastName}}
+            </mat-option>
+          </mat-select>
+          <mat-error>This field is required!</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select placeholder="With this blue..." formControlName="bluePerson">
+            <mat-option *ngFor="let member of blues" [value]="member">
+              {{member.firstName}} {{member.lastName}}
+            </mat-option>
+          </mat-select>
+          <mat-error>This field is required!</mat-error>
+        </mat-form-field>
+      </div>
+
+      <app-overlay-hint #rofHint></app-overlay-hint>
+
+      <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!rofFg.valid">
+        Reverse
+      </button>
+    </form> </mat-card>
+  </div>
+</app-centered-layout>
