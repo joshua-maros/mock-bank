@@ -11,7 +11,7 @@
     <div class="prop-box">
       <span class="key">Bank Balance:</span>
       <span class="spacer"></span>
-      <span class="value">${{thisMember.currentWealth}}</span>
+      <span class="value">${{f(thisMember.currentWealth)}}</span>
     </div>
     <div class="prop-box">
       <span class="key">Number of Jobs:</span>
@@ -21,7 +21,7 @@
     <div class="prop-box">
       <span class="key">Weekly Salary:</span>
       <span class="spacer"></span>
-      <span class="value">${{salary}}</span>
+      <span class="value">${{f(salary)}}</span>
     </div>
   </mat-card>
   <h1>{{thisMember.firstName}} {{thisMember.lastName}}'s Jobs

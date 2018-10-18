@@ -16,6 +16,10 @@ export class TransactionComponent implements OnInit {
 
   constructor(private backend: WebappBackendService, private router: Router) { }
 
+  get f() {
+    return Math.floor;
+  }
+
   ngOnInit() {
     this.backend.getCachedMemberList().then((members) => {
       if (!this.transaction) {

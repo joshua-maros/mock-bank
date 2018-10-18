@@ -55,6 +55,10 @@ export class MemberPageComponent implements OnInit {
     }
   }
 
+  get f() {
+    return Math.floor;
+  }
+
   private async reloadData() {
     const members = this.backend.getCachedMemberList();
     const ledger = this.backend.getCachedLedger();

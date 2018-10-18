@@ -9,7 +9,7 @@
   </span>
   <span id="amount">
     <span class="mat-caption">AMOUNT: </span>
-    <span class="cat-text value">${{transaction && transaction.amount || "UNKNOWN"}}</span>
+    <span class="cat-text value">${{transaction && f(transaction.amount) || "UNKNOWN"}}</span>
   </span>
   <span id="reason">
     <span class="mat-caption">REASON: </span>

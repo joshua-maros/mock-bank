@@ -11,9 +11,9 @@
           </mat-option>
         </mat-select>
         <mat-hint class="net-desc loss">
-          $<span class="before" *ngIf="fg.value.from">{{fg.value.from.currentWealth}}</span>
+          $<span class="before" *ngIf="fg.value.from">{{f(fg.value.from.currentWealth)}}</span>
           <span class="after" *ngIf="fg.value.from && fg.value.amount > 0">
-            &#8594; ${{newBalanceForFrom}}
+            &#8594; ${{f(newBalanceForFrom)}}
           </span>
         </mat-hint>
         <mat-error *ngIf="checkError('from', 'required')">This value is required!</mat-error>

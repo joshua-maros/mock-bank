@@ -58,6 +58,10 @@ export class MakeTransactionPageComponent implements OnInit {
   get AccessLevel() { // For *ngIfs
     return AccessLevel;
   }
+  
+  get f() {
+    return Math.floor;
+  }
 
   private computeBalanceForFrom(amount: number) {
     const v = this.fg.value;

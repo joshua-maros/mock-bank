@@ -11,6 +11,10 @@ export class MemberComponent implements OnInit {
   @Input() member: Member = null;
   salary: Number = null;
 
+  get f() {
+    return Math.floor;
+  }
+
   constructor(private backend: WebappBackendService, private router: Router) { }
 
   ngOnInit() {
