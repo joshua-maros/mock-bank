@@ -227,10 +227,47 @@ app.patch('/api/v1/members/:id', async (req, res) => {
 	res.status(200).send(existingMember);
 });
 
+app.post('/api/v1/members/:id/switch', async (req, res) => {
+	if (!req.body.other) {
+		res.status(400).send({error: 'The parameter [other] must be provided in the request body.'});
+		return;
+	}
+
+	await checkLogin(req, res, c.access.LEADER);
+	
+	const aid = req.params.id, bid = req.body.other;
+	const aCopy = {};
+	const a = dbs.members.findItemWithValue('id', aid), 
+		  b = dbs.members.findItemWithValue('id', bid);
+	// Switch their identifying information, but leave all their posession and status information.
+	const aa = await a, ab = await b;
+	const aFirst = aa.firstName, aLast = aa.lastName;
+	aa.firstName = ab.firstName;
+	aa.lastName = ab.lastName;
+	ab.firstName = aFirst;
+	ab.lastName = aLast;
+
+	// Switch around their transactions.
+	for (const transaction of await ledger.getTransactionHistory()) {
+		if (transaction.from === aid) 
+			transaction.from = bid;
+		else if (transaction.from === bid) 
+			transaction.from = aid;
+
+		if (transaction.to === aid) 
+			transaction.to = bid;
+		else if (transaction.to === bid) 
+			transaction.to = aid;
+	}
+
+	res.status(200).send({});
+})
+
 app.post('/api/v1/members/:id/pin', async (req, res) => {
 	const loggedInMember = await checkLogin(req, res, c.access.MEMBER);
 	if (!req.body.oldPin || !req.body.newPin) {
 		res.status(400).send({error: 'The parameters [oldPin, newPin] must be provided in the request body!'});
+		return;
 	}
 	if (loggedInMember.id !== req.params.id) {
 		res.status(403).send({error: 'Members can only change their own PINs!'});
@@ -243,6 +280,7 @@ app.post('/api/v1/members/:id/pin', async (req, res) => {
 	const existingMember = await dbs.members.findItemWithValue('id', req.params.id);
 	if (existingMember.pin !== req.body.oldPin) {
 		res.status(403).send({error: 'Old PIN provided in request body does not match old PIN of user!'});
+		return;
 	}
 	existingMember.pin = req.body.newPin;
 	res.status(200).send({});

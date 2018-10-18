@@ -321,6 +321,24 @@ export class WebappBackendService {
     });
   }
 
+  swapMembers(a: Member | string, b: Member | string): Promise<HttpResponse<{}>> {
+    this.cachedMembers.markDirtyAndHold();
+    this.cachedLedger.markDirtyAndHold();
+    if ((a as Member).id !== undefined) {
+      a = (a as Member).id;
+    }
+    if ((b as Member).id !== undefined) {
+      b = (b as Member).id;
+    }
+    return this.post<{}>('/api/v1/members/' + a + '/switch', {
+      other: b
+    }).then(e => {
+      this.cachedMembers.endHold();
+      this.cachedLedger.endHold();
+      return e;
+    });
+  }
+
   changePin(from: string, to: string): Promise<HttpResponse<{}>> {
     return this.post<{}>('/api/v1/members/' + this.getCurrentMember().id + '/pin', {
       oldPin: from,
