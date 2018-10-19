@@ -1,8 +1,2 @@
 <app-centered-layout>
-  <h1 *ngIf="loggedIn">Quick Actions</h1>
-  <div *ngIf="loggedIn" id="tool-box">
-    <button mat-raised-button *ngIf="loggedIn" color="primary" (click)="logout()">Sign Out</button>
-    <button mat-raised-button *ngIf="loggedIn" color="primary" (click)="changePin()">Change PIN</button>
-    <button mat-raised-button *ngIf="showLeader" color="primary" (click)="paySalaries()">Pay All Salaries</button>
-  </div>
 </app-centered-layout>

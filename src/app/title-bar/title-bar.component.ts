@@ -49,5 +49,10 @@ export class TitleBarComponent implements OnInit {
     });
   }
 
+  signOut() {
+    this.backend.logout();
+    this.router.navigateByUrl('/home');
+  }
+
   ngOnInit() { }
 }

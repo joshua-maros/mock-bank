@@ -8,6 +8,7 @@
 		<li *ngFor="let button of (backend.getAccessLevel() == AccessLevel.LEADER) ? leaderButtons : []">
 			<a mat-button [routerLink]="button.url">{{button.text}}</a>
 		</li>
+		<li *ngIf="backend.isSessionValid()"><a mat-button (click)="signOut()">Sign Out</a></li>
 	</ul>
 	<mat-menu id="mobile-menu" class="mobile" #mobileMenu>
 		<button mat-menu-item routerLink="/">Home</button>
@@ -20,6 +21,7 @@
 			mat-menu-item [routerLink]="button.url">
 			{{button.text}}
 		</button>
+		<button mat-menu-item *ngIf="backend.isSessionValid()" (click)="signOut()">Sign Out</button>
 	</mat-menu>
 	<div id="mobile-bar" class="mobile" [matMenuTriggerFor]="mobileMenu">
 		<button mat-icon-button>
