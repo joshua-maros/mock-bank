@@ -34,6 +34,15 @@ export class ToolsPageComponent implements OnInit {
     confirm: [false, Validators.requiredTrue]
   });
 
+  @ViewChild('salaryHint') salaryHint: OverlayHintComponent;
+  @ViewChild('salaryForm') salaryForm: NgForm;
+  public salaryFg = this.fb.group({
+    taxRate: [0],
+    taxBlues: [false],
+    taxOranges: [false],
+    taxDestination: [null]
+  });
+
   get oranges() {
     return this.members.filter(e => e.class === Class.ORANGE);
   }
@@ -129,6 +138,26 @@ export class ToolsPageComponent implements OnInit {
           this.promoteHint.showError('Promotion failed, try again.');
       }
       this.promoteFg.enable();
+    })();
+  }
+
+  paySalaries() {
+    this.salaryFg.disable();
+    const v = this.salaryFg.value;
+    (async () => {
+      try {
+        const result = await this.backend.paySalaries();
+        if (result.ok) {
+          this.salaryHint.showMessage('Salaries are now paid.');
+          await this.updateData();
+        } else {
+          this.salaryFg.enable();
+          this.salaryHint.showError('Salary payment failed, try again.');
+        }
+      } catch {
+        this.salaryFg.enable();
+        this.salaryHint.showError('Salary payment failed, try again.');
+      }
     })();
   }
 }

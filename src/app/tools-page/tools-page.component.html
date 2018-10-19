@@ -93,4 +93,22 @@
       <app-overlay-hint #promoteHint></app-overlay-hint>
     </form> </mat-card>
   </div>
+
+  <div class="toolPane">
+    <h1>Pay Salaries</h1>
+    <mat-card> <form [formGroup]="salaryFg" (submit)="paySalaries()" #salaryForm="ngForm">
+      <div class="controls">
+        This will automatically give everyone one week's worth of wages according to their current employment and social
+        class.
+
+        <div class="spacing"></div>
+      </div>
+
+      <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!salaryFg.valid">
+        Pay Salaries
+      </button>
+
+      <app-overlay-hint #salaryHint></app-overlay-hint>
+    </form></mat-card>
+  </div>
 </app-centered-layout>
