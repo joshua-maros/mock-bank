@@ -1,0 +1,8 @@
+<div *ngFor="let entry of entries" class="entry">
+    <h2>{{entry.versionNumber}}</h2>
+    <ul>
+        <li *ngFor="let change of entry.changes">
+            {{change}}
+        </li>
+    </ul>
+</div>

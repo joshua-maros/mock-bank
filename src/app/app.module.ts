@@ -33,6 +33,7 @@ import { ClearBoxComponent } from './clear-box/clear-box.component';
 import { FadeHintComponent } from './fade-hint/fade-hint.component';
 import { OverlayHintComponent } from './overlay-hint/overlay-hint.component';
 import { ToolsPageComponent } from './tools-page/tools-page.component';
+import { ChangelogComponent } from './changelog/changelog.component';
 
 const appRoutes = [
   { path: 'home', component: HomePageComponent },
@@ -71,7 +72,8 @@ const appRoutes = [
     ClearBoxComponent,
     FadeHintComponent,
     OverlayHintComponent,
-    ToolsPageComponent
+    ToolsPageComponent,
+    ChangelogComponent
   ],
   imports: [
     BrowserModule,
