@@ -18,7 +18,7 @@ if (process.argv.indexOf('--port') !== -1) {
 		throw new Error('--port must be followed by a port number to serve on.');
 	}
 	const port = process.argv[portIndex];
-	const portNum = Number(port);
+	const portNum = number(port);
 	if (!(portNum >= 0 && portNum <= 65535)) {
 		throw new Error('--port must be followed by a valid port number, not ' + a + '.');
 	}

@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class MemberComponent implements OnInit {
   @Input() member: Member = null;
-  salary: Number = null;
+  salary: number = null;
 
   get f() {
     return Math.floor;
