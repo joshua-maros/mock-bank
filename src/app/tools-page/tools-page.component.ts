@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators, NgForm } from '@angular/forms';
+import { FormBuilder, Validators, NgForm, AbstractControl } from '@angular/forms';
 import { Member, WebappBackendService, Class, MemberGroup } from '../webapp-backend.service';
 import { sortMembers } from '../util';
 import { OverlayHintComponent } from '../overlay-hint/overlay-hint.component';
@@ -19,6 +19,7 @@ export class ToolsPageComponent implements OnInit {
     newPin: [null, Validators.required],
     confirmPin: [null, Validators.required]
   });
+
   @ViewChild('rofHint') rofHint: OverlayHintComponent;
   @ViewChild('rofForm') rofForm: NgForm;
   public rofFg = this.fb.group({
@@ -26,18 +27,45 @@ export class ToolsPageComponent implements OnInit {
     orangePerson: [null, Validators.required]
   });
 
+  @ViewChild('promoteHint') promoteHint: OverlayHintComponent;
+  @ViewChild('promoteForm') promoteForm: NgForm;
+  public promoteFg = this.fb.group({
+    person: [null, Validators.required],
+    confirm: [false, Validators.requiredTrue]
+  });
+
   get oranges() {
     return this.members.filter(e => e.class === Class.ORANGE);
+  }
+
+  get richOranges() {
+    return this.oranges.filter(e => e.currentWealth >= 550);
   }
 
   get blues() {
     return this.members.filter(e => e.class === Class.BLUE);
   }
 
+  get minBlue() {
+    let minWealth = 1e10;
+    let minBlue: Member | MemberGroup = null;
+    for (const blue of this.blues) {
+      if (blue.currentWealth < minWealth) {
+        minWealth = blue.currentWealth;
+        minBlue = blue;
+      }
+    }
+    return minBlue;
+  }
+
   constructor(private backend: WebappBackendService, private fb: FormBuilder) { }
 
+  async updateData() {
+    this.members = sortMembers(await this.backend.getCachedMemberList(), true);
+  }
+
   ngOnInit() {
-    this.backend.getCachedMemberList().then(e => this.members = sortMembers(e, true));
+    this.updateData();
   }
 
   changePin() {
@@ -73,6 +101,7 @@ export class ToolsPageComponent implements OnInit {
         if (result.ok) {
           this.rofHint.showMessage('Swap was successful.');
           this.rofForm.resetForm();
+          await this.updateData();
         } else {
           this.rofHint.showError('Swap was not successful, try again.');
         }
@@ -80,6 +109,26 @@ export class ToolsPageComponent implements OnInit {
           this.rofHint.showError('Swap was not successful, try again.');
       }
       this.rofFg.enable();
+    })();
+  }
+
+  promoteOrange() {
+    this.promoteFg.disable();
+    const v = this.promoteFg.value;
+    (async () => {
+      try {
+        const result = await this.backend.promoteMember(v.person);
+        if (result.ok) {
+          this.promoteHint.showMessage(`Successfully promoted ${v.person.firstName} ${v.person.lastName}.`);
+          this.promoteForm.resetForm();
+          await this.updateData();
+        } else {
+          this.promoteHint.showError('Promotion failed, try again.');
+        }
+      } catch {
+          this.promoteHint.showError('Promotion failed, try again.');
+      }
+      this.promoteFg.enable();
     })();
   }
 }
