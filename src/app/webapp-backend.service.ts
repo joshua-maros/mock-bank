@@ -339,6 +339,19 @@ export class WebappBackendService {
     });
   }
 
+  promoteMember(orange: Member | string): Promise<HttpResponse<Member>> {
+    this.cachedMembers.markDirtyAndHold();
+    this.cachedLedger.markDirtyAndHold();
+    if ((orange as Member).id !== undefined) {
+      orange = (orange as Member).id;
+    }
+    return this.post<Member>('/api/v1/members/' + orange + '/promote', {}).then(e => {
+      this.cachedMembers.endHold();
+      this.cachedLedger.endHold();
+      return e;
+    })
+  }
+
   changePin(from: string, to: string): Promise<HttpResponse<{}>> {
     return this.post<{}>('/api/v1/members/' + this.getCurrentMember().id + '/pin', {
       oldPin: from,

@@ -259,8 +259,41 @@ app.post('/api/v1/members/:id/switch', async (req, res) => {
 		else if (transaction.to === bid) 
 			transaction.to = aid;
 	}
+	// A bunch of transactions were *edited*, the running tally of every account needs to be redone.
+	await ledger.init(); 
 
 	res.status(200).send({});
+});
+
+app.post('/api/v1/members/:id/promote', async (req, res) => {
+	await checkLogin(req, res, c.access.LEADER);
+
+	const orange = await dbs.members.findItemWithValue('id', req.params.id);
+	if (orange.class !== 'orange') {
+		res.status(400).send({error: 'Only oranges can be promoted.'});
+		return;
+	}
+	const orangeBalance = ledger.getBalance(orange);
+	if (orangeBalance < 550) {
+		res.status(400).send({error: 'Oranges must have at least $550 to be promoted.'});
+		return;
+	}
+
+	let blue;
+	for (const member of await dbs.members.getAllItems()) {
+		if (member.class === 'blue' && (!blue || ledger.getBalance(member) < ledger.getBalance(blue))) {
+			blue = member;
+		}
+	}
+
+	await ledger.createTransaction(blue, c.BANK_ID, ledger.getBalance(blue), 'Class Demotion');
+	await ledger.createTransaction(c.BANK_ID, blue, c.ORANGE_START, 'Starting Balance');
+	blue.class = 'orange';
+	await ledger.createTransaction(orange, c.BANK_ID, orangeBalance, 'Class Promotion');
+	await ledger.createTransaction(c.BANK_ID, orange, c.BLUE_START, 'Starting Balance');
+	orange.class = 'blue';
+
+	res.status(200).send(censorMember(orange));
 })
 
 app.post('/api/v1/members/:id/pin', async (req, res) => {
