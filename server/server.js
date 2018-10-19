@@ -241,9 +241,11 @@ app.post('/api/v1/members/:id/switch', async (req, res) => {
 		  b = dbs.members.findItemWithValue('id', bid);
 	// Switch their identifying information, but leave all their posession and status information.
 	const aa = await a, ab = await b;
-	const aFirst = aa.firstName, aLast = aa.lastName;
+	const aFirst = aa.firstName, aLast = aa.lastName, aId = aa.id;
+	aa.id = ab.id;
 	aa.firstName = ab.firstName;
 	aa.lastName = ab.lastName;
+	ab.id = aId;
 	ab.firstName = aFirst;
 	ab.lastName = aLast;
 
@@ -259,6 +261,7 @@ app.post('/api/v1/members/:id/switch', async (req, res) => {
 		else if (transaction.to === bid) 
 			transaction.to = aid;
 	}
+
 	// A bunch of transactions were *edited*, the running tally of every account needs to be redone.
 	await ledger.init(); 
 
