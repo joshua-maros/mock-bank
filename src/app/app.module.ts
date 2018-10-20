@@ -34,6 +34,7 @@ import { FadeHintComponent } from './fade-hint/fade-hint.component';
 import { OverlayHintComponent } from './overlay-hint/overlay-hint.component';
 import { ToolsPageComponent } from './tools-page/tools-page.component';
 import { ChangelogComponent } from './changelog/changelog.component';
+import { MetricsComponent } from './metrics/metrics.component';
 
 const appRoutes = [
   { path: 'home', component: HomePageComponent },
@@ -73,7 +74,8 @@ const appRoutes = [
     FadeHintComponent,
     OverlayHintComponent,
     ToolsPageComponent,
-    ChangelogComponent
+    ChangelogComponent,
+    MetricsComponent
   ],
   imports: [
     BrowserModule,
