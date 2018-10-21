@@ -35,6 +35,7 @@ import { OverlayHintComponent } from './overlay-hint/overlay-hint.component';
 import { ToolsPageComponent } from './tools-page/tools-page.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { MetricsComponent } from './metrics/metrics.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 const appRoutes = [
   { path: 'home', component: HomePageComponent },
@@ -75,7 +76,8 @@ const appRoutes = [
     OverlayHintComponent,
     ToolsPageComponent,
     ChangelogComponent,
-    MetricsComponent
+    MetricsComponent,
+    PieChartComponent
   ],
   imports: [
     BrowserModule,

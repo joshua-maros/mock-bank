@@ -1,0 +1,3 @@
+<svg viewBox="-1 -1 2 2">
+  <path *ngFor="let path of paths" [attr.d]="path.data" [ngStyle]="{'fill': '#' + path.color}"></path>
+</svg>
