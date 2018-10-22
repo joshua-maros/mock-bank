@@ -349,7 +349,8 @@ app.post('/api/v1/ledger/paySalaries', async (req, res) => {
 		for (const jobId of member.jobs) {
 			const job = await dbs.jobs.findItemWithValue('id', jobId);
 			if (!job) {
-				throw new Error('There is no job with ID ' + jobId);
+				console.error('There is no job with ID ' + jobId);
+				continue;
 			}
 			let amount = 0;
 			if (member.class === 'blue') {
