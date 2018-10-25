@@ -66,7 +66,10 @@
     <mat-card> <form [formGroup]="promoteFg" (submit)="promoteOrange()" #promoteForm="ngForm">
       <div class="controls">
         <mat-form-field>
-          <mat-select [placeholder]="!richOranges.length ? 'No Oranges have $550' : 'Orange to promote...'" 
+          <input matInput type="number" placeholder="Threshold" formControlName="threshold">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select [placeholder]="!richOranges.length ? 'No Oranges have enough funds' : 'Orange to promote...'" 
             formControlName="person" [disabled]="richOranges.length === 0">
             <mat-option *ngFor="let member of richOranges" [value]="member">
               {{member.firstName}} {{member.lastName}}

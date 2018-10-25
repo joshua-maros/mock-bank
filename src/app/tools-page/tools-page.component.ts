@@ -30,6 +30,7 @@ export class ToolsPageComponent implements OnInit {
   @ViewChild('promoteHint') promoteHint: OverlayHintComponent;
   @ViewChild('promoteForm') promoteForm: NgForm;
   public promoteFg = this.fb.group({
+    threshold: [550, Validators.required],
     person: [null, Validators.required],
     confirm: [false, Validators.requiredTrue]
   });
@@ -48,7 +49,7 @@ export class ToolsPageComponent implements OnInit {
   }
 
   get richOranges() {
-    return this.oranges.filter(e => e.currentWealth >= 550);
+    return this.oranges.filter(e => e.currentWealth >= this.promoteFg.value.threshold);
   }
 
   get blues() {
@@ -67,7 +68,12 @@ export class ToolsPageComponent implements OnInit {
     return minBlue;
   }
 
-  constructor(private backend: WebappBackendService, private fb: FormBuilder) { }
+  constructor(private backend: WebappBackendService, private fb: FormBuilder) {
+    this.promoteFg.get('threshold').valueChanges.subscribe(e => {
+      this.promoteFg.get('person').reset();
+      this.promoteFg.get('person').markAsDirty();
+    });
+  }
 
   async updateData() {
     this.members = sortMembers(await this.backend.getCachedMemberList(), true);

@@ -277,10 +277,6 @@ app.post('/api/v1/members/:id/promote', async (req, res) => {
 		return;
 	}
 	const orangeBalance = ledger.getBalance(orange);
-	if (orangeBalance < 550) {
-		res.status(400).send({error: 'Oranges must have at least $550 to be promoted.'});
-		return;
-	}
 
 	let blue;
 	for (const member of await dbs.members.getAllItems()) {
