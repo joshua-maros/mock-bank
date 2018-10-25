@@ -1,0 +1,11 @@
+@import 'vars';
+
+app-pie-chart .blue {
+    fill: $class-blue;
+    background: $class-blue;
+}
+
+app-pie-chart .orange {
+    fill: $class-orange;
+    background: $class-orange;
+}
