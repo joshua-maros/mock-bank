@@ -25,7 +25,7 @@ export function sortObjects<T>(input: T[], rules: {key: string, reverse: boolean
       if (typeof(ak) === typeof('') || typeof(bk) === typeof('')) {
         return ((ak as string).toLowerCase() > (bk as string).toLowerCase() ? 1 : -1) * (rule.reverse ? -1 : 1);
       } else {
-        return (ak as number) - (bk as number);
+        return ((ak as number) - (bk as number)) * (rule.reverse ? -1 : 1);
       }
     }
   });
