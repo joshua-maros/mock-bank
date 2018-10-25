@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, NgForm, AbstractControl } from '@angular/forms';
-import { Member, WebappBackendService, Class, MemberGroup } from '../webapp-backend.service';
+import { Member, WebappBackendService, Class, MemberGroup, AccessLevel } from '../webapp-backend.service';
 import { sortMembers } from '../util';
 import { OverlayHintComponent } from '../overlay-hint/overlay-hint.component';
 
@@ -53,6 +53,10 @@ export class ToolsPageComponent implements OnInit {
   public pinToolFg = this.fb.group({
     person: [null, Validators.required]
   });
+
+  get leader() {
+    return this.backend.getAccessLevel() === AccessLevel.LEADER;
+  }
 
   get oranges() {
     return this.members.filter(e => e.class === Class.ORANGE);

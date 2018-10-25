@@ -30,7 +30,7 @@
     </form> </mat-card>
   </div>
 
-  <div class="toolPane">
+  <div class="toolPane" *ngIf="leader">
     <h1>Reversal of Fortune</h1>
     <mat-card> <form [formGroup]="rofFg" (submit)="doRof()" #rofForm="ngForm">
       <div class="controls">
@@ -61,7 +61,7 @@
     </form> </mat-card>
   </div>
 
-  <div class="toolPane">
+  <div class="toolPane" *ngIf="leader">
     <h1>Promote an Orange</h1>
     <mat-card> <form [formGroup]="promoteFg" (submit)="promoteOrange()" #promoteForm="ngForm">
       <div class="controls">
@@ -97,7 +97,7 @@
     </form> </mat-card>
   </div>
 
-  <div class="toolPane">
+  <div class="toolPane" *ngIf="leader">
     <h1>Pay Salaries</h1>
     <mat-card> <form [formGroup]="salaryFg" (submit)="paySalaries()" #salaryForm="ngForm">
       <div class="controls">
@@ -115,7 +115,7 @@
     </form></mat-card>
   </div>
 
-  <div class="toolPane">
+  <div class="toolPane" *ngIf="leader">
     <h1>Major Ec. Crisis</h1>
     <mat-card> <form [formGroup]="majorFg" (submit)="majorEC()" #majorForm="ngForm">
       <div class="controls">
@@ -132,7 +132,7 @@
     </form></mat-card>
   </div>
 
-  <div class="toolPane">
+  <div class="toolPane" *ngIf="leader">
     <h1>PIN Tool</h1>
     <mat-card> <form [formGroup]="pinToolFg" (submit)="getPIN()" #pinToolForm="ngForm">
       <div class="controls">
