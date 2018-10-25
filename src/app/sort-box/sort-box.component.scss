@@ -1,0 +1,56 @@
+@import 'vars';
+
+mat-radio-group > * {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+div#sort-by > span {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+div#sort-by > * {
+    display: inline-block;
+    white-space: initial;
+}
+
+div.filter-rule {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    background: $hover;
+    border-radius: 0.5em;
+    display: grid;
+    grid-template-columns: 2fr 1fr min-content;
+    grid-row-gap: 0.5em;
+    grid-column-gap: 1em;
+    grid-template-areas: 
+        "prop func x"
+        "val  val  x"
+}
+
+@media(min-width: 35em) {
+    div.filter-rule {
+        grid-template-columns: 2fr 1fr 3fr min-content;
+        grid-template-areas: "prop func val x";
+    }
+}
+
+div.filter-rule #prop {
+    grid-area: prop;
+    min-width: 7em;
+}
+
+div.filter-rule #func {
+    grid-area: func;
+    min-width: 5em;
+}
+
+div.filter-rule #val {
+    grid-area: val;
+}
+
+div.filter-rule #x {
+    grid-area: x;
+}
