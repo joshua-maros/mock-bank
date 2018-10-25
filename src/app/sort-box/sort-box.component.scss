@@ -1,5 +1,10 @@
 @import 'vars';
 
+:host {
+    display: block;
+    margin-bottom: 1em;
+}
+
 mat-radio-group > * {
     margin-left: 0.5em;
     margin-right: 0.5em;

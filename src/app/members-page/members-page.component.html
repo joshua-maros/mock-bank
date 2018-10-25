@@ -1,8 +1,12 @@
 <app-page-guard [loaded]="members" accessLevel="leader" #guard>
 </app-page-guard>
 <app-centered-layout *ngIf="guard.show">
-  <app-sort-box #sorter (sorted)="sortedMembers = $event" [(values)]="members"
-    [filterKeys]="memberFilterKeys" [sortModes]="memberSortModes"></app-sort-box>
-  <h1>Members<a routerLink="/members/new"><mat-icon>add</mat-icon></a></h1>
+  <h1>
+    <button mat-icon-button (click)="showSort = !showSort"><mat-icon>search</mat-icon></button>
+    Members
+    <a routerLink="/members/new"><mat-icon>add</mat-icon></a>
+  </h1>
+  <app-sort-box [style.display]="showSort ? 'block' : 'none'" (sorted)="sortedMembers = $event"
+    [(values)]="members" [filterKeys]="memberFilterKeys" [sortModes]="memberSortModes"></app-sort-box>
   <app-member *ngFor="let member of sortedMembers" [member]="member"></app-member>
 </app-centered-layout>

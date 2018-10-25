@@ -9,7 +9,7 @@ import { ItemKey, ItemKeyType, SortMode, SortKey } from '../sort-box/sort-box.co
   styleUrls: ['./members-page.component.scss']
 })
 export class MembersPageComponent implements OnInit {
-  test: boolean;
+  showSort = false;
   members: (Member | MemberGroup)[];
   sortedMembers: (Member | MemberGroup)[];
   memberFilterKeys: ItemKey[] = [
@@ -17,8 +17,8 @@ export class MembersPageComponent implements OnInit {
     new ItemKey('lastName', 'Last Name', 'string'),
     new ItemKey('currentWealth', 'Bank Balance', 'number'),
     new ItemKey('class', 'Social Class', [
-      ['Blue', Class.BLUE], 
-      ['Orange', Class.ORANGE], 
+      ['Blue', Class.BLUE],
+      ['Orange', Class.ORANGE],
       ['Neutral', Class.NEUTRAL]
     ]),
   ];
