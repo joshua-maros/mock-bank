@@ -350,7 +350,7 @@ export class WebappBackendService {
       this.cachedMembers.endHold();
       this.cachedLedger.endHold();
       return e;
-    })
+    });
   }
 
   changePin(from: string, to: string): Promise<HttpResponse<{}>> {
@@ -395,8 +395,20 @@ export class WebappBackendService {
     });
   }
 
-  paySalaries(): Promise<HttpResponse<null>> {
-    return this.post('/api/v1/ledger/paySalaries', {});
+  paySalaries(): Promise<HttpResponse<{}>> {
+    this.cachedMembers.markDirtyAndHold();
+    return this.post('/api/v1/ledger/paySalaries', {}).then(e => {
+      this.cachedMembers.endHold();
+      return e;
+    });
+  }
+
+  majorEC(): Promise<HttpResponse<{}>> {
+    this.cachedMembers.markDirtyAndHold();
+    return this.post('/api/v1/ledger/majorEC', {}).then(e => {
+      this.cachedMembers.endHold();
+      return e;
+    });
   }
 
   getCachedJobList(): Promise<Job[]> {

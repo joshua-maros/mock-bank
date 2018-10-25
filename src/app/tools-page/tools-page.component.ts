@@ -44,6 +44,15 @@ export class ToolsPageComponent implements OnInit {
     taxDestination: [null]
   });
 
+  @ViewChild('majorHint') majorHint: OverlayHintComponent;
+  @ViewChild('majorForm') majorForm: NgForm;
+  public majorFg = this.fb.group({
+    taxRate: [0],
+    taxBlues: [false],
+    taxOranges: [false],
+    taxDestination: [null]
+  });
+
   get oranges() {
     return this.members.filter(e => e.class === Class.ORANGE);
   }
@@ -163,6 +172,26 @@ export class ToolsPageComponent implements OnInit {
       } catch {
         this.salaryFg.enable();
         this.salaryHint.showError('Salary payment failed, try again.');
+      }
+    })();
+  }
+
+  majorEC() {
+    this.majorFg.disable();
+    const v = this.majorFg.value;
+    (async () => {
+      try {
+        const result = await this.backend.majorEC();
+        if (result.ok) {
+          this.majorHint.showMessage('The economy is now in ruins.');
+          await this.updateData();
+        } else {
+          this.majorFg.enable();
+          this.majorHint.showError('Action failed, try again.');
+        }
+      } catch {
+        this.majorFg.enable();
+          this.majorHint.showError('Action failed, try again.');
       }
     })();
   }

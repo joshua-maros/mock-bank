@@ -114,4 +114,21 @@
       <app-overlay-hint #salaryHint></app-overlay-hint>
     </form></mat-card>
   </div>
+
+  <div class="toolPane">
+    <h1>Major Ec. Crisis</h1>
+    <mat-card> <form [formGroup]="majorFg" (submit)="majorEC()" #majorForm="ngForm">
+      <div class="controls">
+        This will automatically deduct half of everyone's current balance from their account.
+
+        <div class="spacing"></div>
+      </div>
+
+      <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!majorFg.valid">
+        Crash the Economy
+      </button>
+
+      <app-overlay-hint #majorHint></app-overlay-hint>
+    </form></mat-card>
+  </div>
 </app-centered-layout>

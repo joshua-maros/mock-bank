@@ -362,6 +362,15 @@ app.post('/api/v1/ledger/paySalaries', async (req, res) => {
 	res.status(201).send({});
 });
 
+app.post('/api/v1/ledger/majorEC', async (req, res) => {
+	await checkLogin(req, res, c.access.LEADER);
+	for (const member of await dbs.members.getAllItems()) {
+		const wealth = ledger.getBalance(member);
+		await ledger.createTransaction(member.id, c.BANK_ID, wealth / 2, 'Random Event');
+	}
+	res.status(200).send({});
+});
+
 app.get('/api/v1/jobs', async (req, res) => {
 	await checkLogin(req, res, c.access.MEMBER);
 	res.status(201).send(await dbs.jobs.getAllItems());
