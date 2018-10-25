@@ -30,6 +30,7 @@ export interface Member {
   jobs: string[];
   accessLevel: AccessLevel;
   currentWealth: number;
+  salary?: number;
 }
 
 export class MemberGroup {
