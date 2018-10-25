@@ -3,8 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
   MatSelectModule, MatToolbarModule, MatIconModule, MatIconRegistry, MatMenuModule,
-  MatRippleModule, 
-  MatRadioModule} from '@angular/material';
+  MatRippleModule, MatRadioModule} from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -36,7 +35,6 @@ import { ToolsPageComponent } from './tools-page/tools-page.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { MetricsComponent } from './metrics/metrics.component';
 import { SortBoxComponent } from './sort-box/sort-box.component';
-import { PinToolPageComponent } from './pin-tool-page/pin-tool-page.component';
 
 const appRoutes = [
   { path: 'home', component: HomePageComponent },
@@ -50,7 +48,6 @@ const appRoutes = [
   { path: 'jobs/new', component: MakeJobPageComponent },
   { path: 'jobs/:id', component: JobPageComponent },
   { path: 'tools', component: ToolsPageComponent },
-  { path: 'tools/pinTool', component: PinToolPageComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
@@ -79,8 +76,7 @@ const appRoutes = [
     ToolsPageComponent,
     ChangelogComponent,
     MetricsComponent,
-    SortBoxComponent,
-    PinToolPageComponent
+    SortBoxComponent
   ],
   imports: [
     BrowserModule,
