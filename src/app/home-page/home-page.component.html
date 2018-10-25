@@ -1,5 +1,8 @@
 <app-centered-layout>
-    <app-metrics></app-metrics>
-    <h1>New Features</h1>
-    <app-changelog></app-changelog>
+    <div *ngIf="showMemberLinks">
+        <a mat-raised-button color="primary" routerLink="/members/me">View your profile</a>
+        <a mat-raised-button color="primary" routerLink="/tools">Change your PIN</a>
+    </div>
+    <h1 *ngIf="leader">New Features</h1>
+    <app-changelog *ngIf="leader"></app-changelog>
 </app-centered-layout>
