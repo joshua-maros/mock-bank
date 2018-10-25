@@ -1,8 +1,32 @@
 :host {
-    display: block;
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    grid-template-areas: 
+        "title title"
+        "chart key"
 }
 
-svg {
-    width: 100%;
-    height: 100%;
+#title {
+    grid-area: title;
+    text-align: center;
+}
+
+#chart {
+    grid-area: chart;
+}
+
+#key {
+    grid-area: key;
+}
+
+.key-item .badge {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    border-radius: 0.2em;
+    margin-right: 0.5em;
+}
+
+.key-item, .key-item * {
+    white-space: nowrap;
 }

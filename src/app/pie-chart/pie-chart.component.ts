@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
 export class PieSection {
-  constructor(public readonly size: number, public readonly cssClass: string) { }
+  constructor(public readonly size: number, public readonly cssClass: string, public readonly keyText: string) { }
 }
 
 @Component({
@@ -13,7 +13,7 @@ export class PieChartComponent implements OnInit {
   @Input() sections: PieSection[] = [ ];
   @Input() padding = 0.05;
 
-  get paths(): Array<{data: string, color: string}> {
+  get paths(): Array<{ data: string, cssClass: string }> {
     const tr = [];
     let total = 0;
     for (const section of this.sections) {
@@ -35,6 +35,14 @@ export class PieChartComponent implements OnInit {
         + `L ${tx(0)} ${ty(0)}`;
       tr.push({ data: svgPath, cssClass: section.cssClass });
       startAngle = endAngle;
+    }
+    return tr;
+  }
+
+  get key(): Array<{ cssClass: string, text: string }> {
+    const tr = [];
+    for (const section of this.sections) {
+      tr.push({ cssClass: section.cssClass, text: section.keyText });
     }
     return tr;
   }

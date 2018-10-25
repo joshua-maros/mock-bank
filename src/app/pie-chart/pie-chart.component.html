@@ -1,3 +1,10 @@
-<svg viewBox="-1 -1 2 2">
+<div class="mat-h2" id="title">Chart Title</div>
+<svg viewBox="-1 -1 2 2" id="chart">
   <path *ngFor="let path of paths" [attr.d]="path.data" [ngClass]="[path.cssClass]"></path>
 </svg>
+<div id="key">
+  <div class="key-item" *ngFor="let item of key">
+    <span [ngClass]="[item.cssClass, 'badge']"></span>
+    <span>{{item.text}}</span>
+  </div>
+</div>
