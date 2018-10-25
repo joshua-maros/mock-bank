@@ -21,6 +21,37 @@ div.toolPane  button {
     margin-top: auto;
 }
 
+div.pin-show {
+    font-size: 3em;
+    line-height: 1em;
+    padding: 0.2em;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    position: relative;
+    text-align: center;
+}
+
+@keyframes pin-countdown {
+    0% { right: 0%; }
+    100% { right: 100%; }
+}
+
+div.pin-show div.pin-bg.countdown {
+    animation-name: pin-countdown;
+    animation-duration: 5s;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+}
+
+div.pin-show div.pin-bg {
+    background: $hover;
+    position: absolute;
+    left: 0;
+    right: 100%;
+    top: 0;
+    bottom: 0;
+}
+
 form {
     height: 100%;
     display: grid;

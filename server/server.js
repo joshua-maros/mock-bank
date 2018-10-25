@@ -293,6 +293,16 @@ app.post('/api/v1/members/:id/promote', async (req, res) => {
 	orange.class = 'blue';
 
 	res.status(200).send(censorMember(orange));
+});
+
+app.get('/api/v1/members/:id/pin', async (req, res) => {
+	await checkLogin(req, res, c.access.LEADER);
+	const existingMember = await dbs.members.findItemWithValue('id', req.params.id);
+	if (!existingMember) {
+		res.status(404).send({error: 'User does not exist!'});
+		return;
+	}
+	res.status(200).send({pin: existingMember.pin});
 })
 
 app.post('/api/v1/members/:id/pin', async (req, res) => {

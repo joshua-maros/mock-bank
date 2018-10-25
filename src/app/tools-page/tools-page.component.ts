@@ -11,6 +11,7 @@ import { OverlayHintComponent } from '../overlay-hint/overlay-hint.component';
 })
 export class ToolsPageComponent implements OnInit {
   public members: (Member | MemberGroup)[];
+  public showPIN = '';
 
   @ViewChild('pinHint') pinHint: OverlayHintComponent;
   @ViewChild('pinForm') pinForm: NgForm;
@@ -46,11 +47,11 @@ export class ToolsPageComponent implements OnInit {
 
   @ViewChild('majorHint') majorHint: OverlayHintComponent;
   @ViewChild('majorForm') majorForm: NgForm;
-  public majorFg = this.fb.group({
-    taxRate: [0],
-    taxBlues: [false],
-    taxOranges: [false],
-    taxDestination: [null]
+  public majorFg = this.fb.group({});
+
+  @ViewChild('pinToolForm') pinToolForm: NgForm;
+  public pinToolFg = this.fb.group({
+    person: [null, Validators.required]
   });
 
   get oranges() {
@@ -90,6 +91,12 @@ export class ToolsPageComponent implements OnInit {
 
   ngOnInit() {
     this.updateData();
+  }
+
+  doPINAnim() {
+    setTimeout(() => {
+      this.showPIN = '';
+    }, 5 * 1000);
   }
 
   changePin() {
@@ -192,6 +199,30 @@ export class ToolsPageComponent implements OnInit {
       } catch {
         this.majorFg.enable();
           this.majorHint.showError('Action failed, try again.');
+      }
+    })();
+  }
+
+  getPIN() {
+    this.pinToolFg.disable();
+    this.showPIN = '';
+    const v = this.pinToolFg.value;
+    (async () => {
+      try {
+        const result = await this.backend.getPin(v.person.id);
+        if (result.ok) {
+          this.showPIN = result.body.pin;
+          this.doPINAnim();
+          this.pinToolForm.resetForm();
+          this.pinToolFg.enable();
+          await this.updateData();
+        } else {
+          this.pinToolFg.enable();
+          // this.pinToolHint.showError('Action failed, try again.');
+        }
+      } catch {
+        this.pinToolFg.enable();
+          // this.pinToolHint.showError('Action failed, try again.');
       }
     })();
   }

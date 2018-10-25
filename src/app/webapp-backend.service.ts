@@ -353,6 +353,10 @@ export class WebappBackendService {
     });
   }
 
+  getPin(member: string): Promise<HttpResponse<{pin: string}>> {
+    return this.get<{pin: string}>('/api/v1/members/' + member + '/pin');
+  }
+
   changePin(from: string, to: string): Promise<HttpResponse<{}>> {
     return this.post<{}>('/api/v1/members/' + this.getCurrentMember().id + '/pin', {
       oldPin: from,
