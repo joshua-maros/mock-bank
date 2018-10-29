@@ -33,7 +33,7 @@ export class ToolsPageComponent implements OnInit {
   public promoteFg = this.fb.group({
     threshold: [550, Validators.required],
     person: [null, Validators.required],
-    confirm: [false, Validators.requiredTrue]
+    bluePerson: [null, Validators.required]
   });
 
   @ViewChild('salaryHint') salaryHint: OverlayHintComponent;
@@ -152,7 +152,7 @@ export class ToolsPageComponent implements OnInit {
     const v = this.promoteFg.value;
     (async () => {
       try {
-        const result = await this.backend.promoteMember(v.person);
+        const result = await this.backend.promoteMember(v.person, v.bluePerson);
         if (result.ok) {
           this.promoteHint.showMessage(`Successfully promoted ${v.person.firstName} ${v.person.lastName}.`);
           this.promoteForm.resetForm();
