@@ -78,7 +78,7 @@
           <mat-error>This field is required!</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <mat-select [placeholder]="Blue to demote..." formControlName="bluePerson" 
+          <mat-select placeholder="Blue to demote..." formControlName="bluePerson" 
             [disabled]="richOranges.length === 0">
             <mat-option *ngFor="let member of blues" [value]="member">
               {{member.firstName}} {{member.lastName}}
