@@ -278,7 +278,7 @@ app.post('/api/v1/members/:id/promote', async (req, res) => {
 	}
 	const orangeBalance = ledger.getBalance(orange);
 
-	const blue = await dbs.members.findItemsWithValue('id', req.params.blueId);
+	const blue = await dbs.members.findItemWithValue('id', req.body.blueId);
 	if (blue.class !== 'blue') {
 		res.status(400).send({error: 'Only blues can be demoted.'});
 	}

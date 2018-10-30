@@ -35,6 +35,7 @@ import { ToolsPageComponent } from './tools-page/tools-page.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { MetricsComponent } from './metrics/metrics.component';
 import { SortBoxComponent } from './sort-box/sort-box.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 const appRoutes = [
   { path: 'home', component: HomePageComponent },
@@ -76,7 +77,8 @@ const appRoutes = [
     ToolsPageComponent,
     ChangelogComponent,
     MetricsComponent,
-    SortBoxComponent
+    SortBoxComponent,
+    PieChartComponent,
   ],
   imports: [
     BrowserModule,

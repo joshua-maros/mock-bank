@@ -63,7 +63,7 @@ export class ToolsPageComponent implements OnInit {
   }
 
   get richOranges() {
-    return this.oranges.filter(e => e.currentWealth >= this.promoteFg.value.threshold);
+    return this.oranges.filter(e => e.currentWealth >= this.promoteFg.getRawValue().threshold);
   }
 
   get blues() {
@@ -148,8 +148,8 @@ export class ToolsPageComponent implements OnInit {
   }
 
   promoteOrange() {
-    this.promoteFg.disable();
     const v = this.promoteFg.value;
+    this.promoteFg.disable();
     (async () => {
       try {
         const result = await this.backend.promoteMember(v.person, v.bluePerson);
@@ -160,8 +160,9 @@ export class ToolsPageComponent implements OnInit {
         } else {
           this.promoteHint.showError('Promotion failed, try again.');
         }
-      } catch {
-          this.promoteHint.showError('Promotion failed, try again.');
+      } catch (e) {
+        console.error(e);
+        this.promoteHint.showError('Promotion failed, try again.');
       }
       this.promoteFg.enable();
     })();
