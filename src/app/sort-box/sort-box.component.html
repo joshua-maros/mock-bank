@@ -10,7 +10,7 @@
     </mat-radio-group>
   </div>
   <div formArrayName="filterRules">
-    <div class="filter-rule" *ngFor="let item of fg.get('filterRules').controls; let i = index;" [formGroupName]="i">
+    <div class="filter-rule" *ngFor="let item of filterRules; let i = index;" [formGroupName]="i">
       <mat-form-field id="prop">
         <mat-select placeholder="Property" formControlName="key">
           <mat-option *ngFor="let key of filterKeys" [value]="key">

@@ -6,7 +6,7 @@ export type ItemKeyType = 'string' | 'number' | [string, any][];
 
 export class ItemKey {
   constructor(public readonly name: string, public readonly hrName: string, public readonly type: ItemKeyType) { }
-};
+}
 
 export class SortKey {
   constructor(public readonly name: string, public readonly reverse: boolean) { }
@@ -27,7 +27,7 @@ export class SortBoxComponent implements OnInit {
   @Output() sorted = new EventEmitter<any[]>();
   @Input() filterKeys: ItemKey[] = [];
   @Input() sortModes: SortMode[] = [];
-  
+
   @ViewChild('form') form: NgForm;
   public fg = this.fb.group({
     sortBy: [null],
@@ -38,6 +38,10 @@ export class SortBoxComponent implements OnInit {
 
   get FilterMode() {
     return FilterMode;
+  }
+
+  get filterRules() {
+    return (this.fg.get('filterRules') as FormGroup).controls;
   }
 
   constructor(private fb: FormBuilder) {
@@ -57,7 +61,7 @@ export class SortBoxComponent implements OnInit {
   addFilterRule() {
     (this.fg.get('filterRules') as FormArray).push(this.createFilterRule());
   }
-  
+
   removeFilterRule(index: number) {
     (this.fg.get('filterRules') as FormArray).removeAt(index);
   }
@@ -94,7 +98,7 @@ export class SortBoxComponent implements OnInit {
     if (mode) {
       const keys = this.fg.value.reverse ? mode.reverseKeys : mode.normalKeys;
       const processed = sortObjects(this.filter(), keys.map<{key: string, reverse: boolean}>(
-        k => { return { key: k.name, reverse: k.reverse }; }
+        k => ({ key: k.name, reverse: k.reverse })
       ));
       this.sorted.emit(processed);
     } else {
