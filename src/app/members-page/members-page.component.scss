@@ -5,6 +5,13 @@ mat-card {
     padding-bottom: 0.5em;
 }
 
+h1 > button {
+    position: absolute;
+    left: 0.5em;
+    margin-top: -0.25em;
+    margin-left: -0.25em;
+}
+
 h1 > a {
     position: absolute;
     right: 0.5em;
@@ -13,4 +20,8 @@ h1 > a {
 app-member {
     display: block;
     padding-bottom: 0.5em;
+}
+
+app-sort-box {
+    margin-bottom: 1em;
 }

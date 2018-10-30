@@ -1,0 +1,43 @@
+<form #form="ngForm" [formGroup]="fg">
+  <div id="sort-by">
+    <span class="mat-caption">SORT BY:</span>
+    <mat-radio-group formControlName="sortBy">
+      <mat-radio-button *ngFor="let sortMode of sortModes" [value]="sortMode">
+        {{sortMode.name}}
+      </mat-radio-button>
+      <mat-checkbox formControlName="reverse">Reverse</mat-checkbox>
+      <button mat-button color="primary" (click)="addFilterRule()"> ADD FILTER </button>
+    </mat-radio-group>
+  </div>
+  <div formArrayName="filterRules">
+    <div class="filter-rule" *ngFor="let item of fg.get('filterRules').controls; let i = index;" [formGroupName]="i">
+      <mat-form-field id="prop">
+        <mat-select placeholder="Property" formControlName="key">
+          <mat-option *ngFor="let key of filterKeys" [value]="key">
+            {{key.hrName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field id="func">
+        <mat-select placeholder="Method" formControlName="mode">
+          <mat-option [value]="FilterMode.EQUAL">=</mat-option>
+          <mat-option [value]="FilterMode.NOT_EQUAL">&#x2260;</mat-option>
+          <mat-option *ngIf="item.value.key.type === 'number'" [value]="FilterMode.GREATER_THAN">&#x003e;</mat-option>
+          <mat-option *ngIf="item.value.key.type === 'number'" [value]="FilterMode.LESS_THAN">&#x003c;</mat-option>
+          <mat-option *ngIf="item.value.key.type === 'string'" [value]="FilterMode.CONTAINS">Has</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="item.value.key.type === 'number' || item.value.key.type === 'string'" id="val">
+        <input matInput [type]="item.value.key.type" placeholder="Value" formControlName="value">
+      </mat-form-field>
+      <mat-form-field *ngIf="item.value.key.type.filter" id="val">
+        <mat-select placeholder="Value" formControlName="value">
+          <mat-option *ngFor="let typedef of item.value.key.type" [value]="typedef[1]">{{typedef[0]}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-icon-button (click)="removeFilterRule(i)" id="x">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+  </div>
+</form>

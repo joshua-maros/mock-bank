@@ -3,8 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
   MatSelectModule, MatToolbarModule, MatIconModule, MatIconRegistry, MatMenuModule,
-  MatRippleModule, 
-  MatRadioModule} from '@angular/material';
+  MatRippleModule, MatRadioModule} from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -35,6 +34,7 @@ import { OverlayHintComponent } from './overlay-hint/overlay-hint.component';
 import { ToolsPageComponent } from './tools-page/tools-page.component';
 import { ChangelogComponent } from './changelog/changelog.component';
 import { MetricsComponent } from './metrics/metrics.component';
+import { SortBoxComponent } from './sort-box/sort-box.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 const appRoutes = [
@@ -77,7 +77,8 @@ const appRoutes = [
     ToolsPageComponent,
     ChangelogComponent,
     MetricsComponent,
-    PieChartComponent
+    SortBoxComponent,
+    PieChartComponent,
   ],
   imports: [
     BrowserModule,

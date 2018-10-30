@@ -277,16 +277,10 @@ app.post('/api/v1/members/:id/promote', async (req, res) => {
 		return;
 	}
 	const orangeBalance = ledger.getBalance(orange);
-	if (orangeBalance < 550) {
-		res.status(400).send({error: 'Oranges must have at least $550 to be promoted.'});
-		return;
-	}
 
-	let blue;
-	for (const member of await dbs.members.getAllItems()) {
-		if (member.class === 'blue' && (!blue || ledger.getBalance(member) < ledger.getBalance(blue))) {
-			blue = member;
-		}
+	const blue = await dbs.members.findItemWithValue('id', req.body.blueId);
+	if (blue.class !== 'blue') {
+		res.status(400).send({error: 'Only blues can be demoted.'});
 	}
 
 	await ledger.createTransaction(blue, c.BANK_ID, ledger.getBalance(blue), 'Class Demotion');
@@ -297,6 +291,16 @@ app.post('/api/v1/members/:id/promote', async (req, res) => {
 	orange.class = 'blue';
 
 	res.status(200).send(censorMember(orange));
+});
+
+app.get('/api/v1/members/:id/pin', async (req, res) => {
+	await checkLogin(req, res, c.access.LEADER);
+	const existingMember = await dbs.members.findItemWithValue('id', req.params.id);
+	if (!existingMember) {
+		res.status(404).send({error: 'User does not exist!'});
+		return;
+	}
+	res.status(200).send({pin: existingMember.pin});
 })
 
 app.post('/api/v1/members/:id/pin', async (req, res) => {
@@ -349,7 +353,8 @@ app.post('/api/v1/ledger/paySalaries', async (req, res) => {
 		for (const jobId of member.jobs) {
 			const job = await dbs.jobs.findItemWithValue('id', jobId);
 			if (!job) {
-				throw new Error('There is no job with ID ' + jobId);
+				console.error('There is no job with ID ' + jobId);
+				continue;
 			}
 			let amount = 0;
 			if (member.class === 'blue') {
@@ -363,6 +368,15 @@ app.post('/api/v1/ledger/paySalaries', async (req, res) => {
 		}
 	}
 	res.status(201).send({});
+});
+
+app.post('/api/v1/ledger/majorEC', async (req, res) => {
+	await checkLogin(req, res, c.access.LEADER);
+	for (const member of await dbs.members.getAllItems()) {
+		const wealth = ledger.getBalance(member);
+		await ledger.createTransaction(member.id, c.BANK_ID, wealth / 2, 'Random Event');
+	}
+	res.status(200).send({});
 });
 
 app.get('/api/v1/jobs', async (req, res) => {

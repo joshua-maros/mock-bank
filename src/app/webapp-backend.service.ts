@@ -30,6 +30,7 @@ export interface Member {
   jobs: string[];
   accessLevel: AccessLevel;
   currentWealth: number;
+  salary?: number;
 }
 
 export class MemberGroup {
@@ -178,18 +179,19 @@ export class WebappBackendService {
     this.cachedLedger = new CachedResource<Transaction[]>(() => this.get<Transaction[]>('/api/v1/ledger'), []);
     this.cachedJobs = new CachedResource<Job[]>(() => this.get<Job[]>('/api/v1/jobs'), []);
     if (this.cookieService.get('sessionToken')) {
-      this.session = {
-        sessionToken: this.cookieService.get('sessionToken'),
-        expires: Date.now() + 1000 * 60,
-        loggedInMember: null
-      };
-      this.get<Session>('/api/v1/session/isValid').then((res) => {
+      new Promise<HttpResponse<Session>>((resolve, reject) => {
+        this.client.get<Session>('/api/v1/sesion/isValid', {
+          headers: { 'Authorization': `Bearer ${this.cookieService.get('sessionToken')}` },
+          observe: <'response'> 'response',
+          responseType: <'json'> 'json'
+        }).subscribe(resolve, reject);
+      }).then(res => {
         if (res.ok) {
           this.session = res.body;
         } else {
           this.session = null;
         }
-      }, (err) => {
+      }, err => {
         this.session = null;
       });
     }
@@ -339,17 +341,26 @@ export class WebappBackendService {
     });
   }
 
-  promoteMember(orange: Member | string): Promise<HttpResponse<Member>> {
+  promoteMember(orange: Member | string, blue: Member | string): Promise<HttpResponse<Member>> {
     this.cachedMembers.markDirtyAndHold();
     this.cachedLedger.markDirtyAndHold();
     if ((orange as Member).id !== undefined) {
       orange = (orange as Member).id;
     }
-    return this.post<Member>('/api/v1/members/' + orange + '/promote', {}).then(e => {
+    if ((blue as Member).id !== undefined) {
+      blue = (blue as Member).id;
+    }
+    return this.post<Member>('/api/v1/members/' + orange + '/promote', {
+      blueId: blue
+    }).then(e => {
       this.cachedMembers.endHold();
       this.cachedLedger.endHold();
       return e;
-    })
+    });
+  }
+
+  getPin(member: string): Promise<HttpResponse<{pin: string}>> {
+    return this.get<{pin: string}>('/api/v1/members/' + member + '/pin');
   }
 
   changePin(from: string, to: string): Promise<HttpResponse<{}>> {
@@ -394,8 +405,20 @@ export class WebappBackendService {
     });
   }
 
-  paySalaries(): Promise<HttpResponse<null>> {
-    return this.post('/api/v1/ledger/paySalaries', {});
+  paySalaries(): Promise<HttpResponse<{}>> {
+    this.cachedMembers.markDirtyAndHold();
+    return this.post('/api/v1/ledger/paySalaries', {}).then(e => {
+      this.cachedMembers.endHold();
+      return e;
+    });
+  }
+
+  majorEC(): Promise<HttpResponse<{}>> {
+    this.cachedMembers.markDirtyAndHold();
+    return this.post('/api/v1/ledger/majorEC', {}).then(e => {
+      this.cachedMembers.endHold();
+      return e;
+    });
   }
 
   getCachedJobList(): Promise<Job[]> {

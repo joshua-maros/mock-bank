@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, NgForm, AbstractControl } from '@angular/forms';
-import { Member, WebappBackendService, Class, MemberGroup } from '../webapp-backend.service';
+import { Member, WebappBackendService, Class, MemberGroup, AccessLevel } from '../webapp-backend.service';
 import { sortMembers } from '../util';
 import { OverlayHintComponent } from '../overlay-hint/overlay-hint.component';
 
@@ -11,6 +11,7 @@ import { OverlayHintComponent } from '../overlay-hint/overlay-hint.component';
 })
 export class ToolsPageComponent implements OnInit {
   public members: (Member | MemberGroup)[];
+  public showPIN = '';
 
   @ViewChild('pinHint') pinHint: OverlayHintComponent;
   @ViewChild('pinForm') pinForm: NgForm;
@@ -30,8 +31,9 @@ export class ToolsPageComponent implements OnInit {
   @ViewChild('promoteHint') promoteHint: OverlayHintComponent;
   @ViewChild('promoteForm') promoteForm: NgForm;
   public promoteFg = this.fb.group({
+    threshold: [550, Validators.required],
     person: [null, Validators.required],
-    confirm: [false, Validators.requiredTrue]
+    bluePerson: [null, Validators.required]
   });
 
   @ViewChild('salaryHint') salaryHint: OverlayHintComponent;
@@ -43,12 +45,25 @@ export class ToolsPageComponent implements OnInit {
     taxDestination: [null]
   });
 
+  @ViewChild('majorHint') majorHint: OverlayHintComponent;
+  @ViewChild('majorForm') majorForm: NgForm;
+  public majorFg = this.fb.group({});
+
+  @ViewChild('pinToolForm') pinToolForm: NgForm;
+  public pinToolFg = this.fb.group({
+    person: [null, Validators.required]
+  });
+
+  get leader() {
+    return this.backend.getAccessLevel() === AccessLevel.LEADER;
+  }
+
   get oranges() {
     return this.members.filter(e => e.class === Class.ORANGE);
   }
 
   get richOranges() {
-    return this.oranges.filter(e => e.currentWealth >= 550);
+    return this.oranges.filter(e => e.currentWealth >= this.promoteFg.getRawValue().threshold);
   }
 
   get blues() {
@@ -67,7 +82,12 @@ export class ToolsPageComponent implements OnInit {
     return minBlue;
   }
 
-  constructor(private backend: WebappBackendService, private fb: FormBuilder) { }
+  constructor(private backend: WebappBackendService, private fb: FormBuilder) {
+    this.promoteFg.get('threshold').valueChanges.subscribe(e => {
+      this.promoteFg.get('person').reset();
+      this.promoteFg.get('person').markAsDirty();
+    });
+  }
 
   async updateData() {
     this.members = sortMembers(await this.backend.getCachedMemberList(), true);
@@ -75,6 +95,12 @@ export class ToolsPageComponent implements OnInit {
 
   ngOnInit() {
     this.updateData();
+  }
+
+  doPINAnim() {
+    setTimeout(() => {
+      this.showPIN = '';
+    }, 5 * 1000);
   }
 
   changePin() {
@@ -122,11 +148,11 @@ export class ToolsPageComponent implements OnInit {
   }
 
   promoteOrange() {
-    this.promoteFg.disable();
     const v = this.promoteFg.value;
+    this.promoteFg.disable();
     (async () => {
       try {
-        const result = await this.backend.promoteMember(v.person);
+        const result = await this.backend.promoteMember(v.person, v.bluePerson);
         if (result.ok) {
           this.promoteHint.showMessage(`Successfully promoted ${v.person.firstName} ${v.person.lastName}.`);
           this.promoteForm.resetForm();
@@ -134,8 +160,9 @@ export class ToolsPageComponent implements OnInit {
         } else {
           this.promoteHint.showError('Promotion failed, try again.');
         }
-      } catch {
-          this.promoteHint.showError('Promotion failed, try again.');
+      } catch (e) {
+        console.error(e);
+        this.promoteHint.showError('Promotion failed, try again.');
       }
       this.promoteFg.enable();
     })();
@@ -157,6 +184,50 @@ export class ToolsPageComponent implements OnInit {
       } catch {
         this.salaryFg.enable();
         this.salaryHint.showError('Salary payment failed, try again.');
+      }
+    })();
+  }
+
+  majorEC() {
+    this.majorFg.disable();
+    const v = this.majorFg.value;
+    (async () => {
+      try {
+        const result = await this.backend.majorEC();
+        if (result.ok) {
+          this.majorHint.showMessage('The economy is now in ruins.');
+          await this.updateData();
+        } else {
+          this.majorFg.enable();
+          this.majorHint.showError('Action failed, try again.');
+        }
+      } catch {
+        this.majorFg.enable();
+          this.majorHint.showError('Action failed, try again.');
+      }
+    })();
+  }
+
+  getPIN() {
+    this.pinToolFg.disable();
+    this.showPIN = '';
+    const v = this.pinToolFg.value;
+    (async () => {
+      try {
+        const result = await this.backend.getPin(v.person.id);
+        if (result.ok) {
+          this.showPIN = result.body.pin;
+          this.doPINAnim();
+          this.pinToolForm.resetForm();
+          this.pinToolFg.enable();
+          await this.updateData();
+        } else {
+          this.pinToolFg.enable();
+          // this.pinToolHint.showError('Action failed, try again.');
+        }
+      } catch {
+        this.pinToolFg.enable();
+          // this.pinToolHint.showError('Action failed, try again.');
       }
     })();
   }

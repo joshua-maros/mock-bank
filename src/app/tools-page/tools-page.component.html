@@ -30,7 +30,7 @@
     </form> </mat-card>
   </div>
 
-  <div class="toolPane">
+  <div class="toolPane" *ngIf="leader">
     <h1>Reversal of Fortune</h1>
     <mat-card> <form [formGroup]="rofFg" (submit)="doRof()" #rofForm="ngForm">
       <div class="controls">
@@ -61,12 +61,15 @@
     </form> </mat-card>
   </div>
 
-  <div class="toolPane">
+  <div class="toolPane" *ngIf="leader">
     <h1>Promote an Orange</h1>
     <mat-card> <form [formGroup]="promoteFg" (submit)="promoteOrange()" #promoteForm="ngForm">
       <div class="controls">
         <mat-form-field>
-          <mat-select [placeholder]="!richOranges.length ? 'No Oranges have $550' : 'Orange to promote...'" 
+          <input matInput type="number" placeholder="Threshold" formControlName="threshold">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select [placeholder]="!richOranges.length ? 'No Oranges have enough funds' : 'Orange to promote...'" 
             formControlName="person" [disabled]="richOranges.length === 0">
             <mat-option *ngFor="let member of richOranges" [value]="member">
               {{member.firstName}} {{member.lastName}}
@@ -74,16 +77,15 @@
           </mat-select>
           <mat-error>This field is required!</mat-error>
         </mat-form-field>
-
-        <ng-container *ngIf="promoteFg.value.person">
-          <div>
-            This action will bump 
-            <strong class="blue">{{minBlue.firstName}} {{minBlue.lastName}}</strong>
-            into the orange class.
-          </div>
-          <div class="spacing"></div>
-          <mat-checkbox formControlName="confirm">I understand.</mat-checkbox>
-        </ng-container>
+        <mat-form-field>
+          <mat-select placeholder="Blue to demote..." formControlName="bluePerson" 
+            [disabled]="richOranges.length === 0">
+            <mat-option *ngFor="let member of blues" [value]="member">
+              {{member.firstName}} {{member.lastName}}
+            </mat-option>
+          </mat-select>
+          <mat-error>This field is required!</mat-error>
+        </mat-form-field>
       </div>
 
       <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!promoteFg.valid">
@@ -94,7 +96,7 @@
     </form> </mat-card>
   </div>
 
-  <div class="toolPane">
+  <div class="toolPane" *ngIf="leader">
     <h1>Pay Salaries</h1>
     <mat-card> <form [formGroup]="salaryFg" (submit)="paySalaries()" #salaryForm="ngForm">
       <div class="controls">
@@ -109,6 +111,49 @@
       </button>
 
       <app-overlay-hint #salaryHint></app-overlay-hint>
+    </form></mat-card>
+  </div>
+
+  <div class="toolPane" *ngIf="leader">
+    <h1>Major Ec. Crisis</h1>
+    <mat-card> <form [formGroup]="majorFg" (submit)="majorEC()" #majorForm="ngForm">
+      <div class="controls">
+        This will automatically deduct half of everyone's current balance from their account.
+
+        <div class="spacing"></div>
+      </div>
+
+      <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!majorFg.valid">
+        Crash the Economy
+      </button>
+
+      <app-overlay-hint #majorHint></app-overlay-hint>
+    </form></mat-card>
+  </div>
+
+  <div class="toolPane" *ngIf="leader">
+    <h1>PIN Tool</h1>
+    <mat-card> <form [formGroup]="pinToolFg" (submit)="getPIN()" #pinToolForm="ngForm">
+      <div class="controls">
+        Use this to give everyone their username and temporary PIN so that they can view their transaction history.
+
+        <mat-form-field>
+          <mat-select placeholder="Select Person" formControlName="person">
+            <mat-option *ngFor="let member of members" [value]="member">
+              {{member.firstName + ' ' + member.lastName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="spacing"></div>
+      </div>
+      <div class="pin-show">
+        <div class="pin-bg" [class.countdown]="!!showPIN"></div>
+        {{showPIN}}
+      </div>
+      <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!pinToolFg.valid">
+        Show PIN
+      </button>
     </form></mat-card>
   </div>
 </app-centered-layout>
